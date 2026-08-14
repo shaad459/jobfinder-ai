@@ -4,6 +4,8 @@ WORKDAY_COMPANIES = {
     "Mastercard": {"company": "mastercard", "datacenter": "wd1", "site": "CorporateCareers"},
     "Barclays": {"company": "barclays", "datacenter": "wd3", "site": "External_Career_Site_Barclays"},
     "Deutsche Bank": {"company": "db", "datacenter": "wd3", "site": "DBWebsite"},
+    "Apex Group": {"company": "theapexgroup", "datacenter": "wd3", "site": "apexgroupcareers"},
+    "Citi": {"company": "citi", "datacenter": "wd5", "site": "2"},
 }
 
 
