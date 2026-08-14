@@ -4,38 +4,46 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+ADZUNA_PAGE_SIZE = 20
 
-def fetch_adzuna_jobs(query: str, location: str = "", country: str = "in", results_per_page: int = 20) -> list[dict]:
-    url = f"https://api.adzuna.com/v1/api/jobs/{country}/search/1"
-    params = {
-        "app_id": os.environ["ADZUNA_APP_ID"],
-        "app_key": os.environ["ADZUNA_APP_KEY"],
-        "results_per_page": results_per_page,
-        "what": query,
-        "where": location,
-        "content-type": "application/json",
-    }
 
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    raw_jobs = response.json().get("results", [])
-
+def fetch_adzuna_jobs(query: str, location: str = "", country: str = "in", max_results: int = 60) -> list[dict]:
     normalized = []
-    for job in raw_jobs:
-        normalized.append({
-            "title": job.get("title"),
-            "company": (job.get("company") or {}).get("display_name"),
-            "location": (job.get("location") or {}).get("display_name"),
-            "posted_date": job.get("created"),
-            "url": job.get("redirect_url"),
-            "description": job.get("description"),
-            "source": "adzuna",
-        })
-    return normalized
+    page = 1
 
+    while len(normalized) < max_results:
+        url = f"https://api.adzuna.com/v1/api/jobs/{country}/search/{page}"
+        params = {
+            "app_id": os.environ["ADZUNA_APP_ID"],
+            "app_key": os.environ["ADZUNA_APP_KEY"],
+            "results_per_page": ADZUNA_PAGE_SIZE,
+            "what": query,
+            "where": location,
+            "content-type": "application/json",
+        }
 
-if __name__ == "__main__":
-    jobs = fetch_adzuna_jobs("product owner", location="Pune")
-    print(f"{len(jobs)} jobs found")
-    for job in jobs[:3]:
-        print(job)
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        raw_jobs = data.get("results", [])
+        total_count = data.get("count", 0)
+
+        if not raw_jobs:
+            break
+
+        for job in raw_jobs:
+            normalized.append({
+                "title": job.get("title"),
+                "company": (job.get("company") or {}).get("display_name"),
+                "location": (job.get("location") or {}).get("display_name"),
+                "posted_date": job.get("created"),
+                "url": job.get("redirect_url"),
+                "description": job.get("description"),
+                "source": "adzuna",
+            })
+
+        page += 1
+        if (page - 1) * ADZUNA_PAGE_SIZE >= total_count:
+            break
+
+    return normalized[:max_results]

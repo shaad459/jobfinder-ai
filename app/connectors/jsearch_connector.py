@@ -1,3 +1,4 @@
+import math
 import os
 import requests
 from dotenv import load_dotenv
@@ -7,7 +8,8 @@ load_dotenv()
 JSEARCH_HOST = "jsearch.p.rapidapi.com"
 
 
-def fetch_jsearch_jobs(query: str, num_pages: int = 1, country: str = "in", date_posted: str = "all") -> list[dict]:
+def fetch_jsearch_jobs(query: str, max_results: int = 60, country: str = "in", date_posted: str = "all") -> list[dict]:
+    num_pages = max(1, math.ceil(max_results / 10))  # roughly 10 results per page
     url = f"https://{JSEARCH_HOST}/search-v2"
     headers = {
         "X-RapidAPI-Key": os.environ["JSEARCH_API_KEY"],
@@ -35,11 +37,4 @@ def fetch_jsearch_jobs(query: str, num_pages: int = 1, country: str = "in", date
             "description": job.get("job_description"),
             "source": "jsearch",
         })
-    return normalized
-
-
-if __name__ == "__main__":
-    jobs = fetch_jsearch_jobs("product owner in Pune, India")
-    print(f"{len(jobs)} jobs found")
-    for job in jobs[:3]:
-        print(job)
+    return normalized[:max_results]
