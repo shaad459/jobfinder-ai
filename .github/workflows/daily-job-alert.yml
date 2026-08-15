@@ -18,13 +18,28 @@ jobs:
         working-directory: app
 
     # Edit this if your resume is a .docx instead of a .pdf - extract_resume_text() picks its
-    # parser from the file extension, so this has to match what you actually base64-encoded
-    # into the RESUME_BASE64 secret.
+    # parser from the file extension, so this has to match the filename you push to the private
+    # resume repo below.
     env:
       RESUME_EXT: pdf
 
     steps:
       - uses: actions/checkout@v4
+
+      # Pulls your resume from a SEPARATE private repo instead of storing it as a chunked/base64
+      # secret. Avoids the 48 KB-per-secret limit entirely (a previous version of this workflow
+      # hit that with a truncated resume - see git history), and updating the resume going
+      # forward is just "push a new file to that repo" instead of re-running a chunking script.
+      # PRIVATE_RESUME_PAT is a fine-grained Personal Access Token scoped to read-only access to
+      # ONLY that one private repo - see GITHUB_ACTIONS_SETUP.md for how to create it. Checked
+      # out under app/private-data so the relative RESUME_PATH below (used with
+      # working-directory: app) resolves correctly.
+      - name: Checkout private resume repo
+        uses: actions/checkout@v4
+        with:
+          repository: shaad459/resume-private
+          token: ${{ secrets.PRIVATE_RESUME_PAT }}
+          path: app/private-data
 
       - uses: actions/setup-python@v5
         with:
@@ -46,13 +61,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Write resume from secret
-        run: echo "${{ secrets.RESUME_BASE64 }}" | base64 --decode > "resume.${{ env.RESUME_EXT }}"
-
       - name: Run search and send digest
         run: python run_scheduled_search.py
         env:
-          RESUME_PATH: resume.${{ env.RESUME_EXT }}
+          RESUME_PATH: private-data/resume.${{ env.RESUME_EXT }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           JSEARCH_API_KEY: ${{ secrets.JSEARCH_API_KEY }}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}

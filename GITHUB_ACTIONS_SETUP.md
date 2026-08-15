@@ -16,31 +16,46 @@ once 2-Step Verification is turned on.
    This is **not** your normal Gmail password and can be revoked independently at any time from
    the same page.
 
-## 2. Base64-encode your resume
+## 2. Create a private repo for your resume, and a token to read it
 
-The workflow needs your resume as a GitHub secret (secrets are encrypted and GitHub auto-redacts
-exact matches from log output, so this never appears in plaintext anywhere in the repo or its
-history). One catch: a single GitHub secret is capped at 48 KB, and this resume's base64 text is
-around 106 KB - too big for one secret, so it needs to be split across three
-(`RESUME_BASE64_1`, `RESUME_BASE64_2`, `RESUME_BASE64_3`) and reassembled by the workflow at
-runtime (already wired up in `daily-job-alert.yml`).
+Earlier versions of this doc had you base64-encode the resume and split it across GitHub
+secrets, since a single secret is capped at 48 KB and the encoded resume is bigger than that.
+That approach is fragile (easy to mis-paste one chunk, hard to update) and unnecessary - storing
+the resume in its own small private repo avoids the size limit entirely, and updating it going
+forward is just "push a new file."
 
-**Windows (PowerShell) - run `encode_resume.ps1`:**
-A ready-made script (delivered alongside this doc) does the splitting for you - it writes
-`chunk_1.txt`, `chunk_2.txt`, `chunk_3.txt` to a temp folder and tells you exactly how many
-chunks your resume produced (usually 3; could be fewer if you swap in a smaller resume, or more
-if you use a larger one). Run it, then open each `chunk_N.txt` in Notepad, select-all/copy its
-full contents, and paste into the matching `RESUME_BASE64_N` secret in step 3.
+**a. Create the private repo:**
+On GitHub, click **+** (top right) → **New repository**. Name it `resume-private` (or anything -
+just update the `repository:` line in `daily-job-alert.yml` to match). Set visibility to
+**Private**. Don't add a README/gitignore/license - keep it empty.
 
-**Mac/Linux:**
-```bash
-split -b 45000 -d <(base64 -i "app/sample_data/Shaad Khan Product Owner.pdf") /tmp/resume_chunk_
-# writes /tmp/resume_chunk_00, _01, _02, ... - paste each into RESUME_BASE64_1, _2, _3 in order
+**b. Push your resume to it:**
+```powershell
+cd "$env:TEMP"
+git clone https://github.com/shaad459/resume-private.git
+Copy-Item "D:\training\Ai trainings\pythonprojects\jobfinder-ai\app\sample_data\Shaad Khan Product Owner.pdf" "resume-private\resume.pdf"
+cd resume-private
+git add resume.pdf
+git commit -m "Add resume"
+git push
 ```
+If your resume is a `.docx` instead of `.pdf`, name the pushed file `resume.docx` and change
+`RESUME_EXT: pdf` to `RESUME_EXT: docx` near the top of `.github/workflows/daily-job-alert.yml`
+before you push that file - `extract_resume_text()` picks its parser from the file extension, so
+these have to match.
 
-If your resume is a `.docx` instead of `.pdf`, also change `RESUME_EXT: pdf` to
-`RESUME_EXT: docx` near the top of `.github/workflows/daily-job-alert.yml` before you push it -
-`extract_resume_text()` picks its parser from the file extension, so this has to match.
+**c. Create a token scoped to ONLY that repo:**
+Go to `github.com/settings/personal-access-tokens` → **Generate new token** (this is the
+"fine-grained" token type, not "classic" - fine-grained lets you lock it down to one repo).
+- **Repository access:** "Only select repositories" → choose `resume-private`.
+- **Permissions** → **Repository permissions** → set **Contents** to **Read-only**. Leave
+  everything else as "No access."
+- **Expiration:** pick something like 90 days or 1 year rather than "No expiration" - this token
+  can only ever read one small private repo, but a shorter lifetime limits the blast radius if it
+  ever leaks. You'll get an email from GitHub before it expires; when that happens, generate a
+  new one and update the secret in step 3 - the workflow will otherwise start failing silently
+  until you do.
+- Click **Generate token** and copy it immediately (GitHub only shows it once).
 
 ## 3. Add repository secrets
 
@@ -49,9 +64,7 @@ secret**. Add each of these (values from your local `.env` for the API keys):
 
 | Secret name | Value |
 |---|---|
-| `RESUME_BASE64_1` | contents of `chunk_1.txt` from step 2 |
-| `RESUME_BASE64_2` | contents of `chunk_2.txt` from step 2 |
-| `RESUME_BASE64_3` | contents of `chunk_3.txt` from step 2 (if your script produced more or fewer chunks, add/remove secrets - and matching lines in the workflow's "Write resume from secret" step - to match) |
+| `PRIVATE_RESUME_PAT` | the fine-grained token from step 2c |
 | `GEMINI_API_KEY` | same as your local `.env` |
 | `JSEARCH_API_KEY` | same as your local `.env` |
 | `ADZUNA_APP_ID` | same as your local `.env` |
@@ -69,6 +82,12 @@ of the logs automatically.
 `email_sender.py`, `run_scheduled_search.py`, and `.github/workflows/daily-job-alert.yml` are all
 safe to commit - none of them contain a real key or your resume, only code and placeholders read
 from the environment at runtime.
+
+If you'd previously set up the old base64-secret approach, clean up the now-unused secrets:
+**Settings → Secrets and variables → Actions** → delete `RESUME_BASE64_1`, `RESUME_BASE64_2`,
+`RESUME_BASE64_3` if present (the workflow no longer reads them - leaving them costs nothing
+functionally, but there's no reason to keep old resume data sitting there). `encode_resume.ps1`
+and `update_resume_secrets.ps1` are no longer needed either - the private repo replaces both.
 
 ## 5. Test it
 
