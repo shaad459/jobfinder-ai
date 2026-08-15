@@ -2,6 +2,11 @@ import os
 import requests
 from dotenv import load_dotenv
 
+try:
+    from .date_utils import normalize_posted_date
+except ImportError:
+    from date_utils import normalize_posted_date
+
 load_dotenv()
 
 ADZUNA_PAGE_SIZE = 20
@@ -22,7 +27,7 @@ def fetch_adzuna_jobs(query: str, location: str = "", country: str = "in", max_r
             "content-type": "application/json",
         }
 
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=30)
         response.raise_for_status()
         data = response.json()
         raw_jobs = data.get("results", [])
@@ -36,7 +41,7 @@ def fetch_adzuna_jobs(query: str, location: str = "", country: str = "in", max_r
                 "title": job.get("title"),
                 "company": (job.get("company") or {}).get("display_name"),
                 "location": (job.get("location") or {}).get("display_name"),
-                "posted_date": job.get("created"),
+                "posted_date": normalize_posted_date(job.get("created"), "adzuna"),
                 "url": job.get("redirect_url"),
                 "description": job.get("description"),
                 "source": "adzuna",

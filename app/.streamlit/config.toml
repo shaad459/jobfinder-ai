@@ -1,0 +1,25 @@
+[server]
+# Max upload size for st.file_uploader, in MB. Resumes are small text-based documents (a few
+# hundred KB at most) - capping this low is a deliberate safeguard against someone uploading a
+# huge/unexpected file that then gets written to a temp file and parsed.
+maxUploadSize = 1
+
+[theme]
+# The app's custom CSS (CUSTOM_CSS in streamlit_app.py) is hand-tuned against a fixed dark
+# palette - this sets Streamlit's own native widgets (text inputs, selectboxes, expanders,
+# sliders) to the same palette so they match instead of using Streamlit's generic dark
+# defaults, and sets it as the default so the app opens in the right state immediately. The
+# CSS in CUSTOM_CSS additionally pins this with !important, so picking "Light" or "System" in
+# the top-right theme menu can't undo it and land back in the mismatched state that caused the
+# invisible-text bug.
+#
+# Palette: black / grey / blue (per explicit request - the earlier navy/indigo pass still read
+# as "too white"/wrong tint). backgroundColor and secondaryBackgroundColor are neutral
+# black-greys with no blue/navy tint, textColor is pure white, primaryColor is a clean blue -
+# these values must stay in sync with CUSTOM_CSS's .stApp / card / button colors in
+# streamlit_app.py.
+base = "dark"
+backgroundColor = "#0a0a0d"
+secondaryBackgroundColor = "#1a1a1e"
+textColor = "#ffffff"
+primaryColor = "#2563eb"

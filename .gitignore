@@ -4,3 +4,10 @@ __pycache__/
 .env
 .DS_Store
 app/sample_data/
+app/jobfinder.db
+app/*.pdf
+app/*.docx
+# Belt-and-suspenders: no secrets.toml exists yet (checked directly against your machine), but
+# this is the single most common way Streamlit projects accidentally leak API keys to a public
+# repo, so it's blocked pre-emptively rather than waiting for one to show up.
+**/.streamlit/secrets.toml

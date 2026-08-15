@@ -3,13 +3,18 @@ import os
 import requests
 from dotenv import load_dotenv
 
+try:
+    from .date_utils import normalize_posted_date
+except ImportError:
+    from date_utils import normalize_posted_date
+
 load_dotenv()
 
 JSEARCH_HOST = "jsearch.p.rapidapi.com"
 
 
 def fetch_jsearch_jobs(query: str, max_results: int = 60, country: str = "in", date_posted: str = "all") -> list[dict]:
-    num_pages = max(1, math.ceil(max_results / 10))  # roughly 10 results per page
+    num_pages = max(1, math.ceil(max_results / 10))
     url = f"https://{JSEARCH_HOST}/search-v2"
     headers = {
         "X-RapidAPI-Key": os.environ["JSEARCH_API_KEY"],
@@ -22,7 +27,7 @@ def fetch_jsearch_jobs(query: str, max_results: int = 60, country: str = "in", d
         "date_posted": date_posted,
     }
 
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url, headers=headers, params=params, timeout=30)
     response.raise_for_status()
     raw_jobs = response.json().get("data", {}).get("jobs", [])
 
@@ -32,7 +37,9 @@ def fetch_jsearch_jobs(query: str, max_results: int = 60, country: str = "in", d
             "title": job.get("job_title"),
             "company": job.get("employer_name"),
             "location": job.get("job_location") or job.get("job_city"),
-            "posted_date": job.get("job_posted_at_datetime_utc") or job.get("job_posted_at"),
+            "posted_date": normalize_posted_date(
+                job.get("job_posted_at_datetime_utc") or job.get("job_posted_at"), "jsearch"
+            ),
             "url": job.get("job_apply_link"),
             "description": job.get("job_description"),
             "source": "jsearch",

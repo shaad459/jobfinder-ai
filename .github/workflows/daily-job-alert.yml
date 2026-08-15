@@ -1,0 +1,71 @@
+name: Daily job alert
+
+# Runs once a day and emails you any new Strong/Good matches. See GITHUB_ACTIONS_SETUP.md for
+# the one-time secrets setup this needs (resume, API keys, Gmail app password).
+#
+# Cron below is 01:30 UTC = 07:00 IST - edit the schedule line to change the time. You can
+# always trigger a run manually from the repo's Actions tab too (workflow_dispatch below).
+on:
+  schedule:
+    - cron: "30 1 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  daily-search:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    # Edit this if your resume is a .docx instead of a .pdf - extract_resume_text() picks its
+    # parser from the file extension, so this has to match what you actually base64-encoded
+    # into the RESUME_BASE64 secret.
+    env:
+      RESUME_EXT: pdf
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # actions/cache has no "update in place" - each run saves under a brand-new key
+      # (github.run_id) and restores from whatever the most recent previous key was, via the
+      # restore-keys prefix match below. Old entries are simply never restored again and
+      # GitHub auto-evicts anything unused for 7 days, so this is self-cleaning - no separate
+      # cleanup step needed.
+      - name: Restore job database from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: app/jobfinder.db
+          key: jobfinder-db-${{ github.run_id }}
+          restore-keys: |
+            jobfinder-db-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write resume from secret
+        run: echo "${{ secrets.RESUME_BASE64 }}" | base64 --decode > "resume.${{ env.RESUME_EXT }}"
+
+      - name: Run search and send digest
+        run: python run_scheduled_search.py
+        env:
+          RESUME_PATH: resume.${{ env.RESUME_EXT }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JSEARCH_API_KEY: ${{ secrets.JSEARCH_API_KEY }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+
+      # Runs even if the search/email step above failed, so a bad run doesn't wipe out
+      # yesterday's database - you keep whatever state existed before this run started.
+      - name: Save job database to cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: app/jobfinder.db
+          key: jobfinder-db-${{ github.run_id }}
