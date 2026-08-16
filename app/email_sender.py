@@ -73,6 +73,80 @@ def _build_html_body(matches: list[dict]) -> str:
     """
 
 
+def _build_new_postings_html(jobs: list[dict]) -> str:
+    rows = []
+    for job in jobs:
+        title = job.get("title") or "(untitled role)"
+        company = job.get("company") or ""
+        location = job.get("location") or "location not listed"
+        url = job.get("url") or "#"
+        rows.append(f"""
+            <tr>
+              <td style="padding:12px 0;border-bottom:1px solid #e5e5e5;">
+                <div style="font-weight:600;font-size:15px;color:#111;">{title}</div>
+                <div style="color:#555;font-size:13px;">{company} - {location}</div>
+                <a href="{url}" style="font-size:13px;">View job posting -&gt;</a>
+              </td>
+            </tr>
+        """)
+
+    plural = "s" if len(jobs) != 1 else ""
+    return f"""
+    <html><body style="font-family:Arial,Helvetica,sans-serif;max-width:600px;">
+      <h2 style="color:#111;">JobScout AI - {len(jobs)} new posting{plural} spotted</h2>
+      <p style="color:#555;font-size:13px;">
+        These just showed up in the job cache refresh and haven't been AI-scored yet - that
+        happens on the next daily digest (or the next time you open the app). This heads-up is
+        sent before any Gemini scoring so you can be first to apply if one looks promising,
+        without waiting for a full match verdict.
+      </p>
+      <table style="width:100%;border-collapse:collapse;">{''.join(rows)}</table>
+      <p style="color:#999;font-size:11px;margin-top:24px;">
+        Sent automatically by refresh-job-cache.yml. To stop these emails, disable or delete
+        that scheduled workflow in your repo's Actions tab.
+      </p>
+    </body></html>
+    """
+
+
+def send_new_postings_alert(jobs: list[dict]):
+    """Lightweight, UNSCORED heads-up for postings the ~3-hourly job-cache refresh has never
+    seen before (see refresh_job_cache.py) - deliberately separate from send_digest_email above,
+    which only fires once a day and only for jobs Gemini has actually scored Strong/Good. This
+    one skips scoring entirely so it can go out fast, on the theory that "a brand-new posting in
+    a role family you search for exists" is itself useful enough to act on immediately, even
+    before you know how good a fit it is.
+
+    No-ops (does nothing, does not raise) if `jobs` is empty - the common case, since this only
+    matters when the cache refresh actually finds something it hasn't seen before. Raises
+    RuntimeError if Gmail credentials aren't configured, same as send_digest_email - the caller
+    (refresh_job_cache.py) is expected to catch this and log it rather than let a missing/expired
+    Gmail secret take down the whole cache refresh, since refreshing the cache is the primary job
+    here and the email is a bonus.
+    """
+    if not jobs:
+        return
+    if not GMAIL_ADDRESS or not GMAIL_APP_PASSWORD:
+        raise RuntimeError(
+            "GMAIL_ADDRESS and GMAIL_APP_PASSWORD must be set (as GitHub Actions secrets, or "
+            "in your local .env) to send the new-postings alert."
+        )
+    if not NOTIFY_EMAIL:
+        raise RuntimeError("No recipient configured - set NOTIFY_EMAIL or GMAIL_ADDRESS.")
+
+    msg = MIMEMultipart("mixed")
+    plural = "s" if len(jobs) != 1 else ""
+    msg["Subject"] = f"JobScout AI: {len(jobs)} new posting{plural} - be the first to apply"
+    msg["From"] = GMAIL_ADDRESS
+    msg["To"] = NOTIFY_EMAIL
+    msg.attach(MIMEText(_build_new_postings_html(jobs), "html"))
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
+        server.sendmail(GMAIL_ADDRESS, [NOTIFY_EMAIL], msg.as_string())
+
+
 def send_digest_email(matches: list[dict], attachment_path: str | None = None):
     """Emails the given matches as an HTML digest, optionally with a PDF attached.
 

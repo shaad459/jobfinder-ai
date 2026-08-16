@@ -108,6 +108,37 @@ overwrites whatever resume was there before, so the next scheduled (or manually 
 picks up the new one automatically. See `resume_sync.py` for exactly what it does; it only ever
 touches that separate local clone, never `jobfinder-ai`'s own git repo.
 
+## 6. Set up the job-cache refresh workflow (optional, but recommended)
+
+`.github/workflows/refresh-job-cache.yml` runs every 3 hours, refreshes a shared job cache so
+Streamlit searches read from it instead of waiting on a live Workday/JSearch/Adzuna call every
+time, and emails you an immediate, unscored heads-up for anything brand new (see
+`refresh_job_cache.py` and `email_sender.send_new_postings_alert`). It reuses every secret from
+step 3 above - **no new secrets to add.**
+
+**a. Allow it to push back to the repo.** This workflow needs to push the refreshed cache to a
+`data-cache` branch it creates on its own first run - something `daily-job-alert.yml` never
+needed, since that one only reads secrets and sends email. Go to your repo's **Settings** →
+**Actions** → **General** → scroll to **Workflow permissions**, and make sure **"Read and write
+permissions"** is selected (not "Read repository contents permission" only). Without this, the
+workflow's own `permissions: contents: write` declaration gets capped by the repo-level setting
+and the push step will fail with a 403.
+
+**b. Test it.** Same as step 5 - **Actions** tab → "Refresh job cache" → **Run workflow**. The
+first run creates the `data-cache` branch (you'll see "data-cache branch didn't exist yet -
+created it fresh" in the logs) and will very likely email you a batch of "new" postings, since
+nothing's been cached before. After that, each run should only alert on genuinely new listings.
+
+**c. Adding a company automatically reaches this workflow too.** Unlike `daily-job-alert.yml`
+(which keeps its own separate `jobfinder.db`, restored from Actions cache - see "One thing worth
+knowing" below), this workflow reads its company list from `app/companies_config.json`, which is
+committed to `main` automatically whenever you add or remove a company in the Streamlit UI's
+"Manage companies" panel (see `company_sync.py`). No manual step needed - just note that this
+push happens in the background right when you click Add/Remove, using your machine's existing
+git credentials, so it needs a working internet connection at that moment to actually reach
+GitHub (it fails silently toward the console if it can't, and the company is still saved
+locally either way).
+
 ## One thing worth knowing
 
 This workflow keeps its own `jobfinder.db`, persisted in GitHub's Actions cache - it is a

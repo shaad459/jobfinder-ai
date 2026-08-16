@@ -2,6 +2,7 @@ import json
 import hashlib
 from datetime import datetime, timedelta, timezone
 from database import get_connection
+import company_sync
 
 
 _PROFILE_COLUMNS = (
@@ -340,6 +341,7 @@ def add_company(name: str, company: str, datacenter: str, site: str):
     """, (name, company, datacenter, site))
     conn.commit()
     conn.close()
+    _sync_companies_to_github()
 
 
 def remove_company(name: str):
@@ -348,6 +350,19 @@ def remove_company(name: str):
     cursor.execute("DELETE FROM companies WHERE name = ?", (name,))
     conn.commit()
     conn.close()
+    _sync_companies_to_github()
+
+
+def _sync_companies_to_github():
+    """Best-effort push of the current company list to companies_config.json on GitHub (see
+    company_sync.py) - so refresh_job_cache.py's scheduled run (which has no access to this local
+    database) picks up a company you just added/removed. Runs synchronously so the push either
+    lands before this call returns or fails visibly in the console; it deliberately never raises,
+    so a network hiccup here can't turn "add company" into a broken button - worst case, the
+    change is fully saved locally and just isn't on GitHub yet.
+    """
+    ok, message = company_sync.sync_companies_config(get_all_companies())
+    print(f"companies_config.json sync: {message}" if ok else f"companies_config.json sync failed: {message}")
 
 
 def get_matches(profile_id: int) -> list[dict]:

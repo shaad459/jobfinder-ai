@@ -1,0 +1,27 @@
+{
+  "Apex Group": {
+    "company": "theapexgroup",
+    "datacenter": "wd3",
+    "site": "apexgroupcareers"
+  },
+  "Barclays": {
+    "company": "barclays",
+    "datacenter": "wd3",
+    "site": "External_Career_Site_Barclays"
+  },
+  "Citi": {
+    "company": "citi",
+    "datacenter": "wd5",
+    "site": "2"
+  },
+  "Deutsche Bank": {
+    "company": "db",
+    "datacenter": "wd3",
+    "site": "DBWebsite"
+  },
+  "Mastercard": {
+    "company": "mastercard",
+    "datacenter": "wd1",
+    "site": "CorporateCareers"
+  }
+}

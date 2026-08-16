@@ -1,12 +1,21 @@
-"""Pulls the shared job cache (refreshed every ~12h by .github/workflows/refresh-job-cache.yml,
+"""Pulls the shared job cache (refreshed every ~3h by .github/workflows/refresh-job-cache.yml,
 see refresh_job_cache.py) into the local `jobs` table, so streamlit_app.py's search can read
 already-cached postings instead of waiting on a live Workday/JSearch/Adzuna call every time.
 
-Read-only from this side: clones/pulls a small PUBLIC repo (job postings aren't personal data,
-unlike the resume - see resume_sync.py's docstring for why THAT repo has to be private) and
-upserts every entry into the local jobs table via repository.save_job(), which already
-overwrites-by-url on conflict. No git credentials needed for a public repo pull, unlike
-resume_sync.py's push side.
+Reads from a dedicated `data-cache` branch of the SAME jobfinder-ai repo, not a separate
+repository - an earlier version of this module pointed at a standalone
+shaad459/jobscout-job-cache repo that was designed but never actually created, which silently
+made every "cache-first" search fall through to a live fetch (the clone step always failed).
+Using a branch of the repo that already exists avoids needing to create anything new by hand.
+job_cache.json lives there instead of on `main` specifically because it's rewritten every ~3h -
+committing that to `main` would flood the repo's real (LinkedIn-visible) commit history with
+bot-only churn. See company_sync.py for the contrasting case (companies_config.json, which DOES
+belong on `main` since adding a company is rare and human-meaningful).
+
+Read-only from this side: clones/pulls the `data-cache` branch (job postings aren't personal
+data, unlike the resume - see resume_sync.py's docstring for why THAT repo has to be private)
+and upserts every entry into the local jobs table via repository.save_job(), which already
+overwrites-by-url on conflict. No git credentials needed for a public repo pull.
 """
 import json
 import shutil
@@ -15,8 +24,9 @@ from pathlib import Path
 
 from repository import save_job
 
-JOB_CACHE_REPO_URL = "https://github.com/shaad459/jobscout-job-cache.git"
-LOCAL_CLONE_DIR = Path.home() / ".jobscout_ai" / "jobscout-job-cache"
+JOB_CACHE_REPO_URL = "https://github.com/shaad459/jobfinder-ai.git"
+JOB_CACHE_BRANCH = "data-cache"
+LOCAL_CLONE_DIR = Path.home() / ".jobscout_ai" / "jobfinder-ai-data-cache"
 CACHE_FILE_NAME = "job_cache.json"
 
 
@@ -49,22 +59,26 @@ def _sync_job_cache() -> tuple[bool, str]:
     LOCAL_CLONE_DIR.parent.mkdir(parents=True, exist_ok=True)
 
     if (LOCAL_CLONE_DIR / ".git").exists():
-        pull = _run_git(["pull", "--ff-only"], cwd=LOCAL_CLONE_DIR)
+        pull = _run_git(["pull", "--ff-only", "origin", JOB_CACHE_BRANCH], cwd=LOCAL_CLONE_DIR)
         if pull.returncode != 0:
             return False, f"Couldn't update the local job-cache clone: {pull.stderr.strip()[:300]}"
     else:
         if LOCAL_CLONE_DIR.exists():
             shutil.rmtree(LOCAL_CLONE_DIR)
-        clone = _run_git(["clone", JOB_CACHE_REPO_URL, str(LOCAL_CLONE_DIR)], cwd=LOCAL_CLONE_DIR.parent)
+        clone = _run_git(
+            ["clone", "--branch", JOB_CACHE_BRANCH, "--single-branch", JOB_CACHE_REPO_URL, str(LOCAL_CLONE_DIR)],
+            cwd=LOCAL_CLONE_DIR.parent,
+        )
         if clone.returncode != 0:
             return False, (
-                f"Couldn't clone the job-cache repo (has it been created and refreshed at least "
-                f"once yet? See GITHUB_ACTIONS_SETUP.md). git said: {clone.stderr.strip()[:300]}"
+                f"Couldn't clone the '{JOB_CACHE_BRANCH}' branch (has "
+                f"refresh-job-cache.yml run at least once yet? It creates this branch on its "
+                f"first run). git said: {clone.stderr.strip()[:300]}"
             )
 
     cache_file = LOCAL_CLONE_DIR / CACHE_FILE_NAME
     if not cache_file.exists():
-        return False, f"{CACHE_FILE_NAME} doesn't exist yet in the job-cache repo - has refresh-job-cache.yml run at least once?"
+        return False, f"{CACHE_FILE_NAME} doesn't exist yet on the '{JOB_CACHE_BRANCH}' branch - has refresh-job-cache.yml run at least once?"
 
     with open(cache_file, "r", encoding="utf-8") as f:
         jobs = json.load(f)

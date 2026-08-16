@@ -1,0 +1,89 @@
+﻿name: Refresh job cache
+
+# Runs every 3 hours and refreshes the shared job cache (job_cache.json, kept on the data-cache
+# branch below) that the Streamlit app reads from before falling back to a live search - see
+# job_cache_sync.py (pull side, used by the app) and refresh_job_cache.py (this workflow's
+# fetch/diff/alert logic) for the full design.
+#
+# Also emails an immediate, UNSCORED "new posting(s) spotted" alert for anything that's new
+# since the last refresh (see email_sender.send_new_postings_alert) - separate from, and much
+# faster than, the once-a-day AI-scored digest in daily-job-alert.yml. The idea: know a fresh
+# posting exists within ~3h so you can be first to apply, without waiting for either the daily
+# digest or a manual search.
+#
+# Deliberately does NOT call Gemini anywhere in this workflow (see refresh_job_cache.py's own
+# docstring for why) - that's what makes it safe/cheap to run this often; nothing here spends
+# the rate-limited scoring quota daily-job-alert.yml and your local searches also share.
+#
+# Needs NO new secrets beyond what daily-job-alert.yml already has configured - reuses
+# JSEARCH_API_KEY/ADZUNA_APP_ID/ADZUNA_APP_KEY/GMAIL_ADDRESS/GMAIL_APP_PASSWORD/NOTIFY_EMAIL as
+# they're already set up. The one thing this workflow needs that daily-job-alert.yml doesn't:
+# "contents: write" permission below, so it can push the refreshed cache back to the data-cache
+# branch using the automatically-provided GITHUB_TOKEN - no personal access token required.
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-cache:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # data-cache is a separate, orphan branch used purely to hold job_cache.json - kept off
+      # `main` on purpose so a run every 3 hours doesn't flood the repo's real commit history
+      # with bot-only churn (see job_cache_sync.py's docstring). Cloned independently of the
+      # actions/checkout above (which stays on `main` for the actual code) via a token-embedded
+      # URL, since actions/checkout's own credential setup is scoped to the directory it checked
+      # out, not to a second directory we create by hand.
+      - name: Check out (or create) the data-cache branch
+        run: |
+          git config --global user.name "JobScout AI bot"
+          git config --global user.email "actions@users.noreply.github.com"
+          REPO_URL="https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          if git clone --branch data-cache --single-branch "$REPO_URL" data-cache-checkout 2>/dev/null; then
+            echo "Checked out existing data-cache branch."
+          else
+            git clone --single-branch "$REPO_URL" data-cache-checkout
+            cd data-cache-checkout
+            git checkout --orphan data-cache
+            git rm -rf . > /dev/null 2>&1 || true
+            cd ..
+            echo "data-cache branch didn't exist yet - created it fresh (this is expected on the very first run)."
+          fi
+
+      - name: Refresh job cache (emails an alert if anything new turns up)
+        run: python refresh_job_cache.py --output data-cache-checkout/job_cache.json
+        env:
+          JSEARCH_API_KEY: ${{ secrets.JSEARCH_API_KEY }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+
+      - name: Commit and push the refreshed cache
+        working-directory: app/data-cache-checkout
+        run: |
+          git add job_cache.json
+          if git diff --cached --quiet; then
+            echo "No changes to the job cache this run - nothing to push."
+          else
+            git commit -m "Refresh job cache"
+            git push origin HEAD:data-cache
+          fi
