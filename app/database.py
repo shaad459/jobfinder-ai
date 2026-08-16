@@ -127,6 +127,17 @@ def init_db():
         "ALTER TABLE matches ADD COLUMN opened_at TEXT",
         "ALTER TABLE matches ADD COLUMN dimension_breakdown TEXT",
         "ALTER TABLE gemini_calls ADD COLUMN status TEXT",
+        # Resume-library support (multiple saved resumes, e.g. one per role you target - see
+        # search_service.py): `label` is the user-facing name shown in the library ("Business
+        # Analyst", "Product Owner - Citi"), defaulting to the resume's own first job_titles
+        # entry at creation time if the caller doesn't supply one. `active` controls whether a
+        # profile shows up in the library / gets included in a "search all my resumes" call -
+        # 1 (the default, via the CURRENT NOT NULL DEFAULT below) rather than a hard delete, so
+        # retiring a resume never loses its match history. `resume_filename` is stored purely for
+        # display (e.g. "Shaad Khan - BA.pdf") since job_titles alone isn't always a great label.
+        "ALTER TABLE profiles ADD COLUMN label TEXT",
+        "ALTER TABLE profiles ADD COLUMN active INTEGER NOT NULL DEFAULT 1",
+        "ALTER TABLE profiles ADD COLUMN resume_filename TEXT",
     ):
         try:
             cursor.execute(statement)

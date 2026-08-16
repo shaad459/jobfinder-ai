@@ -28,33 +28,31 @@ than being lost or requiring those functions to be rewritten to return diagnosti
 printing them.
 """
 
-import contextlib
 import html
-import io
 import re
 import tempfile
 from pathlib import Path
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 from resume_parser import extract_resume_text
 from profile_extractor import extract_structured_profile
 from resume_builder import build_ats_resume_pdf
 from resume_tailor import tailor_profile_for_job, tailored_resume_filename
-from job_aggregator import fetch_company_jobs
-from matcher import score_all_jobs
+from job_cache_sync import sync_job_cache
 from pdf_export import export_matches_to_pdf
+from resume_sync import sync_resume_for_email_alerts
+from resume_storage import save_resume_file, get_resume_file_path
+from search_service import run_search_for_profiles
 from database import init_db
 from connectors.workday_connector import parse_workday_url
 from repository import (
-    get_or_create_profile, get_profile_by_hash, save_job, save_match,
-    get_scored_job_urls, get_matches, get_gemini_call_counts_today, delete_stale_jobs,
-    mark_job_opened, get_all_companies, add_company, remove_company,
+    get_or_create_profile, get_profile_by_hash, get_profile_by_id, get_gemini_call_counts_today,
+    delete_stale_jobs, mark_job_opened, get_all_companies, add_company, remove_company,
+    list_profiles, set_profile_label, set_profile_active,
 )
 
 DIMENSIONS = ("role", "location", "skills", "certification", "experience", "domain")
-TIER_ORDER = {"Strong": 0, "Good": 1, "Weak": 2}
 TIER_BADGE_CLASS = {"Strong": "jsa-badge-strong", "Good": "jsa-badge-good", "Weak": "jsa-badge-weak"}
 LEVEL_CHIP_CLASS = {"match": "jsa-level-match", "partial": "jsa-level-partial", "none": "jsa-level-none"}
 
@@ -190,858 +188,15 @@ button[kind="secondary"] {
 """
 
 # gemini_utils.call_gemini() prints this exact line ("Rate limited by Gemini - waiting {N}s
-# before retry {a}/{b}...") on every retry - _run_search_captured() below catches it in stdout
-# along with everything else. This regex pulls the wait time back out of that captured text so
-# the UI can show a real, run-specific rate-limit summary instead of just a raw log dump.
+# before retry {a}/{b}...") on every retry - run_search_for_profiles() (search_service.py)
+# captures stdout along with everything else during a search. This regex pulls the wait time
+# back out of that captured text so the UI can show a real, run-specific rate-limit summary
+# instead of just a raw log dump.
 _RATE_LIMIT_WAIT_PATTERN = re.compile(r"waiting (\d+)s before retry")
 
-# A small self-contained canvas game (no external assets, no network calls) shown in the sidebar
-# while a search is running - fetch_company_jobs()/score_all_jobs() run synchronously and can
-# take a while (especially the "all companies" sweep with Gemini rate-limit backoffs), and
-# Streamlit blocks all UI updates until that finishes. This iframe is plain client-side
-# JavaScript though, so once the browser has loaded it, it keeps running/responding to keypresses
-# on its own regardless of what the Python side is doing.
-#
-# An original 2D bowling game - a top-down lane rendered with a simple vanishing-point
-# perspective (the lane narrows toward the back), shaded pins and ball, and the classic
-# two-press aim-then-power control scheme. All original code/art (canvas shapes and gradients
-# only, no external assets), so there's no licensing question the way there would be with an
-# actual Mario/Sonic/etc. title.
-MINIGAME_HTML = """
-<div style="font-family:sans-serif;text-align:center;">
-  <canvas id="jsaGame" width="260" height="380" tabindex="0"
-    style="background:#0b0d1a;border-radius:10px;outline:none;cursor:pointer;"></canvas>
-  <div style="color:#9297b8;font-size:11px;margin-top:6px;">
-    Click the lane, then Space to lock aim &middot; Space again to lock power
-  </div>
-</div>
-<script>
-(function() {
-  const canvas = document.getElementById('jsaGame');
-  const ctx = canvas.getContext('2d');
-  canvas.addEventListener('click', () => canvas.focus());
-  canvas.focus();
-
-  // --- Lane geometry: a simple forced-perspective trapezoid. Pin/ball positions are tracked
-  // in "world" units (using the lane's width at the player's end as the reference scale) and
-  // converted to screen pixels via scaleAt(y), which shrinks toward the back of the lane. ---
-  const topY = 26, bottomY = 344;
-  const topHalfW = 38, bottomHalfW = 92;
-  const centerX = canvas.width / 2;
-
-  function scaleAt(y) {
-    const t = Math.max(0, Math.min(1, (y - topY) / (bottomY - topY)));
-    return (topHalfW + t * (bottomHalfW - topHalfW)) / bottomHalfW;
-  }
-  function screenX(y, worldX) { return centerX + worldX * scaleAt(y); }
-
-  const PIN_ROWS = [
-    { y: 62,  xs: [-27, -9, 9, 27] },
-    { y: 96,  xs: [-18, 0, 18] },
-    { y: 130, xs: [-9, 9] },
-    { y: 164, xs: [0] },
-  ];
-
-  let pins, ball, state, frame, aimAngle, power, totalScore, rolls, message, messageTimer, pinsThisRoll;
-
-  function spawnPins() {
-    pins = [];
-    PIN_ROWS.forEach(row => row.xs.forEach(wx => pins.push({ wx, y: row.y, standing: true })));
-  }
-  function resetRoll() {
-    ball = { wx: 0, y: bottomY - 20, vy: 0, vx: 0 };
-    pinsThisRoll = 0;
-    state = 'aim';
-  }
-  spawnPins();
-  resetRoll();
-  totalScore = 0;
-  rolls = 0;
-  frame = 0;
-  message = '';
-  messageTimer = 0;
-  const MAX_AIM = 0.55; // radians, ~31 degrees either side
-
-  function handlePress() {
-    if (state === 'aim') {
-      state = 'power';
-    } else if (state === 'power') {
-      const speed = 3.2 + (power / 100) * 4.3;
-      ball.vy = -speed;
-      ball.vx = Math.sin(aimAngle) * (2.0 + (power / 100) * 1.4);
-      state = 'roll';
-    } else if (state === 'result') {
-      spawnPins();
-      resetRoll();
-    }
-  }
-
-  canvas.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); handlePress(); }
-  });
-  canvas.addEventListener('mousedown', () => { canvas.focus(); handlePress(); });
-
-  function endRoll(reason) {
-    totalScore += pinsThisRoll;
-    rolls++;
-    if (pinsThisRoll >= 10) message = 'STRIKE!  +10';
-    else if (reason === 'gutter') message = 'Gutter ball';
-    else message = '+' + pinsThisRoll + ' pin' + (pinsThisRoll === 1 ? '' : 's');
-    messageTimer = 70;
-    state = 'result';
-  }
-
-  function update() {
-    frame++;
-    if (state === 'aim') {
-      aimAngle = Math.sin(frame * 0.045) * MAX_AIM;
-    } else if (state === 'power') {
-      power = Math.abs(Math.sin(frame * 0.032)) * 100;
-    } else if (state === 'roll') {
-      ball.y += ball.vy;
-      ball.wx += ball.vx;
-
-      pins.forEach(p => {
-        if (p.standing && Math.abs(ball.y - p.y) < 10 && Math.abs(ball.wx - p.wx) < 11) {
-          p.standing = false;
-          pinsThisRoll++;
-        }
-      });
-
-      if (Math.abs(ball.wx) > bottomHalfW - 4) {
-        endRoll('gutter');
-      } else if (ball.y <= topY || pins.every(p => !p.standing)) {
-        endRoll('reached_end');
-      }
-    } else if (state === 'result') {
-      messageTimer--;
-      if (messageTimer <= 0) { spawnPins(); resetRoll(); }
-    }
-  }
-
-  function drawLane() {
-    ctx.fillStyle = '#0b0d1a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Gutters (a wider, darker trapezoid drawn first, lane trapezoid on top of it)
-    ctx.fillStyle = '#1a1440';
-    ctx.beginPath();
-    ctx.moveTo(screenX(topY, -topHalfW - 10), topY);
-    ctx.lineTo(screenX(topY, topHalfW + 10), topY);
-    ctx.lineTo(screenX(bottomY, bottomHalfW + 14), bottomY);
-    ctx.lineTo(screenX(bottomY, -bottomHalfW - 14), bottomY);
-    ctx.closePath();
-    ctx.fill();
-
-    const laneGrad = ctx.createLinearGradient(0, topY, 0, bottomY);
-    laneGrad.addColorStop(0, '#caa06a');
-    laneGrad.addColorStop(1, '#e8c48c');
-    ctx.fillStyle = laneGrad;
-    ctx.beginPath();
-    ctx.moveTo(screenX(topY, -topHalfW), topY);
-    ctx.lineTo(screenX(topY, topHalfW), topY);
-    ctx.lineTo(screenX(bottomY, bottomHalfW), bottomY);
-    ctx.lineTo(screenX(bottomY, -bottomHalfW), bottomY);
-    ctx.closePath();
-    ctx.fill();
-
-    // Faint board lines for texture + a sense of depth
-    ctx.strokeStyle = 'rgba(120, 85, 40, 0.25)';
-    ctx.lineWidth = 1;
-    [-60, -30, 0, 30, 60].forEach(wx => {
-      ctx.beginPath();
-      ctx.moveTo(screenX(topY, wx), topY);
-      ctx.lineTo(screenX(bottomY, wx), bottomY);
-      ctx.stroke();
-    });
-
-    // Foul line
-    ctx.strokeStyle = 'rgba(180, 30, 30, 0.8)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(screenX(bottomY - 14, -bottomHalfW), bottomY - 14);
-    ctx.lineTo(screenX(bottomY - 14, bottomHalfW), bottomY - 14);
-    ctx.stroke();
-  }
-
-  function drawPin(p) {
-    const s = scaleAt(p.y);
-    const x = screenX(p.y, p.wx);
-    const h = 14 * s, w = 6 * s;
-    ctx.fillStyle = 'rgba(0,0,0,0.25)';
-    ctx.beginPath();
-    ctx.ellipse(x, p.y + h * 0.55, w * 0.9, w * 0.4, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    const grad = ctx.createLinearGradient(x - w, p.y - h, x + w, p.y + h);
-    grad.addColorStop(0, '#f5f5f7');
-    grad.addColorStop(0.5, '#ffffff');
-    grad.addColorStop(1, '#d8d8de');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.ellipse(x, p.y, w, h, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#c23b3b';
-    ctx.fillRect(x - w, p.y - h * 0.25, w * 2, h * 0.3);
-  }
-
-  function drawBall() {
-    const s = scaleAt(ball.y);
-    const x = screenX(ball.y, ball.wx);
-    const r = 9 * s;
-    ctx.fillStyle = 'rgba(0,0,0,0.3)';
-    ctx.beginPath();
-    ctx.ellipse(x, ball.y + r * 0.7, r * 0.9, r * 0.35, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    const grad = ctx.createRadialGradient(x - r * 0.35, ball.y - r * 0.35, r * 0.15, x, ball.y, r);
-    grad.addColorStop(0, '#7b6bd8');
-    grad.addColorStop(0.6, '#4b3aa8');
-    grad.addColorStop(1, '#2b1f70');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, ball.y, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = 'rgba(20,15,50,0.8)';
-    [[-0.2, -0.3], [0.2, -0.3], [0, 0.05]].forEach(([dx, dy]) => {
-      ctx.beginPath();
-      ctx.ellipse(x + dx * r, ball.y + dy * r, r * 0.14, r * 0.14, 0, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-
-  function drawAimAndPower() {
-    if (state === 'aim') {
-      const len = 46;
-      const x1 = screenX(ball.y, 0), y1 = ball.y - 6;
-      const x2 = x1 + Math.sin(aimAngle) * len, y2 = y1 - Math.cos(aimAngle) * len;
-      ctx.strokeStyle = '#4ade80';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-    }
-    if (state === 'power') {
-      const barX = 30, barY = bottomY + 20, barW = canvas.width - 60, barH = 10;
-      ctx.strokeStyle = '#e7e8f5';
-      ctx.strokeRect(barX, barY, barW, barH);
-      ctx.fillStyle = power > 80 ? '#f87171' : power > 40 ? '#fbbf24' : '#4ade80';
-      ctx.fillRect(barX, barY, barW * (power / 100), barH);
-    }
-  }
-
-  function draw() {
-    drawLane();
-    pins.forEach(p => { if (p.standing) drawPin(p); });
-    if (state === 'roll' || state === 'result') drawBall();
-    drawAimAndPower();
-
-    ctx.fillStyle = '#e7e8f5';
-    ctx.font = '12px monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('Score ' + totalScore, 8, 16);
-    ctx.fillText('Rolls ' + rolls, 8, 30);
-
-    if (state === 'aim') {
-      ctx.fillStyle = '#9297b8';
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Space to lock aim', canvas.width / 2, canvas.height - 4);
-    } else if (state === 'power') {
-      ctx.fillStyle = '#9297b8';
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Space to roll!', canvas.width / 2, canvas.height - 4);
-    } else if (state === 'result' && message) {
-      ctx.fillStyle = 'rgba(0,0,0,0.35)';
-      ctx.fillRect(0, canvas.height / 2 - 26, canvas.width, 40);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(message, canvas.width / 2, canvas.height / 2);
-    }
-    ctx.textAlign = 'left';
-  }
-
-  function loop() {
-    update();
-    draw();
-    requestAnimationFrame(loop);
-  }
-  loop();
-})();
-</script>
-"""
-
-# An original vertical-scrolling racing game, in the same spirit as the arcade-era "your red car
-# dodges oncoming traffic on a scrolling road" genre (Konami's Road Fighter being the best-known
-# example) - built from scratch here rather than using that actual game, since Road Fighter is
-# Konami's copyrighted IP and isn't open source. All shapes/colors are drawn with canvas
-# primitives only, no borrowed assets or code.
-ROAD_RACER_HTML = """
-<div style="font-family:sans-serif;text-align:center;">
-  <canvas id="jsaRacer" width="260" height="380" tabindex="0"
-    style="background:#0b0d1a;border-radius:10px;outline:none;cursor:pointer;"></canvas>
-  <div style="color:#9297b8;font-size:11px;margin-top:6px;">
-    Click the road, then &larr;/&rarr; to steer &middot; Space to restart after a crash
-  </div>
-</div>
-<script>
-(function() {
-  const canvas = document.getElementById('jsaRacer');
-  const ctx = canvas.getContext('2d');
-  canvas.addEventListener('click', () => canvas.focus());
-  canvas.focus();
-
-  const roadLeft = 46, roadRight = 214;
-  const carW = 22, carH = 34;
-  const playerY = 320;
-
-  let player, traffic, keys, dashOffset, grassOffset, speed, score, best, state, frame, spawnTimer;
-
-  function reset() {
-    player = { x: (roadLeft + roadRight) / 2 - carW / 2, vx: 0 };
-    traffic = [];
-    dashOffset = 0;
-    grassOffset = 0;
-    speed = 3.2;
-    score = 0;
-    frame = 0;
-    spawnTimer = 60;
-    state = 'playing';
-  }
-  keys = {};
-  reset();
-  best = 0;
-
-  canvas.addEventListener('keydown', (e) => {
-    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') { e.preventDefault(); keys[e.code] = true; }
-    if (e.code === 'Space' && state === 'crashed') { e.preventDefault(); reset(); }
-  });
-  canvas.addEventListener('keyup', (e) => {
-    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') { keys[e.code] = false; }
-  });
-
-  function spawnTrafficCar() {
-    const w = carW, laneX = roadLeft + 4 + Math.random() * (roadRight - roadLeft - w - 8);
-    const palette = ['#3b82f6', '#eab308', '#22c55e', '#a855f7'];
-    traffic.push({
-      x: laneX, y: -carH, w, h: carH,
-      color: palette[Math.floor(Math.random() * palette.length)],
-    });
-  }
-
-  function rectsOverlap(a, b) {
-    return a.x < b.x + b.w && a.x + carW > b.x && playerY < b.y + b.h && playerY + carH > b.y;
-  }
-
-  function update() {
-    if (state !== 'playing') return;
-    frame++;
-
-    if (keys['ArrowLeft']) player.vx -= 0.9;
-    if (keys['ArrowRight']) player.vx += 0.9;
-    if (!keys['ArrowLeft'] && !keys['ArrowRight']) player.vx *= 0.8;
-    player.vx = Math.max(-5, Math.min(5, player.vx));
-    player.x += player.vx;
-    player.x = Math.max(roadLeft + 2, Math.min(roadRight - carW - 2, player.x));
-
-    speed = 3.2 + Math.min(4.5, score / 400);
-    dashOffset = (dashOffset + speed) % 40;
-    grassOffset = (grassOffset + speed) % 30;
-
-    spawnTimer--;
-    if (spawnTimer <= 0) {
-      spawnTrafficCar();
-      spawnTimer = Math.max(22, 55 - Math.floor(score / 60));
-    }
-
-    traffic.forEach(c => c.y += speed);
-    traffic = traffic.filter(c => c.y < canvas.height + 40);
-
-    for (const c of traffic) {
-      if (rectsOverlap({ x: player.x, y: playerY }, c)) {
-        state = 'crashed';
-        best = Math.max(best, Math.floor(score));
-        break;
-      }
-    }
-
-    score += speed * 0.12;
-  }
-
-  function drawCar(x, y, w, h, color, windshieldUp) {
-    ctx.fillStyle = 'rgba(0,0,0,0.3)';
-    ctx.fillRect(x - 1, y + h - 4, w + 2, 5);
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
-    ctx.fillStyle = 'rgba(255,255,255,0.55)';
-    const wy = windshieldUp ? y + 4 : y + h - 12;
-    ctx.fillRect(x + 3, wy, w - 6, 8);
-    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-    ctx.fillRect(x + 1, y + 2, 3, 6);
-    ctx.fillRect(x + w - 4, y + 2, 3, 6);
-    ctx.fillRect(x + 1, y + h - 8, 3, 6);
-    ctx.fillRect(x + w - 4, y + h - 8, 3, 6);
-  }
-
-  function draw() {
-    // Grass shoulders, with a simple scrolling stripe pattern for motion
-    const grassGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grassGrad.addColorStop(0, '#1f5c2e');
-    grassGrad.addColorStop(1, '#173f20');
-    ctx.fillStyle = grassGrad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgba(255,255,255,0.06)';
-    for (let y = -30 + grassOffset; y < canvas.height; y += 30) {
-      ctx.fillRect(0, y, roadLeft, 14);
-      ctx.fillRect(roadRight, y, canvas.width - roadRight, 14);
-    }
-
-    // Road surface + shoulder edge
-    ctx.fillStyle = '#3a3a45';
-    ctx.fillRect(roadLeft, 0, roadRight - roadLeft, canvas.height);
-    ctx.fillStyle = '#e7e8f5';
-    ctx.fillRect(roadLeft - 3, 0, 3, canvas.height);
-    ctx.fillRect(roadRight, 0, 3, canvas.height);
-
-    // Scrolling dashed lane dividers
-    ctx.strokeStyle = 'rgba(231,232,245,0.7)';
-    ctx.lineWidth = 3;
-    ctx.setLineDash([16, 14]);
-    ctx.lineDashOffset = -dashOffset;
-    [roadLeft + (roadRight - roadLeft) / 3, roadLeft + (roadRight - roadLeft) * 2 / 3].forEach(x => {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
-      ctx.stroke();
-    });
-    ctx.setLineDash([]);
-
-    traffic.forEach(c => drawCar(c.x, c.y, c.w, c.h, c.color, false));
-    drawCar(player.x, playerY, carW, carH, '#e13a3a', true);
-
-    ctx.fillStyle = '#e7e8f5';
-    ctx.font = '12px monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('Score ' + Math.floor(score), 8, 16);
-    ctx.fillText('Best ' + best, 8, 30);
-
-    if (state === 'crashed') {
-      ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.fillRect(0, canvas.height / 2 - 30, canvas.width, 48);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 15px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Crashed! Space to retry', canvas.width / 2, canvas.height / 2 - 4);
-      ctx.font = '11px sans-serif';
-      ctx.fillStyle = '#e7e8f5';
-      ctx.fillText('Score: ' + Math.floor(score), canvas.width / 2, canvas.height / 2 + 16);
-    }
-    ctx.textAlign = 'left';
-  }
-
-  function loop() {
-    update();
-    draw();
-    requestAnimationFrame(loop);
-  }
-  loop();
-})();
-</script>
-"""
-
-# Modeled after the mechanics of Chromium's actual open-source T-Rex runner (jump over cacti,
-# duck under birds) rather than adapting Chromium's own game.js verbatim - that file lives inside
-# a much larger module system that isn't a clean drop-in for a standalone iframe, so a fresh,
-# compact reimplementation of the same mechanics is simpler here.
-DINO_HTML = """
-<div style="font-family:sans-serif;text-align:center;">
-  <canvas id="jsaDino" width="260" height="200" tabindex="0"
-    style="background:#0f1225;border-radius:10px;outline:none;cursor:pointer;"></canvas>
-  <div style="color:#9297b8;font-size:11px;margin-top:6px;">
-    Click, then Space/&uarr; to jump &middot; hold &darr; to duck
-  </div>
-</div>
-<script>
-(function() {
-  const canvas = document.getElementById('jsaDino');
-  const ctx = canvas.getContext('2d');
-  canvas.addEventListener('click', () => canvas.focus());
-  canvas.focus();
-
-  const ground = 150;
-  let dino, obstacles, frame, score, best, gameOver, speed, ducking;
-
-  function reset() {
-    dino = { x: 24, y: ground - 26, vy: 0, w: 20, h: 26, jumping: false };
-    obstacles = [];
-    frame = 0;
-    score = 0;
-    speed = 4;
-    gameOver = false;
-    ducking = false;
-  }
-  reset();
-  best = 0;
-
-  function jump() {
-    if (gameOver) { reset(); return; }
-    if (!dino.jumping && !ducking) { dino.vy = -12.5; dino.jumping = true; }
-  }
-
-  canvas.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); }
-    if (e.code === 'ArrowDown') { e.preventDefault(); if (!dino.jumping) ducking = true; }
-  });
-  canvas.addEventListener('keyup', (e) => {
-    if (e.code === 'ArrowDown') ducking = false;
-  });
-
-  function spawn() {
-    const isBird = Math.random() < 0.3 && frame > 200;
-    if (isBird) {
-      obstacles.push({ type: 'bird', x: canvas.width, w: 22, h: 14, y: ground - 46 });
-    } else {
-      const h = 20 + Math.random() * 16;
-      obstacles.push({ type: 'cactus', x: canvas.width, w: 12, h, y: ground - h });
-    }
-  }
-
-  function loop() {
-    frame++;
-    ctx.fillStyle = '#0f1225';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#3730a3';
-    ctx.beginPath();
-    ctx.moveTo(0, ground + 1);
-    ctx.lineTo(canvas.width, ground + 1);
-    ctx.stroke();
-
-    const dinoH = ducking ? 16 : dino.h;
-
-    if (!gameOver) {
-      dino.vy += 0.8;
-      dino.y += dino.vy;
-      const restY = ducking ? ground - 16 : ground - dino.h;
-      if (dino.y >= restY) { dino.y = restY; dino.vy = 0; dino.jumping = false; }
-
-      if (frame % Math.max(45, 80 - Math.floor(speed * 3)) === 0) spawn();
-      obstacles.forEach(o => o.x -= speed);
-      obstacles = obstacles.filter(o => o.x + o.w > 0);
-      if (frame % 300 === 0) speed += 0.4;
-      score = Math.floor(frame / 5);
-      best = Math.max(best, score);
-
-      obstacles.forEach(o => {
-        if (dino.x < o.x + o.w && dino.x + dino.w > o.x &&
-            dino.y < o.y + o.h && dino.y + dinoH > o.y) {
-          gameOver = true;
-        }
-      });
-    }
-
-    ctx.fillStyle = '#818cf8';
-    ctx.fillRect(dino.x, dino.y, dino.w, dinoH);
-    ctx.fillRect(dino.x + dino.w - 8, dino.y - 6, 10, 10);
-    if (!ducking) {
-      const legOffset = Math.floor(frame / 6) % 2 === 0 ? 0 : 4;
-      ctx.fillRect(dino.x + 2, dino.y + dinoH, 4, 6 - legOffset);
-      ctx.fillRect(dino.x + dino.w - 8, dino.y + dinoH, 4, legOffset + 2);
-    }
-
-    obstacles.forEach(o => {
-      if (o.type === 'cactus') {
-        ctx.fillStyle = '#4ade80';
-        ctx.fillRect(o.x, o.y, o.w, o.h);
-        ctx.fillRect(o.x - 4, o.y + 6, 4, 8);
-        ctx.fillRect(o.x + o.w, o.y + 10, 4, 8);
-      } else {
-        ctx.fillStyle = '#f472b6';
-        const flapUp = Math.floor(frame / 8) % 2 === 0;
-        ctx.fillRect(o.x, o.y + (flapUp ? 0 : 4), o.w, 6);
-      }
-    });
-
-    ctx.fillStyle = '#e7e8f5';
-    ctx.font = '12px monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('Score ' + score, 8, 16);
-    ctx.fillText('Best ' + best, 8, 30);
-
-    if (gameOver) {
-      ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Game over - Space to retry', canvas.width / 2, canvas.height / 2);
-      ctx.textAlign = 'left';
-    }
-    requestAnimationFrame(loop);
-  }
-  loop();
-})();
-</script>
-"""
-
-# An original reimplementation of 2048's mechanics (Gabriele Cirulli's original is MIT-licensed,
-# but its actual code is built around external CSS/DOM tiles and touch handling rather than a
-# single embeddable canvas) - same slide-and-merge rules, standalone canvas rendering so it drops
-# into the sidebar iframe the same way the other games do.
-G2048_HTML = """
-<div style="font-family:sans-serif;text-align:center;">
-  <canvas id="jsa2048" width="260" height="300" tabindex="0"
-    style="background:#0b0d1a;border-radius:10px;outline:none;cursor:pointer;"></canvas>
-  <div style="color:#9297b8;font-size:11px;margin-top:6px;">
-    Click, then arrow keys to slide &amp; merge tiles
-  </div>
-</div>
-<script>
-(function() {
-  const canvas = document.getElementById('jsa2048');
-  const ctx = canvas.getContext('2d');
-  canvas.addEventListener('click', () => canvas.focus());
-  canvas.focus();
-
-  const gridLeft = 20, gridTop = 55, gridSize = 220, gap = 8;
-  const cell = (gridSize - gap * 5) / 4;
-  const TILE_COLORS = {
-    0: '#3a3750', 2: '#eee4da', 4: '#ede0c8', 8: '#f2b179', 16: '#f59563',
-    32: '#f67c5f', 64: '#f65e3b', 128: '#edcf72', 256: '#edcc61', 512: '#edc850',
-    1024: '#edc53f', 2048: '#edc22e',
-  };
-  function tileColor(v) { return TILE_COLORS[v] || '#3c3a32'; }
-  function textColor(v) { return v > 0 && v <= 4 ? '#3c352c' : '#f9f6f2'; }
-
-  let grid, score, best, over;
-
-  function emptyCells() {
-    const cells = [];
-    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) if (grid[r][c] === 0) cells.push([r, c]);
-    return cells;
-  }
-  function spawnTile() {
-    const cells = emptyCells();
-    if (!cells.length) return;
-    const [r, c] = cells[Math.floor(Math.random() * cells.length)];
-    grid[r][c] = Math.random() < 0.9 ? 2 : 4;
-  }
-  function reset() {
-    grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    score = 0;
-    over = false;
-    spawnTile();
-    spawnTile();
-  }
-  reset();
-  best = 0;
-
-  function processLine(line) {
-    let nums = line.filter(v => v !== 0);
-    let gained = 0;
-    for (let i = 0; i < nums.length - 1; i++) {
-      if (nums[i] === nums[i + 1]) {
-        nums[i] *= 2;
-        gained += nums[i];
-        nums.splice(i + 1, 1);
-      }
-    }
-    while (nums.length < 4) nums.push(0);
-    return { line: nums, gained };
-  }
-
-  function hasMoves() {
-    if (emptyCells().length) return true;
-    for (let r = 0; r < 4; r++) {
-      for (let c = 0; c < 4; c++) {
-        const v = grid[r][c];
-        if (c < 3 && grid[r][c + 1] === v) return true;
-        if (r < 3 && grid[r + 1][c] === v) return true;
-      }
-    }
-    return false;
-  }
-
-  function move(direction) {
-    const vertical = direction === 'up' || direction === 'down';
-    const reversed = direction === 'right' || direction === 'down';
-    let moved = false, gained = 0;
-    const newGrid = grid.map(row => row.slice());
-
-    for (let i = 0; i < 4; i++) {
-      const original = vertical ? [0, 1, 2, 3].map(r => grid[r][i]) : grid[i].slice();
-      let line = original.slice();
-      if (reversed) line.reverse();
-      const result = processLine(line);
-      let finalLine = result.line.slice();
-      if (reversed) finalLine.reverse();
-      gained += result.gained;
-      if (finalLine.some((v, idx) => v !== original[idx])) moved = true;
-      if (vertical) { for (let r = 0; r < 4; r++) newGrid[r][i] = finalLine[r]; }
-      else { newGrid[i] = finalLine; }
-    }
-
-    if (moved) {
-      grid = newGrid;
-      score += gained;
-      best = Math.max(best, score);
-      spawnTile();
-      if (!hasMoves()) over = true;
-    }
-  }
-
-  canvas.addEventListener('keydown', (e) => {
-    const map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
-    if (!map[e.code]) return;
-    e.preventDefault();
-    if (over) { reset(); return; }
-    move(map[e.code]);
-  });
-
-  function fillRoundRect(x, y, w, h, r) {
-    if (ctx.roundRect) {
-      ctx.beginPath();
-      ctx.roundRect(x, y, w, h, r);
-      ctx.fill();
-    } else {
-      ctx.fillRect(x, y, w, h);
-    }
-  }
-
-  function drawTile(r, c, v) {
-    const x = gridLeft + c * (cell + gap), y = gridTop + r * (cell + gap);
-    ctx.fillStyle = tileColor(v);
-    fillRoundRect(x, y, cell, cell, 6);
-    if (v) {
-      ctx.fillStyle = textColor(v);
-      ctx.font = 'bold ' + (v < 100 ? 20 : v < 1000 ? 17 : 14) + 'px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(String(v), x + cell / 2, y + cell / 2 + 1);
-      ctx.textBaseline = 'alphabetic';
-    }
-  }
-
-  function draw() {
-    ctx.fillStyle = '#0b0d1a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#e7e8f5';
-    ctx.font = '12px monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('Score ' + score, 8, 16);
-    ctx.fillText('Best ' + best, 8, 30);
-
-    ctx.fillStyle = '#2a2740';
-    fillRoundRect(gridLeft - gap, gridTop - gap, gridSize, gridSize, 8);
-
-    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) drawTile(r, c, grid[r][c]);
-
-    if (over) {
-      ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 14px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('No more moves', canvas.width / 2, canvas.height / 2 - 8);
-      ctx.font = '11px sans-serif';
-      ctx.fillText('press any arrow to restart', canvas.width / 2, canvas.height / 2 + 12);
-    }
-    ctx.textAlign = 'left';
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-</script>
-"""
-
-MINIGAMES = {
-    "Bowling": {"html": MINIGAME_HTML, "height": 430},
-    "Road Racer": {"html": ROAD_RACER_HTML, "height": 430},
-    "2048": {"html": G2048_HTML, "height": 350},
-    "Chrome Dino Run": {"html": DINO_HTML, "height": 250},
-}
-
-
-def _render_game_panel():
-    """Renders the game picker in the sidebar, plus the iframe itself when a game is open.
-    Lives in the sidebar (not the search form) and, once unlocked (see game_panel_unlocked
-    below), stays visible for the rest of the session - including after "Close game" is
-    clicked. Closing only hides the running iframe (game_open), not the picker dropdown
-    itself; previously both were gated by the same flag, so closing the game made the whole
-    panel - dropdown included - disappear with no way to reopen a game afterward. Called from
-    two places: inline, right before a search's blocking call (so it's visible during THAT
-    run's wait), and from the persistent top-of-script sidebar block on every subsequent rerun
-    (so it doesn't vanish the next time something else on the page triggers a rerun, e.g. the
-    PDF export button).
-    """
-    st.markdown("**While you wait:**")
-    game_choice = st.selectbox("Pick a game", list(MINIGAMES.keys()), key="game_choice",
-                                label_visibility="collapsed")
-    if st.session_state.game_open:
-        game = MINIGAMES[game_choice]
-        components.html(game["html"], height=game["height"], scrolling=False)
-        if st.button("Close game", key="close_game_btn"):
-            st.session_state.game_open = False
-            st.rerun()
-    else:
-        if st.button("Open game", key="open_game_btn"):
-            st.session_state.game_open = True
-            st.rerun()
-
-
-# --- Search helpers (same calls chat_assistant.py's _do_search makes, minus the input()
-# fallback and print()s - a Streamlit widget always supplies company/location/etc. directly, and
-# stdout is captured by the caller instead of printed inline). ---------------------------------
-
-def _run_search(profile, profile_id, company, title_override, location, relocation_ok,
-                 include_aggregators=False):
-    query = title_override or (profile.get("job_titles") or ["product owner"])[0]
-    jobs = fetch_company_jobs(company, query, location=location, relocation_ok=relocation_ok,
-                               include_aggregators_for_workday=include_aggregators)
-
-    already_scored = get_scored_job_urls(profile_id)
-    new_jobs = [j for j in jobs if j["url"] not in already_scored]
-
-    def save_batch(batch_scored):
-        for job in batch_scored:
-            save_job(job)
-            save_match(profile_id, job)
-
-    if new_jobs:
-        score_all_jobs(profile, new_jobs, batch_size=10, on_batch_scored=save_batch,
-                        title_override=title_override)
-
-    job_urls_this_search = {j["url"] for j in jobs}
-    all_matches = get_matches(profile_id)
-    return [m for m in all_matches if m["url"] in job_urls_this_search]
-
-
-def _run_search_all_companies(profile, profile_id, title_override, location, relocation_ok):
-    all_matches = []
-    for company in get_all_companies():
-        all_matches.extend(_run_search(profile, profile_id, company, title_override, location,
-                                        relocation_ok, include_aggregators=True))
-    return all_matches
-
-
-def _run_search_captured(*args, **kwargs):
-    """Runs a search while capturing everything it prints, so the same diagnostics the CLI
-    entry points show inline (prefilter/prescreen counts, freshness/location notes, warnings)
-    are visible in the browser too, not just in the terminal running the Streamlit server.
-    """
-    buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
-        all_companies = kwargs.pop("all_companies", False)
-        if all_companies:
-            result = _run_search_all_companies(*args, **kwargs)
-        else:
-            result = _run_search(*args, **kwargs)
-    return result, buf.getvalue()
+# The actual search/scoring flow (cache-first read, live-fetch fallback, Gemini scoring, stdout
+# capture for the on-page log) lives in search_service.py, shared with api_server.py - see that
+# module's docstring. run_search_for_profiles() below is what this page calls directly.
 
 
 # --- Job result card ------------------------------------------------------------------------
@@ -1068,29 +223,85 @@ def _ats_coverage_pct(job: dict) -> int | None:
     return round(100 * len(points) / total)
 
 
+def _flatten_matches_for_export(jobs: list[dict]) -> list[dict]:
+    """export_matches_to_pdf() (and the emailed digest, which reuses the same function) expects
+    one flat match-shaped dict per row - unchanged, deliberately, so the PDF/email code never had
+    to learn about the new per-resume "scores" list. This just re-flattens a merged multi-resume
+    job back into one row per (job, resume) pair, with the resume's label folded into the title
+    so it's still clear which resume that row's verdict belongs to.
+    """
+    flattened = []
+    for job in jobs:
+        for s in job.get("scores", []):
+            label = s.get("label") or f"Resume {s.get('profile_id')}"
+            flattened.append({
+                "url": job.get("url"),
+                "title": f'{job.get("title")} (as {label})',
+                "company": job.get("company"),
+                "location": job.get("location"),
+                "posted_date": job.get("posted_date"),
+                "match_tier": s.get("match_tier"),
+                "match_score": s.get("match_score"),
+                "match_points": s.get("match_points"),
+                "match_gaps": s.get("match_gaps"),
+                "dimension_breakdown": s.get("dimension_breakdown"),
+            })
+    return flattened
+
+
 @st.fragment
-def _render_job_card(job, profile, profile_id, resume_filename):
-    tier = job.get("match_tier") or "Weak"
-    badge_class = TIER_BADGE_CLASS.get(tier, "jsa-badge-weak")
+def _render_job_card_multi(job):
+    """One card per JOB (not per job-per-resume) - the point of the resume library. A job that
+    matches several of your selected resumes shows a score pill for each; clicking a pill expands
+    THAT resume's fit breakdown/points/gaps below, and "Tailor resume for this job" tailors
+    whichever resume's pill is currently expanded (see tailored_paths, now keyed by
+    (url, profile_id) instead of just url, since the same job can be tailored differently per
+    resume).
+    """
     url = job.get("url")
-    coverage = _ats_coverage_pct(job)
+    scores = sorted(job.get("scores") or [], key=lambda s: -(s.get("match_score") or 0))
+    if not scores:
+        return
+    best = scores[0]
 
     with st.container(border=True):
-        st.markdown(
-            f'<span class="jsa-badge {badge_class}">{_esc(tier)}</span>'
-            f'<span class="jsa-score">{_esc(job.get("match_score"))}</span>'
-            + (f'<span class="jsa-coverage">ATS coverage: {coverage}%</span>'
-               if coverage is not None else ''),
-            unsafe_allow_html=True,
-        )
         st.markdown(f'<div class="jsa-job-title">{_esc(job.get("title"))}</div>',
                     unsafe_allow_html=True)
         posted = job.get("posted_date") or "date unknown"
-        opened_note = " · already opened" if job.get("opened_at") else ""
         st.caption(f"{job.get('company')} · {job.get('location') or 'location not listed'} "
-                   f"· {job.get('source')} · posted {posted}{opened_note}")
+                   f"· {job.get('source')} · posted {posted}")
 
-        breakdown = job.get("dimension_breakdown") or {}
+        state_key = f"expanded_profile_{url}"
+        if state_key not in st.session_state:
+            st.session_state[state_key] = best["profile_id"]
+
+        pill_cols = st.columns(len(scores))
+        for col, s in zip(pill_cols, scores):
+            with col:
+                is_expanded = s["profile_id"] == st.session_state[state_key]
+                label = s.get("label") or f"Resume {s['profile_id']}"
+                button_label = f"{'▸ ' if is_expanded else ''}{label}: {s.get('match_score')} ({s.get('match_tier')})"
+                if st.button(button_label, key=f"pill_{url}_{s['profile_id']}"):
+                    st.session_state[state_key] = s["profile_id"]
+                    st.rerun(scope="fragment")
+
+        expanded = next((s for s in scores if s["profile_id"] == st.session_state[state_key]), best)
+        tier = expanded.get("match_tier") or "Weak"
+        badge_class = TIER_BADGE_CLASS.get(tier, "jsa-badge-weak")
+        coverage = _ats_coverage_pct(expanded)
+        opened_note = " · already opened" if expanded.get("opened_at") else ""
+        st.markdown(
+            f'<span class="jsa-badge {badge_class}">{_esc(tier)}</span>'
+            f'<span class="jsa-score">{_esc(expanded.get("match_score"))}</span>'
+            + (f'<span class="jsa-coverage">ATS coverage: {coverage}%</span>'
+               if coverage is not None else '')
+            + opened_note,
+            unsafe_allow_html=True,
+        )
+        if expanded.get("match_reasoning"):
+            st.caption(f"As {expanded.get('label')}: {expanded['match_reasoning']}")
+
+        breakdown = expanded.get("dimension_breakdown") or {}
         if breakdown:
             with st.expander("Fit breakdown"):
                 for dimension in DIMENSIONS:
@@ -1116,24 +327,41 @@ def _render_job_card(job, profile, profile_id, resume_filename):
                 st.markdown(f"[View posting ↗]({url})")
         with action_cols[1]:
             if url and st.button("Mark as opened", key=f"open_{url}"):
-                mark_job_opened(profile_id, url)
+                # Marks it opened against EVERY resume that matched this job, not just the
+                # currently-expanded one - once you've actually opened/applied to a posting,
+                # that's true regardless of which resume happened to surface it.
+                for s in scores:
+                    mark_job_opened(s["profile_id"], url)
                 st.rerun(scope="fragment")
         with action_cols[2]:
-            # Available for Strong AND Good matches now - a Good-tier match with a high score
-            # (e.g. 89) is still a real, worthwhile role; it was previously gated to Strong only.
+            # Available for Strong AND Good matches - a Good-tier match with a high score (e.g.
+            # 89) is still a real, worthwhile role, not just Strong ones.
             if tier in ("Strong", "Good") and url:
-                if url in st.session_state.tailored_paths:
-                    with open(st.session_state.tailored_paths[url], "rb") as f:
+                tailor_key = (url, expanded["profile_id"])
+                if tailor_key in st.session_state.tailored_paths:
+                    with open(st.session_state.tailored_paths[tailor_key], "rb") as f:
                         st.download_button(
                             "⬇ Tailored resume", f,
-                            file_name=Path(st.session_state.tailored_paths[url]).name,
-                            mime="application/pdf", key=f"dl_{url}")
-                elif st.button("Tailor resume for this job", key=f"tailor_{url}"):
+                            file_name=Path(st.session_state.tailored_paths[tailor_key]).name,
+                            mime="application/pdf", key=f"dl_{url}_{expanded['profile_id']}")
+                elif st.button("Tailor resume for this job",
+                                key=f"tailor_{url}_{expanded['profile_id']}"):
                     with st.spinner("Tailoring (one Gemini call)..."):
-                        tailored_profile = tailor_profile_for_job(profile, job)
-                        tailored_path = tailored_resume_filename(resume_filename, job["company"])
+                        full_profile = get_profile_by_id(expanded["profile_id"])
+                        # tailor_profile_for_job() reads dimension_breakdown/gaps straight off the
+                        # job dict - those live on the per-resume score here, not on the merged
+                        # job, so they're grafted on for this one call rather than changing that
+                        # function's contract.
+                        job_for_tailoring = dict(job)
+                        job_for_tailoring["dimension_breakdown"] = expanded.get("dimension_breakdown")
+                        job_for_tailoring["match_gaps"] = expanded.get("match_gaps")
+                        tailored_profile = tailor_profile_for_job(full_profile, job_for_tailoring)
+                        original_path = get_resume_file_path(expanded["profile_id"])
+                        base_name = str(original_path) if original_path else (
+                            f"{expanded.get('label') or 'resume'}.pdf")
+                        tailored_path = tailored_resume_filename(base_name, job.get("company") or "")
                         build_ats_resume_pdf(tailored_profile, tailored_path)
-                    st.session_state.tailored_paths[url] = tailored_path
+                    st.session_state.tailored_paths[tailor_key] = tailored_path
                     st.rerun(scope="fragment")
 
 
@@ -1143,31 +371,51 @@ st.set_page_config(page_title="JobScout AI", page_icon="🧭", layout="wide")
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 init_db()
 
-if "profile" not in st.session_state:
-    st.session_state.profile = None
-    st.session_state.profile_id = None
-    st.session_state.resume_filename = None
+# Session-state key the "Search as" multiselect widget below is keyed on. Kept separate from
+# selected_profile_ids (the plain set the rest of the app reads/writes) because Streamlit
+# persists a keyed widget's own value under this key automatically - so any PROGRAMMATIC
+# change to the selection (uploading a new resume, retiring one) has to write here directly,
+# before the widget renders, instead of via a `default=` argument. The old code passed
+# `default=[... derived from selected_profile_ids ...]` with no explicit `key=`; since that
+# default was recomputed from state the widget's own output fed straight back into, every
+# interaction changed the widget's identity on the next rerun (Streamlit auto-derives one from
+# the default when no key is given), which reset it to a stale default and silently discarded
+# whatever the user had just picked - this is what caused "can't select a new resume after
+# removing one."
+RESUME_SELECT_KEY = "resume_multiselect_ids"
+
+if "selected_profile_ids" not in st.session_state:
+    # None means "not yet initialized" - the resume-library section below fills this in with
+    # every active resume selected by default the first time it runs each session, so a
+    # returning user's whole library is searched without an extra click. After that, it's a
+    # plain set of profile_ids the user has checked/unchecked in the library.
+    st.session_state.selected_profile_ids = None
+    st.session_state.editing_label_id = None
+    # last_matches now holds MERGED jobs (one entry per job URL, each carrying a "scores" list -
+    # one score per resume that matched it) rather than one flat match-per-job - see
+    # search_service.run_search_for_profiles.
     st.session_state.last_matches = []
+    # Keyed by (job_url, profile_id) now, not just job_url - the same job can be tailored
+    # differently per resume.
     st.session_state.tailored_paths = {}
     st.session_state.match_report_path = None
-
-if "game_open" not in st.session_state:
-    # Whether the game iframe itself is showing. Set True the moment a search starts; "Close
-    # game" sets it back to False - but that only hides the iframe now, not the picker dropdown
-    # below (game_panel_unlocked), so there's still a way to reopen a game afterward.
-    st.session_state.game_open = False
-
-if "game_panel_unlocked" not in st.session_state:
-    # Set True the moment a search first starts, and never reset for the rest of the session -
-    # this is what keeps the game picker (dropdown) visible in the sidebar even after the user
-    # clicks "Close game". game_open (above) only controls whether the iframe itself is showing.
-    st.session_state.game_panel_unlocked = False
 
 if "startup_cleanup_done" not in st.session_state:
     deleted = delete_stale_jobs(max_age_days=7)
     st.session_state.startup_cleanup_done = True
     if deleted:
         st.session_state.startup_cleanup_note = f"Cleaned up {deleted} job(s) older than 7 days."
+
+if "job_cache_synced" not in st.session_state:
+    # Pulls the shared job cache (refreshed every ~12h by refresh-job-cache.yml, see
+    # job_cache_sync.py) once per app session, before any search - so a search reads
+    # already-cached postings instead of waiting on a live API call. Silent on failure (e.g. no
+    # internet, or the job-cache repo hasn't been set up yet): _run_search below always falls
+    # back to a live fetch for any company the cache comes up empty for, so this is a pure
+    # speed/rate-limit optimization, never a hard dependency.
+    _cache_ok, _cache_message = sync_job_cache()
+    st.session_state.job_cache_synced = True
+    st.session_state.job_cache_sync_note = _cache_message if _cache_ok else None
 
 st.markdown(
     '<div class="jsa-header"><span class="jsa-logo">🧭</span><h1>JobScout AI</h1></div>'
@@ -1178,6 +426,9 @@ st.markdown(
 
 if st.session_state.get("startup_cleanup_note"):
     st.caption(st.session_state.startup_cleanup_note)
+
+if st.session_state.get("job_cache_sync_note"):
+    st.caption(f"Job cache: {st.session_state.job_cache_sync_note}")
 
 with st.sidebar:
     st.markdown('<div class="jsa-sidebar-brand">🧭 JobScout AI</div>', unsafe_allow_html=True)
@@ -1198,24 +449,24 @@ with st.sidebar:
             unsafe_allow_html=True,
         )
 
-# Persistent across reruns once unlocked (see _render_game_panel's docstring) - this is what
-# keeps the game picker visible after a search finishes, after "Close game" is clicked, and on
-# any later rerun that isn't the search itself (e.g. clicking "Export to PDF"). The inline render
-# at the search-button call site below covers the one run where the panel needs to appear but
-# hasn't been unlocked yet.
-if st.session_state.game_panel_unlocked:
-    with st.sidebar:
-        st.divider()
-        _render_game_panel()
-
 # --- Resume upload + profile extraction -----------------------------------------------------
 
-uploaded_file = st.file_uploader("Upload your resume", type=["pdf", "docx"])
+# Every resume you add here is saved permanently (repository.get_or_create_profile - keyed by a
+# hash of the resume text, so re-uploading the same file again is instant/free) rather than
+# replacing whatever you had loaded before. Check a resume's box below to include it in your
+# next search; a job that matches more than one selected resume shows a score for each one (see
+# _render_job_card_multi) - this is the actual point of a library instead of a single "current"
+# resume: e.g. a Business Analyst-tailored resume and a Product Manager-tailored one can each
+# surface roles the other would have missed, since Stage 0/-1 title filtering and Gemini scoring
+# both run per-resume (see search_service.run_search_for_profiles).
+st.subheader("Resume library")
+
+uploaded_file = st.file_uploader("Add a resume (.pdf or .docx)", type=["pdf", "docx"])
 
 if uploaded_file is not None:
-    # extract_resume_text() dispatches by file extension and expects a real path on disk - same
-    # function every other entry point uses, so the uploaded bytes are written to a temp file
-    # rather than teaching that function to also accept a file-like object.
+    # Runs on every rerun the uploader still holds a file (Streamlit doesn't clear it on its
+    # own) - harmless and cheap after the first time, since get_or_create_profile short-circuits
+    # to the existing profile_id by content hash and only calls Gemini on genuinely new content.
     suffix = Path(uploaded_file.name).suffix
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         tmp.write(uploaded_file.getvalue())
@@ -1224,102 +475,208 @@ if uploaded_file is not None:
     resume_text = extract_resume_text(tmp_path)
     cached = get_profile_by_hash(resume_text)
     if cached:
-        profile_id = cached.pop("id")
-        profile = cached
+        new_profile_id = cached["id"]
     else:
         with st.spinner("Extracting your profile with Gemini (one-time per resume)..."):
-            profile = extract_structured_profile(resume_text)
-            profile_id = get_or_create_profile(resume_text, profile)
-        st.success(f"Profile extracted (id {profile_id}).")
+            extracted = extract_structured_profile(resume_text)
+            new_profile_id = get_or_create_profile(
+                resume_text, extracted, resume_filename=uploaded_file.name)
+        new_label = (extracted.get("job_titles") or ["Resume"])[0]
+        st.success(f'Added "{new_label}" to your resume library.')
 
-    st.session_state.profile = profile
-    st.session_state.profile_id = profile_id
-    st.session_state.resume_filename = uploaded_file.name
+    # Persists the ORIGINAL bytes (not just the parsed JSON) so this resume is still fully usable
+    # - for tailoring filenames and for the email-alert sync button below - in a future session,
+    # not just for as long as this browser tab stays open.
+    save_resume_file(new_profile_id, uploaded_file.name, uploaded_file.getvalue())
+    if st.session_state.selected_profile_ids is not None:
+        st.session_state.selected_profile_ids.add(new_profile_id)
+        # Keep the multiselect widget's own state in sync with this programmatic change -
+        # see RESUME_SELECT_KEY's comment above.
+        st.session_state[RESUME_SELECT_KEY] = list(st.session_state.selected_profile_ids)
 
-# --- Profile summary + ATS resume download --------------------------------------------------
+library = list_profiles(active_only=True)
 
-if st.session_state.profile:
-    profile = st.session_state.profile
-    profile_id = st.session_state.profile_id
+# Self-heal: a resume saved before label-defaulting existed (or created via the earlier web-app
+# testing) can have label=NULL in the database - rather than showing a permanent "(untitled
+# resume)", derive one from job_titles the first time it's rendered and persist it, so this only
+# ever needs fixing once, not on every load.
+for p in library:
+    if not p.get("label"):
+        fallback_label = (p.get("job_titles") or ["Untitled resume"])[0]
+        set_profile_label(p["id"], fallback_label)
+        p["label"] = fallback_label
 
-    with st.expander(f"Extracted profile: {profile.get('full_name') or 'your resume'}", expanded=False):
-        st.write(profile.get("summary") or "")
-        st.write(f"**Current location:** {profile.get('current_location') or 'not stated'}")
-        st.write(f"**Years of experience:** {profile.get('total_years_experience')}")
-        st.write(f"**Titles held:** {', '.join(profile.get('job_titles') or []) or 'none extracted'}")
+if st.session_state.selected_profile_ids is None:
+    _all_ids = {p["id"] for p in library}
+    st.session_state.selected_profile_ids = _all_ids
+    st.session_state.setdefault(RESUME_SELECT_KEY, list(_all_ids))
 
-        skills = profile.get("skills") or {}
-        if skills.get("hands_on"):
-            st.write(f"**Hands-on skills:** {', '.join(skills['hands_on'])}")
-        if skills.get("trained"):
-            st.write(f"**Familiar with:** {', '.join(skills['trained'])}")
+if not library:
+    st.info("Upload a resume above to get started.")
+else:
+    # One compact multiselect instead of a checkbox-per-card - this is the whole "which resumes
+    # am I searching with" control day to day; renaming/retiring/ATS-download/email-sync are all
+    # occasional maintenance, tucked into the collapsed expander below instead of always-visible.
+    label_lookup = {p["id"]: p.get("label") or f"Resume {p['id']}" for p in library}
+    # Drop any id no longer in `library` (e.g. just retired) from the widget's own stored
+    # value before rendering - Streamlit errors if a keyed multiselect's session_state value
+    # contains something outside `options`.
+    st.session_state[RESUME_SELECT_KEY] = [
+        pid for pid in st.session_state.get(RESUME_SELECT_KEY, []) if pid in label_lookup
+    ]
+    selected_ids = st.multiselect(
+        "Search as",
+        options=[p["id"] for p in library],
+        format_func=lambda pid: label_lookup.get(pid, f"Resume {pid}"),
+        key=RESUME_SELECT_KEY,
+        help="A job that matches more than one selected resume shows a score for each.",
+    )
+    st.session_state.selected_profile_ids = set(selected_ids)
 
-        certs = profile.get("certifications") or []
-        if certs:
-            cert_labels = [c.get("abbreviation") or c.get("name") for c in certs]
-            st.write(f"**Certifications:** {', '.join(cert_labels)}")
+    with st.expander(f"Manage resume library ({len(library)} saved)", expanded=False):
+        for p in library:
+            row_cols = st.columns([3.5, 1, 1])
+            with row_cols[0]:
+                if st.session_state.editing_label_id == p["id"]:
+                    label_cols = st.columns([3, 1, 1])
+                    with label_cols[0]:
+                        new_label = st.text_input("Label", value=p.get("label") or "",
+                                                   key=f"label_input_{p['id']}",
+                                                   label_visibility="collapsed")
+                    with label_cols[1]:
+                        if st.button("Save", key=f"save_label_{p['id']}"):
+                            set_profile_label(p["id"], new_label.strip() or p.get("label"))
+                            st.session_state.editing_label_id = None
+                            st.rerun()
+                    with label_cols[2]:
+                        if st.button("Cancel", key=f"cancel_label_{p['id']}"):
+                            st.session_state.editing_label_id = None
+                            st.rerun()
+                else:
+                    meta_bits = []
+                    if p.get("job_titles"):
+                        meta_bits.append(", ".join(p["job_titles"][:3]))
+                    if p.get("total_years_experience") is not None:
+                        meta_bits.append(f"{p['total_years_experience']} yrs")
+                    if p.get("domain"):
+                        meta_bits.append(p["domain"])
+                    st.markdown(f"**{p.get('label')}**  \n"
+                                f"<span style='font-size:0.85em;color:#888'>"
+                                f"{_esc(' · '.join(meta_bits) or 'No titles extracted')}</span>",
+                                unsafe_allow_html=True)
+            with row_cols[1]:
+                if st.button("Rename", key=f"edit_label_{p['id']}"):
+                    st.session_state.editing_label_id = p["id"]
+                    st.rerun()
+            with row_cols[2]:
+                if st.button("Retire", key=f"retire_{p['id']}",
+                             help="Excludes it from search without deleting its match history"):
+                    set_profile_active(p["id"], False)
+                    st.session_state.selected_profile_ids.discard(p["id"])
+                    if RESUME_SELECT_KEY in st.session_state:
+                        st.session_state[RESUME_SELECT_KEY] = [
+                            pid for pid in st.session_state[RESUME_SELECT_KEY] if pid != p["id"]
+                        ]
+                    st.rerun()
 
-    ats_resume_path = str(Path(st.session_state.resume_filename).stem) + " ATS.pdf"
-    build_ats_resume_pdf(profile, ats_resume_path)
-    with open(ats_resume_path, "rb") as f:
-        st.download_button("⬇ Download ATS-optimized resume", f, file_name=ats_resume_path,
-                            mime="application/pdf")
+            with st.expander("Details / ATS resume / email alerts", expanded=False):
+                st.write(p.get("summary") or "")
+                st.write(f"**Current location:** {p.get('current_location') or 'not stated'}")
+                skills = p.get("skills") or {}
+                if skills.get("hands_on"):
+                    st.write(f"**Hands-on skills:** {', '.join(skills['hands_on'])}")
+                if skills.get("trained"):
+                    st.write(f"**Familiar with:** {', '.join(skills['trained'])}")
+                certs = p.get("certifications") or []
+                if certs:
+                    cert_labels = [c.get("abbreviation") or c.get("name") for c in certs]
+                    st.write(f"**Certifications:** {', '.join(cert_labels)}")
+
+                ats_resume_path = f"{p.get('label') or 'resume'} ATS.pdf"
+                build_ats_resume_pdf(p, ats_resume_path)
+                with open(ats_resume_path, "rb") as f:
+                    st.download_button("⬇ Download ATS-optimized resume", f,
+                                        file_name=ats_resume_path, mime="application/pdf",
+                                        key=f"ats_dl_{p['id']}")
+
+                # Opt-in for the scheduled email digest: the GitHub Actions workflow still only
+                # reads from ONE resume in a separate private repo (see GITHUB_ACTIONS_SETUP.md) -
+                # it doesn't yet loop over your whole library the way search does, so pushing a
+                # resume here replaces whichever one it was using, rather than adding to it.
+                st.caption(
+                    "Your daily email digest currently searches with whichever ONE resume was "
+                    "last pushed here, not your whole library. Pushing this one replaces it."
+                )
+                if st.button("Use this resume for my scheduled email alerts",
+                              key=f"email_sync_{p['id']}"):
+                    resume_path = get_resume_file_path(p["id"])
+                    if not resume_path:
+                        st.error("Couldn't find the original file for this resume - try "
+                                 "re-uploading it.")
+                    else:
+                        with st.spinner("Pushing resume to your private resume repo..."):
+                            synced_ok, sync_message = sync_resume_for_email_alerts(str(resume_path))
+                        if synced_ok:
+                            st.success(sync_message)
+                        else:
+                            st.error(sync_message)
+            st.divider()
 
     st.divider()
 
     with st.container(border=True):
         st.subheader("Search for jobs")
 
-        default_title = (profile.get("job_titles") or ["product owner"])[0]
+        selected_resumes = [p for p in library if p["id"] in st.session_state.selected_profile_ids]
+        if selected_resumes:
+            st.caption("Searching as: " + ", ".join(
+                p.get("label") or f"Resume {p['id']}" for p in selected_resumes))
+        else:
+            st.caption("No resumes selected above - check at least one to search.")
+
+        default_location = selected_resumes[0].get("current_location") or "" if selected_resumes else ""
 
         col1, col2 = st.columns(2)
         with col1:
-            search_all = st.checkbox("Search all 5 configured companies (Workday + JSearch/Adzuna)")
+            search_all = st.checkbox(
+                f"Search all {len(get_all_companies())} configured companies (Workday + JSearch/Adzuna)")
             company_input = st.text_input("Company", disabled=search_all,
                                            placeholder="e.g. Citi, Google, Barclays")
-            title_input = st.text_input("Specific role to search (optional)",
-                                         placeholder=f'defaults to "{default_title}"')
+            title_input = st.text_input(
+                "Specific role to search (optional)",
+                placeholder="defaults to each selected resume's own titles")
         with col2:
-            location_input = st.text_input("Location", value=profile.get("current_location") or "")
+            location_input = st.text_input("Location", value=default_location)
             relocation_ok = st.checkbox("I'm open to relocating / any location")
+            skip_cache = st.checkbox(
+                "Search live instead of using the cached jobs",
+                help='Searches normally read from the shared job cache (refreshed every ~12h) '
+                     'for speed. Check this to force a live Workday/JSearch/Adzuna search '
+                     'instead - useful if you\'re searching a role the cache wasn\'t refreshed '
+                     'for, or want the absolute latest postings right now.',
+            )
 
-        search_clicked = st.button("Search", type="primary")
+        search_clicked = st.button("Search", type="primary", disabled=not selected_resumes)
 
         if search_clicked:
             if not search_all and not company_input.strip():
                 st.warning("Enter a company, or check 'search all configured companies'.")
             else:
-                # If the game panel isn't already unlocked (from an earlier search), render it
-                # now, before the blocking call below, so it's visible in the sidebar for THIS
-                # run's wait. If it's already unlocked, the persistent sidebar block above
-                # already rendered it earlier in this same script pass - rendering it again here
-                # would duplicate the widget. The game itself (game_open) re-opens on every new
-                # search even if it was previously closed; the picker (game_panel_unlocked)
-                # stays visible for the rest of the session regardless of open/closed state.
-                was_unlocked = st.session_state.game_panel_unlocked
-                st.session_state.game_panel_unlocked = True
-                st.session_state.game_open = True
-                if not was_unlocked:
-                    with st.sidebar:
-                        st.divider()
-                        _render_game_panel()
-
                 with st.spinner(
-                    "Searching and scoring - this can take a while for a fresh search... "
-                    "meanwhile have a cup of coffee or pick a game from the side menu while "
-                    "the results are displayed."
+                    "Searching and scoring across your selected resumes - this can take a while "
+                    "for a fresh search, especially for a full company sweep..."
                 ):
-                    search_kwargs = dict(
+                    result = run_search_for_profiles(
+                        profile_ids=list(st.session_state.selected_profile_ids),
+                        companies=None if search_all else [company_input.strip()],
                         title_override=title_input.strip() or None,
                         location=location_input.strip(),
                         relocation_ok=relocation_ok,
+                        skip_cache=skip_cache,
                     )
-                    if not search_all:
-                        search_kwargs["company"] = company_input.strip()
-                    matches, log = _run_search_captured(
-                        profile, profile_id, all_companies=search_all, **search_kwargs)
 
-                st.session_state.last_matches = matches
+                st.session_state.last_matches = result["jobs"]
+                log = result["log"]
                 st.session_state.tailored_paths = {}
                 st.session_state.match_report_path = None
 
@@ -1330,7 +687,7 @@ if st.session_state.profile:
                         f"search and automatically retried, waiting up to "
                         f"{max(rate_limit_waits)}s each time (total ~{sum(rate_limit_waits)}s "
                         f"spent waiting). See the search log below for exactly which batch. "
-                        f"If this happens often, try searching fewer companies at once."
+                        f"If this happens often, try searching fewer companies or resumes at once."
                     )
                 if log.strip():
                     with st.expander("Search log", expanded=False):
@@ -1362,38 +719,91 @@ if st.session_state.profile:
                 st.error("Enter a display name for the company.")
             elif not new_company_url.strip():
                 st.error("Paste the company's Workday careers URL.")
+            elif not st.session_state.selected_profile_ids:
+                st.error("Select at least one resume in the library above first.")
             else:
                 try:
                     parsed = parse_workday_url(new_company_url)
                     add_company(new_company_name.strip(), parsed["company"],
                                 parsed["datacenter"], parsed["site"])
-                    st.success(f'Added "{new_company_name.strip()}" - it will show up in '
-                               f'"search all configured companies" immediately.')
+
+                    # Immediately search the company just added, rather than only registering it
+                    # for "search all configured companies" later. It isn't in the shared job
+                    # cache yet (refresh-job-cache.yml only knows about companies that existed
+                    # the last time it ran) - run_search_for_profiles' cache-miss fallback
+                    # handles that automatically: an empty cache read triggers a live
+                    # Workday/JSearch/Adzuna fetch, whose results get saved to the local cache
+                    # too. Location is deliberately left unfiltered here (unlike a normal search)
+                    # since your selected resumes may have different locations and this is meant
+                    # to be a quick "does anything show up at all" check, not a filtered result -
+                    # run a normal search afterward for proper location filtering.
+                    with st.spinner(f'Searching "{new_company_name.strip()}" for the first time...'):
+                        added_result = run_search_for_profiles(
+                            profile_ids=list(st.session_state.selected_profile_ids),
+                            companies=[new_company_name.strip()],
+                            title_override=None, location="", relocation_ok=True,
+                        )
+
+                    added_jobs = added_result["jobs"]
+                    real_added = [j for j in added_jobs
+                                  if any((s.get("match_score") or 0) > 0 for s in j["scores"])]
+                    # Stashed in session_state rather than shown directly here - a st.rerun()
+                    # right after rendering something usually fires before the browser gets a
+                    # chance to paint it, so this is picked up and shown once, right after the
+                    # rerun, by the block just below "Manage companies" instead (same pattern as
+                    # startup_cleanup_note/job_cache_sync_note above).
+                    st.session_state.new_company_search_note = (
+                        f'Added "{new_company_name.strip()}" and searched it: '
+                        f'{len(real_added)} match(es) found across your selected resumes '
+                        f'({len(added_jobs) - len(real_added)} excluded by the pre-filter/'
+                        f'prescreen). It will also be included in future "search all configured '
+                        f'companies" runs.'
+                    )
+                    st.session_state.new_company_search_log = added_result["log"]
+                    # Merge by URL rather than plain concatenation, in case a job from this
+                    # company was already present in last_matches from a broader earlier search.
+                    merged = {j["url"]: j for j in (st.session_state.last_matches or [])}
+                    for j in added_jobs:
+                        merged[j["url"]] = j
+                    st.session_state.last_matches = list(merged.values())
                     st.rerun()
                 except ValueError as e:
                     st.error(str(e))
+
+    if st.session_state.get("new_company_search_note"):
+        st.success(st.session_state.new_company_search_note)
+        if st.session_state.get("new_company_search_log", "").strip():
+            with st.expander("Search log for the new company", expanded=False):
+                st.code(st.session_state.new_company_search_log, language=None)
+        # Shown once - clear it so it doesn't linger on every later rerun (e.g. a normal search
+        # or the PDF export button triggering a rerun long after this happened).
+        st.session_state.new_company_search_note = None
+        st.session_state.new_company_search_log = None
 
     # --- Results ---------------------------------------------------------------------------
 
     if st.session_state.last_matches:
         st.divider()
-        # match_score == 0 is not a genuine Gemini verdict - it's the placeholder matcher.py
-        # writes for jobs excluded by the free title/experience pre-filter or the prescreen
-        # pass (see SCREENED_OUT_PLACEHOLDER / _prefiltered_placeholder in matcher.py). Those
-        # rows are kept in the database on purpose (nothing silently disappears, and it avoids
-        # re-checking the same job on a future run) but they're not a match worth showing.
-        real_matches = [j for j in st.session_state.last_matches if (j.get("match_score") or 0) > 0]
+
+        def _job_best_score(job):
+            # match_score == 0 on a score is not a genuine Gemini verdict - it's the placeholder
+            # matcher.py writes for jobs excluded by the free title/experience pre-filter or the
+            # prescreen pass (see SCREENED_OUT_PLACEHOLDER / _prefiltered_placeholder in
+            # matcher.py). A job is only worth showing if AT LEAST ONE of its per-resume scores
+            # is a genuine verdict.
+            return max((s.get("match_score") or 0) for s in job.get("scores") or [{}])
+
+        real_matches = [j for j in st.session_state.last_matches if _job_best_score(j) > 0]
         excluded_count = len(st.session_state.last_matches) - len(real_matches)
-        sorted_matches = sorted(
-            real_matches,
-            key=lambda j: (TIER_ORDER.get(j.get("match_tier"), 3), -(j.get("match_score") or 0)),
-        )
+        sorted_matches = sorted(real_matches, key=lambda j: -_job_best_score(j))
+
         header_cols = st.columns([3, 1])
         with header_cols[0]:
             st.subheader(f"Results ({len(sorted_matches)})")
             if excluded_count:
-                st.caption(f"{excluded_count} job(s) excluded by the pre-filter/prescreen before "
-                           f"detailed scoring - not shown. See the search log above for why.")
+                st.caption(f"{excluded_count} job(s) excluded by the pre-filter/prescreen (for "
+                           f"every selected resume) before detailed scoring - not shown. See the "
+                           f"search log above for why.")
         with header_cols[1]:
             # Moved up here (rather than below the results list) so it's reachable without
             # scrolling through the whole list first.
@@ -1402,7 +812,8 @@ if st.session_state.profile:
                     st.download_button("⬇ Match report PDF", f, file_name="match_report.pdf",
                                         mime="application/pdf")
             elif st.button("Export to PDF"):
-                output_path = export_matches_to_pdf(st.session_state.last_matches, "match_report.pdf")
+                flattened = _flatten_matches_for_export(st.session_state.last_matches)
+                output_path = export_matches_to_pdf(flattened, "match_report.pdf")
                 if output_path:
                     st.session_state.match_report_path = output_path
                     st.rerun()
@@ -1414,6 +825,6 @@ if st.session_state.profile:
         # regardless of how many jobs came back.
         with st.container(height=600, border=True):
             for job in sorted_matches:
-                _render_job_card(job, profile, profile_id, st.session_state.resume_filename)
-else:
-    st.info("Upload a resume above to get started.")
+                _render_job_card_multi(job)
+    elif library:
+        st.info("Run a search above to see results.")

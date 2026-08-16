@@ -97,6 +97,17 @@ check your inbox once it finishes. The very first run will likely email you a fa
 (everything currently open across your 5 configured companies) since nothing's been scored yet -
 after that, each day's email should only contain postings that are genuinely new.
 
+## Updating the resume later
+
+Rather than repeating step 2b by hand, upload the new resume in the Streamlit app as normal,
+then open the **"📧 Scheduled email alerts"** expander that appears below it and click
+**"Use this resume for my scheduled email alerts."** This runs the same `git` clone/commit/push
+against `resume-private` that step 2b describes, from a small local clone kept at
+`~/.jobscout_ai/resume-private` (Windows: `C:\Users\<you>\.jobscout_ai\resume-private`) - it
+overwrites whatever resume was there before, so the next scheduled (or manually triggered) run
+picks up the new one automatically. See `resume_sync.py` for exactly what it does; it only ever
+touches that separate local clone, never `jobfinder-ai`'s own git repo.
+
 ## One thing worth knowing
 
 This workflow keeps its own `jobfinder.db`, persisted in GitHub's Actions cache - it is a

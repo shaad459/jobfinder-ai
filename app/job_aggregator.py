@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from connectors.workday_connector import fetch_workday_jobs
 from connectors.jsearch_connector import fetch_jsearch_jobs
 from connectors.adzuna_connector import fetch_adzuna_jobs
-from repository import get_all_companies
+from repository import get_all_companies, get_cached_jobs_for_company
 
 
 def fetch_all_jobs(query: str, location: str = "", country: str = "in", max_results_per_source: int = 60) -> list[dict]:
@@ -29,6 +29,59 @@ def fetch_all_jobs(query: str, location: str = "", country: str = "in", max_resu
         print(f"Warning: Adzuna fetch failed: {e}")
 
     return all_jobs
+
+
+def filter_by_location_and_freshness(jobs: list[dict], company: str, location: str = "",
+                                      relocation_ok: bool = False, max_age_days: int = 7) -> list[dict]:
+    """Location + freshness filtering, factored out of fetch_company_jobs so job_cache_reader.py
+    can apply the EXACT same rules to jobs read from the local cache instead of a live API
+    response - the cache stores raw, unfiltered postings (see refresh_job_cache.py), and this is
+    what narrows them down to "near you, still fresh" at read time, same as it always did for a
+    live fetch. `company` is only used for the diagnostic print statements below.
+    """
+    fetched_count = len(jobs)
+
+    if location and not relocation_ok:
+        # Match on just the city (the first comma-separated segment of the typed location)
+        # rather than requiring the whole typed string to appear verbatim in a job's location
+        # field. Job boards rarely list "City, State, Country" in full - "Pune, India",
+        # "Pune, Maharashtra", or just "Pune" are all common - so requiring the full three-part
+        # string as a literal substring was silently rejecting real, nearby jobs.
+        location_key = location.split(",")[0].strip().lower()
+        jobs = [j for j in jobs
+                if (location_key and location_key in (j.get("location") or "").lower())
+                or "remote" in (j.get("location") or "").lower()]
+
+        if fetched_count and not jobs:
+            print(f"Note: found {fetched_count} job(s) at {company}, but none near '{location}' "
+                  f"(or remote). Try a different location, or answer 'y' to the relocation "
+                  f"prompt to see all of them regardless of location.")
+
+    after_location_count = len(jobs)
+
+    today = datetime.now(timezone.utc).date()
+    dated_jobs = []
+    for j in jobs:
+        raw = j.get("posted_date")
+        if not raw:
+            continue
+        try:
+            posted = datetime.strptime(raw, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        age_days = (today - posted).days
+        if 0 <= age_days <= max_age_days:
+            dated_jobs.append((age_days, j))
+
+    dated_jobs.sort(key=lambda pair: pair[0])
+    jobs = [j for _, j in dated_jobs]
+
+    if after_location_count and not jobs:
+        print(f"Note: found {after_location_count} job(s) at {company} near your location, but "
+              f"none were posted within the last {max_age_days} days (or their posting date "
+              f"couldn't be determined).")
+
+    return jobs
 
 
 def fetch_company_jobs(company: str, query: str, location: str = "", relocation_ok: bool = False,
@@ -79,49 +132,24 @@ def fetch_company_jobs(company: str, query: str, location: str = "", relocation_
     # JSearch/Adzuna's, which sometimes index the same posting Workday's own feed already has.
     jobs = list({j["url"]: j for j in jobs}.values())
 
-    fetched_count = len(jobs)
+    return filter_by_location_and_freshness(jobs, company, location, relocation_ok, max_age_days)
 
-    if location and not relocation_ok:
-        # Match on just the city (the first comma-separated segment of the typed location)
-        # rather than requiring the whole typed string to appear verbatim in a job's location
-        # field. Job boards rarely list "City, State, Country" in full - "Pune, India",
-        # "Pune, Maharashtra", or just "Pune" are all common - so requiring the full three-part
-        # string as a literal substring was silently rejecting real, nearby jobs.
-        location_key = location.split(",")[0].strip().lower()
-        jobs = [j for j in jobs
-                if (location_key and location_key in (j.get("location") or "").lower())
-                or "remote" in (j.get("location") or "").lower()]
 
-        if fetched_count and not jobs:
-            print(f"Note: found {fetched_count} job(s) at {company}, but none near '{location}' "
-                  f"(or remote). Try a different location, or answer 'y' to the relocation "
-                  f"prompt to see all of them regardless of location.")
+def get_company_jobs_from_cache(company: str, location: str = "", relocation_ok: bool = False,
+                                 max_age_days: int = 7) -> list[dict]:
+    """Cache-first counterpart to fetch_company_jobs() - reads whatever's already in the local
+    `jobs` table (kept fresh by job_cache_sync.py pulling from the GitHub Actions job-cache repo
+    every ~12h, see refresh_job_cache.py) instead of hitting Workday/JSearch/Adzuna live. Applies
+    the exact same location/freshness filtering a live fetch would, via the shared helper above,
+    so results are identical in shape regardless of source.
 
-    after_location_count = len(jobs)
-
-    today = datetime.now(timezone.utc).date()
-    dated_jobs = []
-    for j in jobs:
-        raw = j.get("posted_date")
-        if not raw:
-            continue
-        try:
-            posted = datetime.strptime(raw, "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        age_days = (today - posted).days
-        if 0 <= age_days <= max_age_days:
-            dated_jobs.append((age_days, j))
-
-    dated_jobs.sort(key=lambda pair: pair[0])
-    jobs = [j for _, j in dated_jobs]
-
-    if after_location_count and not jobs:
-        print(f"Note: found {after_location_count} job(s) at {company} near your location, but "
-              f"none were posted within the last {max_age_days} days (or their posting date "
-              f"couldn't be determined).")
-
-    return jobs
+    Returns an empty list (not an error) if the cache has nothing for this company - the caller
+    (streamlit_app.py's _run_search) is expected to fall back to a live fetch_company_jobs() call
+    when this comes back empty, e.g. for a company you just added locally that the shared cache
+    doesn't know about yet.
+    """
+    jobs = get_cached_jobs_for_company(company)
+    return filter_by_location_and_freshness(jobs, company, location, relocation_ok, max_age_days)
 
 
 if __name__ == "__main__":

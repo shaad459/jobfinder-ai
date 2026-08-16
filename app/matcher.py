@@ -375,6 +375,32 @@ def score_all_jobs(profile: dict, jobs: list[dict], batch_size: int = 10,
     """
     scored_jobs = []
 
+    # --- Stage -1: is the SEARCHED role even plausible for this candidate at all? ---
+    #
+    # Stage 0a below checks whether each JOB's title matches what was searched for - it does
+    # NOT check whether the searched title itself has anything to do with the candidate. If
+    # someone searches "Software Engineer" while their whole resume is Product/BA work, every
+    # real Software Engineer posting would still pass Stage 0a (its title matches the search
+    # term) and go all the way to Gemini, which would - correctly, but expensively - call it a
+    # mismatch. This stage catches that upfront, once per search rather than once per job: if
+    # title_override shares no keyword with ANY title in the candidate's own work history,
+    # nothing in this search can plausibly match, so every job is tagged and returned without a
+    # single Gemini call. Only applies when title_override is set (an explicit role search) and
+    # the profile actually has job_titles to check against - fails open otherwise, same
+    # philosophy as every other filter in this file.
+    candidate_titles = profile.get("job_titles") or []
+    if title_override and candidate_titles and not _title_matches_reference(title_override, candidate_titles):
+        reason = (
+            f"Searched role \"{title_override}\" shares no keyword with anything in your "
+            f"resume's work history ({', '.join(candidate_titles)}) - skipped before any Gemini "
+            f"call, since it can't plausibly be a match."
+        )
+        print(f"Skipping Gemini entirely for this search: {reason}")
+        scored_jobs = [dict(job, **_prefiltered_placeholder(reason)) for job in jobs]
+        if on_batch_scored:
+            on_batch_scored(scored_jobs)
+        return scored_jobs
+
     # --- Stage 0a: title-keyword relevance (before description enrichment) ---
     reference_titles = [title_override] if title_override else (profile.get("job_titles") or [])
     reference_label = f'"{title_override}"' if title_override else "the candidate's profile job titles"

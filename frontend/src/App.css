@@ -1,0 +1,452 @@
+:root {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --border: #e2e4e9;
+  --text: #1a1d24;
+  --muted: #6b7280;
+  --accent: #2f5fe0;
+  --accent-hover: #2549b3;
+  --strong: #1a9b5c;
+  --strong-bg: #e5f7ee;
+  --good: #b7791f;
+  --good-bg: #fdf3e0;
+  --weak: #6b7280;
+  --weak-bg: #eef0f3;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-panel {
+  border-color: #e0a0a0;
+}
+
+.error-text {
+  color: #c23a3a;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.panel-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.panel-header p {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+/* --- Buttons --- */
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.88rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-secondary {
+  background: var(--weak-bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+}
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.btn-large {
+  padding: 0.7rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.btn-small {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+/* --- Resume library --- */
+
+.upload-dropzone {
+  display: block;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-align: center;
+  color: var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.upload-dropzone:hover {
+  border-color: var(--accent);
+}
+
+.resume-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.resume-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+}
+
+.resume-card-inactive {
+  opacity: 0.55;
+}
+
+.resume-card-select {
+  padding-top: 0.2rem;
+}
+
+.resume-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.resume-card-label {
+  font-weight: 600;
+  cursor: text;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.label-input {
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.resume-card-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.resume-card-filename {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.pill {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pill-muted {
+  background: var(--weak-bg);
+  color: var(--muted);
+}
+
+/* --- Search form --- */
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.company-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.4rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-grid label,
+.inline-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input[type="text"],
+input:not([type="checkbox"]) {
+  font-family: inherit;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.collapsible {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.collapsible summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.company-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.company-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  padding: 0.2rem 0;
+}
+
+.inline-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-top: 0.5rem;
+}
+.inline-form input {
+  flex: 1;
+}
+
+/* --- Results --- */
+
+.results-section {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.results-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.search-log {
+  background: #12141a;
+  color: #d4d8e0;
+  padding: 0.9rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin-bottom: 1rem;
+}
+
+.job-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem;
+  margin-bottom: 0.85rem;
+}
+
+.job-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.job-card-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.job-card-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.score-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.score-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  font-size: 0.78rem;
+}
+
+.score-pill-label {
+  font-weight: 600;
+}
+
+.score-pill-value {
+  font-weight: 700;
+}
+
+.badge-strong {
+  background: var(--strong-bg);
+  color: var(--strong);
+}
+.badge-good {
+  background: var(--good-bg);
+  color: var(--good);
+}
+.badge-weak {
+  background: var(--weak-bg);
+  color: var(--weak);
+}
+
+.score-pill-expanded {
+  border-color: currentColor;
+}
+
+.job-card-detail {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--border);
+  font-size: 0.88rem;
+}
+
+.job-card-detail-heading {
+  margin-bottom: 0.6rem;
+}
+
+.job-card-detail-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.detail-col-heading {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.job-card-detail-columns ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .form-grid,
+  .job-card-detail-columns {
+    grid-template-columns: 1fr;
+  }
+}
