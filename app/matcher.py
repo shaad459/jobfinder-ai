@@ -1,7 +1,9 @@
 import json
 import re
+import job_similarity
 from gemini_utils import call_gemini
 from connectors.workday_connector import fetch_workday_job_description
+from repository import get_matches
 
 MATCH_PROMPT_TEMPLATE = """You are a job-matching assistant. Given a candidate's profile and a batch of job
 listings, score how well each job fits the candidate.
@@ -335,7 +337,7 @@ def _enrich_missing_descriptions(jobs: list[dict]) -> list[dict]:
 def score_all_jobs(profile: dict, jobs: list[dict], batch_size: int = 10,
                     prescreen_batch_size: int = 20, on_batch_scored=None,
                     title_override: str = None) -> list[dict]:
-    """Three-stage pipeline, to conserve the precise model's much tighter daily quota.
+    """Four-stage pipeline, to conserve the precise model's much tighter daily quota.
 
     Stage 0 - cheap pre-filter (no Gemini): title-keyword relevance against a reference title
     (see title_override below), then (on the survivors, and only after description enrichment)
@@ -357,8 +359,16 @@ def score_all_jobs(profile: dict, jobs: list[dict], batch_size: int = 10,
     plain company search with no explicit role), behavior is unchanged - the candidate's own
     profile.job_titles is the reference, exactly as before.
 
+    Stage 0c - history-based reuse/skip (no Gemini): compares each Stage-0 survivor against this
+    same resume's own past Gemini-verified verdicts (see job_similarity.py) - a near-duplicate of
+    an already-scored posting (e.g. re-posted, or surfaced again via a different job source)
+    reuses that verdict outright, and a job similar enough to a past Weak match for a
+    candidate-intrinsic reason (not location/role) is treated the same way. Only a genuine
+    near-duplicate can inherit a positive verdict - never auto-assigns Strong/Good just from
+    moderate similarity.
+
     Stage 1 - prescreen (gemini-3.5-flash-lite, cheap, large batches): a fast, deliberately
-    generous plausibility check on whatever survives Stage 0. Jobs that fail are tagged "Weak"
+    generous plausibility check on whatever survives Stage 0c. Jobs that fail are tagged "Weak"
     and saved as-is rather than dropped, so nothing silently disappears.
 
     Stage 2 - precise scoring (gemini-3.5-flash, smaller batches): the grounded Strong/Good/
@@ -449,6 +459,44 @@ def score_all_jobs(profile: dict, jobs: list[dict], batch_size: int = 10,
     jobs = experience_ok
     total_excluded_free = len(title_filtered) + len(experience_filtered)
     print(f"{len(jobs)} job(s) remain for Gemini prescreen ({total_excluded_free} excluded at zero cost).")
+
+    # --- Stage 0c: history-based reuse/skip (no Gemini call - see job_similarity.py) ---
+    #
+    # Runs after title/experience filtering (so only already-plausible jobs are compared, which
+    # is both cheaper and safer) and before the prescreen, against this SAME profile's own past
+    # Gemini-verified verdicts (repository.get_matches). Two outcomes, both zero-cost:
+    #   - "reuse": a near-duplicate of an already-scored posting at the same company (e.g. the
+    #     same listing surfaced again via a different source, or reposted later) - its verdict is
+    #     copied over outright, Gemini is never called for this job.
+    #   - "skip_weak": similar enough to a posting that already scored Weak for a
+    #     candidate-intrinsic reason (a missing skill/certification/domain/experience, not
+    #     location or role) that the same gap almost certainly still applies.
+    # Never auto-assigns Strong/Good from a merely-similar (not near-duplicate) job - only a
+    # genuine near-duplicate can inherit a positive verdict; see job_similarity.py's own
+    # docstring for the full reasoning. History is fetched once per call, not once per job.
+    history = get_matches(profile["id"]) if profile.get("id") is not None else []
+    history_resolved = []
+    still_unscored = []
+    if history:
+        for job in jobs:
+            action = job_similarity.find_history_action(job, history)
+            if action is None:
+                still_unscored.append(job)
+            elif action["action"] == "reuse":
+                history_resolved.append(job_similarity.apply_reuse(job, action))
+            else:  # "skip_weak"
+                history_resolved.append(job_similarity.apply_skip_weak(job, action))
+    else:
+        still_unscored = jobs
+
+    if history_resolved:
+        print(f"{len(history_resolved)}/{len(jobs)} job(s) resolved from this resume's own scoring "
+              f"history - no Gemini call needed.")
+        scored_jobs.extend(history_resolved)
+        if on_batch_scored:
+            on_batch_scored(history_resolved)
+
+    jobs = still_unscored
 
     # --- Stage 1: prescreen ---
     plausible_jobs = []

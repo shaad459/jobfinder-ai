@@ -571,12 +571,16 @@ else:
             with row_cols[2]:
                 if st.button("Retire", key=f"retire_{p['id']}",
                              help="Excludes it from search without deleting its match history"):
+                    # Don't touch st.session_state[RESUME_SELECT_KEY] here - the multiselect
+                    # widget using that key already rendered earlier in this same script run,
+                    # and Streamlit raises StreamlitAPIException on any write to a keyed
+                    # widget's session_state after it's been instantiated in that run. Not
+                    # needed anyway: set_profile_active() below drops this resume out of
+                    # list_profiles(active_only=True), so it won't be in label_lookup on the
+                    # next rerun, and the sanitization step just above the widget already
+                    # strips any id no longer in label_lookup automatically.
                     set_profile_active(p["id"], False)
                     st.session_state.selected_profile_ids.discard(p["id"])
-                    if RESUME_SELECT_KEY in st.session_state:
-                        st.session_state[RESUME_SELECT_KEY] = [
-                            pid for pid in st.session_state[RESUME_SELECT_KEY] if pid != p["id"]
-                        ]
                     st.rerun()
 
             with st.expander("Details / ATS resume / email alerts", expanded=False):

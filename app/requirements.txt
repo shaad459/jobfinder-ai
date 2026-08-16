@@ -37,3 +37,4 @@ streamlit
 fastapi
 uvicorn[standard]
 python-multipart
+scikit-learn
