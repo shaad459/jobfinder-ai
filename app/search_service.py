@@ -30,21 +30,28 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
                             include_aggregators=False, skip_cache=False):
     query = title_override or (profile.get("job_titles") or ["product owner"])[0]
 
-    # Cache-first: read whatever the shared job cache (refreshed every ~12h by
-    # refresh-job-cache.yml, see job_cache_sync.py) already has for this company, instead of
-    # waiting on a live Workday/JSearch/Adzuna call. Falls back to a live fetch when the cache
-    # has nothing for this company at all - e.g. one you just added locally that the shared
-    # cache doesn't know about yet - or when skip_cache is checked, and saves those live results
-    # into the local jobs table so the next search benefits too. Note the cache is only as broad
-    # as refresh_job_cache.py's own query terms (see its DEFAULT_QUERIES) - if you're searching a
-    # role family it doesn't cover, check "search live" to make sure you're not missing postings.
-    jobs = [] if skip_cache else get_company_jobs_from_cache(
-        company, location=location, relocation_ok=relocation_ok)
-    if not jobs:
-        jobs = fetch_company_jobs(company, query, location=location, relocation_ok=relocation_ok,
-                                   include_aggregators_for_workday=include_aggregators)
-        for job in jobs:
+    # Cache-first, ALWAYS - not just when "search live" (skip_cache) is unchecked. This used to
+    # skip reading the cache entirely whenever skip_cache was True, which meant anything the 12h
+    # shared refresh (job_cache_sync.py) had already found for this company was silently dropped
+    # from THIS run's job set just because you also wanted a live check - you'd have had to run
+    # a second, cache-only search to see it again. Now the cache is always read, and a live fetch
+    # is layered ON TOP of it - either because skip_cache is checked, or as the existing fallback
+    # when the cache came up empty for this company - and the two are MERGED by url (never one
+    # replacing the other), with the live copy winning on conflict since it's the freshest. Note
+    # the cache is only as broad as refresh_job_cache.py's own query terms (see
+    # search_queries_sync.py) - if you're searching a role family it doesn't cover, "search live"
+    # is still what fills that gap, it just no longer discards the cache while doing it.
+    cached_jobs = get_company_jobs_from_cache(company, location=location, relocation_ok=relocation_ok)
+    live_jobs = []
+    if skip_cache or not cached_jobs:
+        live_jobs = fetch_company_jobs(company, query, location=location, relocation_ok=relocation_ok,
+                                        include_aggregators_for_workday=include_aggregators)
+        for job in live_jobs:
             save_job(job)
+
+    jobs_by_url = {j["url"]: j for j in cached_jobs}
+    jobs_by_url.update({j["url"]: j for j in live_jobs})
+    jobs = list(jobs_by_url.values())
 
     already_scored = get_scored_job_urls(profile_id)
     new_jobs = [j for j in jobs if j["url"] not in already_scored]
@@ -60,7 +67,32 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
 
     job_urls_this_search = {j["url"] for j in jobs}
     all_matches = get_matches(profile_id)
-    return [m for m in all_matches if m["url"] in job_urls_this_search]
+    matches_this_search = [m for m in all_matches if m["url"] in job_urls_this_search]
+
+    # Anything from this run's job set that STILL has no saved match at this point is genuinely
+    # pending, not excluded - a prefilter/prescreen reject already gets a real placeholder
+    # verdict saved via save_match (see matcher.py's _prefiltered_placeholder /
+    # SCREENED_OUT_PLACEHOLDER), so it shows up in matches_this_search above like any other
+    # scored job. Only a Stage 2 batch that itself failed (rate limit exhausted, etc.) leaves a
+    # job with no match row at all - matcher.py deliberately leaves those unsaved so they're
+    # retried on a future run rather than lost. Surfaced here as a "Pending" card instead of
+    # silently vanishing, so a rate-limit storm mid-search doesn't just look like nothing found.
+    scored_urls_this_search = {m["url"] for m in matches_this_search}
+    pending = [
+        {
+            **job,
+            "match_tier": "Pending",
+            "match_score": None,
+            "match_points": [],
+            "match_gaps": [],
+            "match_reasoning": "Not yet scored - will be picked up automatically on a future search.",
+            "dimension_breakdown": {},
+            "opened_at": None,
+        }
+        for job in jobs if job["url"] not in scored_urls_this_search
+    ]
+
+    return matches_this_search + pending
 
 
 def run_search_for_profile_all_companies(profile, profile_id, title_override, location,
@@ -109,6 +141,14 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
     Returns {"jobs": [...], "log": "..."} - jobs sorted by each job's best score across all
     requested profiles (descending), so the strongest match for ANY of your resumes surfaces
     first regardless of which resume produced it.
+
+    The returned set is also never NARROWER than what was already in the database for these
+    profiles: each profile's full past match history (within the last 7 days - see
+    delete_stale_jobs) is merged in on top of whatever this run's own fetch produced, and any job
+    this run touched but couldn't actually score gets included too, tagged match_tier="Pending"
+    (see run_search_for_profile). So a search never makes an earlier run's results disappear -
+    only adds to them - and "Pending" cards make an in-progress rate-limit backoff visible
+    instead of just looking like a smaller result set.
     """
     search_all_companies = companies is None
     company_list = companies if companies is not None else list(get_all_companies().keys())
@@ -142,23 +182,38 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
         if log:
             logs.append(f"[{profile.get('label')}]\n{log}")
 
-        for matches in matches_by_company.values():
-            for job in matches:
-                url = job["url"]
-                if url not in merged:
-                    merged[url] = {field: job.get(field) for field in _JOB_DISPLAY_FIELDS}
-                    merged[url]["scores"] = []
-                merged[url]["scores"].append({
-                    "profile_id": profile_id,
-                    "label": profile.get("label"),
-                    "match_tier": job.get("match_tier"),
-                    "match_score": job.get("match_score"),
-                    "match_points": job.get("match_points"),
-                    "match_gaps": job.get("match_gaps"),
-                    "match_reasoning": job.get("match_reasoning"),
-                    "dimension_breakdown": job.get("dimension_breakdown"),
-                    "opened_at": job.get("opened_at"),
-                })
+        fresh_matches = [job for matches in matches_by_company.values() for job in matches]
+
+        # Never let a job this profile has ALREADY been matched against (any past run, any
+        # company) silently disappear from view just because THIS run's live/cache fetch didn't
+        # happen to return it again - e.g. it dropped off a live feed, this run only covered a
+        # different company, or an API hiccup returned nothing. This is what stops "click live,
+        # forget to export" from actually losing anything: the old behavior only ever returned
+        # matches for job urls THIS run's fetch produced, so anything not re-fetched just
+        # vanished from the results list even though it was still sitting in the database.
+        # delete_stale_jobs(max_age_days=7) already prunes anything with an old/unknown
+        # posted_date once per app session (see streamlit_app.py's startup_cleanup_done block),
+        # so everything get_matches returns here is already within that same 7-day freshness
+        # window - no separate date filter needed.
+        fresh_urls = {job["url"] for job in fresh_matches}
+        past_matches = [m for m in get_matches(profile_id) if m["url"] not in fresh_urls]
+
+        for job in fresh_matches + past_matches:
+            url = job["url"]
+            if url not in merged:
+                merged[url] = {field: job.get(field) for field in _JOB_DISPLAY_FIELDS}
+                merged[url]["scores"] = []
+            merged[url]["scores"].append({
+                "profile_id": profile_id,
+                "label": profile.get("label"),
+                "match_tier": job.get("match_tier"),
+                "match_score": job.get("match_score"),
+                "match_points": job.get("match_points"),
+                "match_gaps": job.get("match_gaps"),
+                "match_reasoning": job.get("match_reasoning"),
+                "dimension_breakdown": job.get("dimension_breakdown"),
+                "opened_at": job.get("opened_at"),
+            })
 
     jobs = list(merged.values())
     jobs.sort(key=lambda j: max((s.get("match_score") or 0) for s in j["scores"]), reverse=True)

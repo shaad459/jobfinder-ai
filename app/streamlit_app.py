@@ -53,7 +53,14 @@ from repository import (
 )
 
 DIMENSIONS = ("role", "location", "skills", "certification", "experience", "domain")
-TIER_BADGE_CLASS = {"Strong": "jsa-badge-strong", "Good": "jsa-badge-good", "Weak": "jsa-badge-weak"}
+TIER_BADGE_CLASS = {
+    "Strong": "jsa-badge-strong", "Good": "jsa-badge-good", "Weak": "jsa-badge-weak",
+    # "Pending" - see search_service.run_search_for_profile - is a job this run's fetch touched
+    # but couldn't get a Gemini verdict for yet (its Stage 2 batch failed, typically a rate-limit
+    # exhaustion), not a real tier - kept visually distinct (blue, not the red/amber/grey scale
+    # the real tiers use) so it doesn't read as a verdict at a glance.
+    "Pending": "jsa-badge-pending",
+}
 LEVEL_CHIP_CLASS = {"match": "jsa-level-match", "partial": "jsa-level-partial", "none": "jsa-level-none"}
 
 
@@ -170,6 +177,7 @@ button[kind="secondary"] {
 .jsa-badge-strong { background: #0f2e1e; color: #4ade80; }
 .jsa-badge-good   { background: #332705; color: #fbbf24; }
 .jsa-badge-weak   { background: #262626; color: #a3a3a8; }
+.jsa-badge-pending { background: #1e293b; color: #93c5fd; }
 .jsa-score { font-weight: 700; color: #ffffff; margin-left: 6px; font-size: 0.95rem; }
 .jsa-coverage {
     font-weight: 600; color: #60a5fa; margin-left: 10px; font-size: 0.8rem;
@@ -280,8 +288,17 @@ def _render_job_card_multi(job):
             with col:
                 is_expanded = s["profile_id"] == st.session_state[state_key]
                 label = s.get("label") or f"Resume {s['profile_id']}"
-                button_label = f"{'▸ ' if is_expanded else ''}{label}: {s.get('match_score')} ({s.get('match_tier')})"
-                if st.button(button_label, key=f"pill_{url}_{s['profile_id']}"):
+                # match_score is None for a "Pending" card (see
+                # search_service.run_search_for_profile) - shown as "—" rather than the literal
+                # text "None".
+                score_display = s.get("match_score") if s.get("match_score") is not None else "—"
+                button_label = f"{label}: {score_display} ({s.get('match_tier')})"
+                # type="primary" is the actual selection indicator now (was previously just a
+                # "▸ " text prefix, easy to miss at a glance across several similar-looking
+                # pills) - the flagged complaint was "I don't even know the fit check is for
+                # which resume," so this needs to be visually obvious, not just textually present.
+                if st.button(button_label, key=f"pill_{url}_{s['profile_id']}",
+                             type="primary" if is_expanded else "secondary"):
                     st.session_state[state_key] = s["profile_id"]
                     st.rerun(scope="fragment")
 
@@ -290,9 +307,11 @@ def _render_job_card_multi(job):
         badge_class = TIER_BADGE_CLASS.get(tier, "jsa-badge-weak")
         coverage = _ats_coverage_pct(expanded)
         opened_note = " · already opened" if expanded.get("opened_at") else ""
+        expanded_score = expanded.get("match_score")
+        score_text = expanded_score if expanded_score is not None else "—"
         st.markdown(
             f'<span class="jsa-badge {badge_class}">{_esc(tier)}</span>'
-            f'<span class="jsa-score">{_esc(expanded.get("match_score"))}</span>'
+            f'<span class="jsa-score">{_esc(score_text)}</span>'
             + (f'<span class="jsa-coverage">ATS coverage: {coverage}%</span>'
                if coverage is not None else '')
             + opened_note,
@@ -303,7 +322,11 @@ def _render_job_card_multi(job):
 
         breakdown = expanded.get("dimension_breakdown") or {}
         if breakdown:
-            with st.expander("Fit breakdown"):
+            # Named after whichever resume's pill is currently selected above, rather than a
+            # bare "Fit breakdown" - with 2-3 resumes' pills sitting right next to each other,
+            # an unlabeled expander made it genuinely ambiguous which one you were looking at.
+            expanded_label = expanded.get("label") or f"Resume {expanded.get('profile_id')}"
+            with st.expander(f"Fit breakdown — {expanded_label}"):
                 for dimension in DIMENSIONS:
                     dim = breakdown.get(dimension) or {}
                     level = dim.get("level")
@@ -430,24 +453,47 @@ if st.session_state.get("startup_cleanup_note"):
 if st.session_state.get("job_cache_sync_note"):
     st.caption(f"Job cache: {st.session_state.job_cache_sync_note}")
 
+def _render_gemini_usage(slot):
+    """Draws the 'Gemini usage today' cards into `slot` (an st.empty() placeholder). Split out
+    so it can be called a SECOND time right after a search finishes, not just once at startup.
+
+    Without this, the panel only got drawn once, near the top of the script - well BEFORE the
+    "Search for jobs" section further down where matcher.py's actual Gemini calls happen (both
+    Stage 1 prescreen, gemini-3.5-flash-lite, and Stage 2 scoring, gemini-3.5-flash). Streamlit
+    doesn't automatically re-run the whole script after a button's own handling finishes within
+    that same run, so the sidebar kept showing whatever the count was BEFORE the search that was
+    just clicked - a full search's worth of calls (including every flash-lite call) stayed
+    invisible until some unrelated later interaction happened to trigger a fresh top-to-bottom
+    rerun. That's why gemini-3.5-flash-lite could look like it had "disappeared" even though
+    matcher.py always calls it before gemini-3.5-flash for the same batch of jobs - see the
+    search-results refresh call to this same function below for the fix.
+    """
+    with slot.container():
+        st.markdown("**Gemini usage today**")
+        counts = get_gemini_call_counts_today()
+        if not counts:
+            st.caption("No calls logged today.")
+        for model, status_counts in counts.items():
+            stats_html = "".join(
+                f'<div class="jsa-model-stat">{_esc(status)}: <strong>{c}</strong></div>'
+                for status, c in status_counts.items()
+            )
+            st.markdown(
+                f'<div class="jsa-model-card">'
+                f'<div class="jsa-model-name">{_esc(model)}</div>{stats_html}</div>',
+                unsafe_allow_html=True,
+            )
+
+
 with st.sidebar:
     st.markdown('<div class="jsa-sidebar-brand">🧭 JobScout AI</div>', unsafe_allow_html=True)
     st.markdown('<div class="jsa-sidebar-tag">Local AI job-matching assistant</div>',
                 unsafe_allow_html=True)
-    st.markdown("**Gemini usage today**")
-    counts = get_gemini_call_counts_today()
-    if not counts:
-        st.caption("No calls logged today.")
-    for model, status_counts in counts.items():
-        stats_html = "".join(
-            f'<div class="jsa-model-stat">{_esc(status)}: <strong>{c}</strong></div>'
-            for status, c in status_counts.items()
-        )
-        st.markdown(
-            f'<div class="jsa-model-card">'
-            f'<div class="jsa-model-name">{_esc(model)}</div>{stats_html}</div>',
-            unsafe_allow_html=True,
-        )
+    # A placeholder rather than a plain block of st.markdown calls, specifically so
+    # _render_gemini_usage can redraw it later, after a search actually runs - see that
+    # function's docstring.
+    gemini_usage_slot = st.empty()
+_render_gemini_usage(gemini_usage_slot)
 
 # --- Resume upload + profile extraction -----------------------------------------------------
 
@@ -683,6 +729,11 @@ else:
                 log = result["log"]
                 st.session_state.tailored_paths = {}
                 st.session_state.match_report_path = None
+
+                # Redraw the sidebar panel now that this search's own Gemini calls have actually
+                # happened - see _render_gemini_usage's docstring for why it wouldn't otherwise
+                # reflect them until some later, unrelated rerun.
+                _render_gemini_usage(gemini_usage_slot)
 
                 rate_limit_waits = [int(m) for m in _RATE_LIMIT_WAIT_PATTERN.findall(log)]
                 if rate_limit_waits:
