@@ -16,15 +16,19 @@ Read-only from this side: clones/pulls the `data-cache` branch (job postings are
 data, unlike the resume - see resume_sync.py's docstring for why THAT repo has to be private)
 and upserts every entry into the local jobs table via repository.save_job(), which already
 overwrites-by-url on conflict. No git credentials needed for a public repo pull.
+
+The repo this reads from is repo_config.MAIN_REPO_URL, not a constant of its own - see
+repo_config.py if you're forking this project for your own use, that's the one file to edit.
 """
 import json
 import shutil
 import subprocess
 from pathlib import Path
 
+from repo_config import MAIN_REPO_URL
 from repository import save_job
 
-JOB_CACHE_REPO_URL = "https://github.com/shaad459/jobfinder-ai.git"
+JOB_CACHE_REPO_URL = MAIN_REPO_URL
 JOB_CACHE_BRANCH = "data-cache"
 LOCAL_CLONE_DIR = Path.home() / ".jobscout_ai" / "jobfinder-ai-data-cache"
 CACHE_FILE_NAME = "job_cache.json"

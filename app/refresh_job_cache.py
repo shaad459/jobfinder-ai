@@ -22,6 +22,23 @@ jobfinder.db (see GITHUB_ACTIONS_SETUP.md's "one thing worth knowing" section). 
 repository.get_all_companies() only if companies_config.json doesn't exist yet, so a manual local
 run before you've ever added/removed a company through the synced path still works.
 
+Query terms work the same way, via search_queries_sync.load_search_queries()
+(search_queries_config.json) - this used to be a single hardcoded DEFAULT_QUERIES list tuned to
+one specific role family (product/program/business analyst titles), which meant anyone searching
+a different role (a software engineer's resume, say) would silently cache-miss on every search
+forever, with no visible explanation. Now it's the union of every ACTIVE resume's own extracted
+job titles, kept current automatically by repository.get_or_create_profile() (on upload) and
+repository.set_profile_active() (on retire/restore) - see search_queries_sync.py. Falls back to
+BOOTSTRAP_DEFAULT_QUERIES only if search_queries_config.json has never been synced at all; if it
+HAS been synced but currently lists no titles (zero active resumes), that's respected as-is -
+nothing to search is a legitimate answer, not a reason to fall back to someone else's roles.
+
+Because this script fully rewrites --output from scratch every run (never merges with the
+previous snapshot - see _load_previous_urls below, which only READS the old file, for the
+new-postings diff), a change to either config file takes full effect on the very next scheduled
+run: postings for a role/company that's no longer active simply stop being fetched and drop out
+of the cache, with no separate "clear the old cache" step needed anywhere.
+
 NEW-POSTING ALERT: before overwriting --output, this reads whatever was already there (the
 previous refresh's snapshot) and diffs job URLs to find postings that are genuinely new since
 last time. If any are found, it emails a lightweight, UNSCORED heads-up via
@@ -33,22 +50,20 @@ job, and the alert is a bonus that shouldn't block it.
 IMPORTANT CAVEAT, honestly flagged rather than silently assumed: each source's own search
 (Workday's career-site search box, JSearch, Adzuna) is keyword/title-based, not "give me
 everything" - there's no verified "no filter, return all openings" mode for any of these
-connectors as of this writing. So this cache is only as broad as DEFAULT_QUERIES below. It's
-currently set to the role families actually relevant to this project (product/program/business
-analyst titles) rather than one guessed generic word - update DEFAULT_QUERIES if your own job
-search broadens into other role families, or the cache will quietly miss postings outside them,
-the same way a live search with an unrelated title would.
+connectors as of this writing. So this cache is only as broad as the query set described above -
+if a resume's extracted job_titles don't cover a role family you actually want cached (e.g. your
+resume says "Product Manager" but you also want "Product Owner" postings specifically), add that
+title to the resume, or pass --query by hand for a one-off local run.
 """
 import argparse
 import json
 import os
 
 import company_sync
+import search_queries_sync
 from database import init_db
 from job_aggregator import fetch_company_jobs
 from repository import get_all_companies
-
-DEFAULT_QUERIES = ["product owner", "product manager", "business analyst"]
 
 
 def _load_companies() -> dict:
@@ -61,8 +76,23 @@ def _load_companies() -> dict:
     return get_all_companies()
 
 
+def _load_queries() -> list[str]:
+    queries = search_queries_sync.load_search_queries()
+    if queries is None:
+        # search_queries_config.json has never been synced (see search_queries_sync.py) - use
+        # the bootstrap default rather than searching nothing.
+        print(f"No search_queries_config.json yet - using bootstrap defaults "
+              f"({', '.join(search_queries_sync.BOOTSTRAP_DEFAULT_QUERIES)}). This updates "
+              f"automatically the next time a resume is uploaded or retired.")
+        return list(search_queries_sync.BOOTSTRAP_DEFAULT_QUERIES)
+    if not queries:
+        print("search_queries_config.json exists but lists no titles from any active resume - "
+              "nothing to search this run.")
+    return queries
+
+
 def refresh_all_jobs(queries: list[str] = None, max_age_days: int = 14) -> list[dict]:
-    queries = queries or DEFAULT_QUERIES
+    queries = queries if queries is not None else _load_queries()
     companies = _load_companies()
     print(f"Refreshing cache for {len(companies)} configured companies, "
           f"{len(queries)} query term(s) each: {', '.join(companies)}")
@@ -126,7 +156,8 @@ if __name__ == "__main__":
     parser.add_argument("--query", action="append", dest="queries",
                          help="Search term to pass to each source's own search - repeatable "
                               "(--query \"product owner\" --query \"business analyst\"). "
-                              "Defaults to DEFAULT_QUERIES if not given at all.")
+                              "Defaults to your active resumes' own job titles (see "
+                              "search_queries_sync.py) if not given at all.")
     parser.add_argument("--max-age-days", type=int, default=14,
                          help="Widest freshness window to cache - narrower filtering happens "
                               "later, at read time, against whatever a specific search asks for.")

@@ -3,6 +3,7 @@ import hashlib
 from datetime import datetime, timedelta, timezone
 from database import get_connection
 import company_sync
+import search_queries_sync
 
 
 _PROFILE_COLUMNS = (
@@ -97,6 +98,7 @@ def get_or_create_profile(resume_text: str, profile: dict, label: str = None,
     conn.commit()
     profile_id = cursor.lastrowid
     conn.close()
+    _sync_search_queries_to_github()
     return profile_id
 
 
@@ -164,6 +166,10 @@ def set_profile_active(profile_id: int, active: bool):
     cursor.execute("UPDATE profiles SET active = ? WHERE id = ?", (1 if active else 0, profile_id))
     conn.commit()
     conn.close()
+    # Retiring or restoring a resume changes which job titles the scheduled 3-hourly cache
+    # should be searching (see search_queries_sync.py) - a retired resume's titles should stop
+    # being searched the same way an activated one's should start.
+    _sync_search_queries_to_github()
 
 
 def save_job(job: dict):
@@ -363,6 +369,19 @@ def _sync_companies_to_github():
     """
     ok, message = company_sync.sync_companies_config(get_all_companies())
     print(f"companies_config.json sync: {message}" if ok else f"companies_config.json sync failed: {message}")
+
+
+def _sync_search_queries_to_github():
+    """Best-effort push of the active resumes' job titles to search_queries_config.json on
+    GitHub (see search_queries_sync.py) - so the scheduled 3-hourly job-cache refresh (which has
+    no access to this local database) searches for what you're ACTUALLY looking for right now,
+    instead of whatever hardcoded role family the cache started with. Same never-raises,
+    synchronous, best-effort contract as _sync_companies_to_github() above - a failure here just
+    means the scheduled cache keeps using its last-synced query set until the next successful
+    sync, not a broken upload/retire action.
+    """
+    ok, message = search_queries_sync.sync_search_queries(list_profiles(active_only=True))
+    print(f"search_queries_config.json sync: {message}" if ok else f"search_queries_config.json sync failed: {message}")
 
 
 def get_matches(profile_id: int) -> list[dict]:

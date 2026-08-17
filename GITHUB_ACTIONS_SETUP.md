@@ -139,6 +139,56 @@ git credentials, so it needs a working internet connection at that moment to act
 GitHub (it fails silently toward the console if it can't, and the company is still saved
 locally either way).
 
+**d. What roles it searches for also comes from your resumes, automatically.** The query terms
+this workflow searches (per company) are the union of every ACTIVE resume's own extracted job
+titles, synced to `app/search_queries_config.json` the same way companies are (see
+`search_queries_sync.py`) - triggered whenever you upload a new resume or retire/restore one in
+the library. This is what makes the cache actually relevant if you ever upload a resume for a
+different role than the one this project was originally built around (e.g. a software engineer
+resume instead of product/PM) - the scheduled cache starts searching for that role's titles
+instead, with nothing to configure by hand. If `search_queries_config.json` has never been
+synced yet (a fresh clone, or before your first resume upload), it falls back to a bootstrap
+default of product/program/business-analyst titles rather than searching nothing.
+
+## Forking this for your own job search
+
+Everything above assumes you're using this exact repo (shaad459/jobfinder-ai) as-is. If you're
+starting from a fork to run your own search instead, there's one thing to fix before you use the
+app for real - not several, now that it's consolidated:
+
+**Edit `app/repo_config.py`.** `company_sync.py`, `search_queries_sync.py`, and
+`job_cache_sync.py` all push/pull `companies_config.json`, `search_queries_config.json`, and
+`job_cache.json` against a single URL - `repo_config.MAIN_REPO_URL`. As checked in, that's this
+repo. Left unchanged, your local "add company" or "upload resume" actions will try to push to
+shaad459's GitHub repo instead of yours (and fail, since you won't have write access - it won't
+silently succeed and pollute anyone's data, but it also won't do anything useful for you). Change
+`MAIN_REPO_URL` to your own fork's URL and treat that fork as a standalone instance from then on,
+not something that stays in sync with the original.
+
+**Create your own private resume repo.** Follow step 2 above to create your own
+`resume-private` (or any name), then either point `resume_sync.py` at it via a
+`PRIVATE_RESUME_REPO_URL` environment variable in your `.env` (no code change needed - see
+`resume_sync.py`'s docstring), or update the `repository:` line in
+`.github/workflows/daily-job-alert.yml`'s "Checkout private resume repo" step to match, plus its
+`PRIVATE_RESUME_PAT` secret.
+
+**The starter content is a starting point, not something to hand-edit.** `companies_config.json`
+currently lists the 5 companies this project's original search targeted, and
+`search_queries_config.json` reflects whatever resumes were active in the original owner's
+library when it was last synced. Neither needs manual cleanup: uploading your first resume
+automatically replaces `search_queries_config.json`'s contents with your own resume's titles
+(see `repository.get_or_create_profile`), and the "Manage companies" panel in the Streamlit app
+lets you add/remove companies the normal way - both propagate to GitHub correctly once
+`MAIN_REPO_URL` points at your own fork.
+
+**What this doesn't fix (yet):** `app/cert_aliases.py`'s certification-to-generic-phrasing table
+now spans several role families (project/program management, agile/scrum/product, business
+analysis, cloud, data & analytics, cybersecurity, DevOps, IT service management, HR, finance),
+but it's still a hand-maintained, representative list, not exhaustive - if your field's
+certifications aren't well covered, matching still works via Gemini's own judgment (the
+GROUNDING RULE in `matcher.py`'s prompt), just without this deterministic assist. Extending the
+table for a category that matters to you is a small, contained edit - see that file's docstring.
+
 ## One thing worth knowing
 
 This workflow keeps its own `jobfinder.db`, persisted in GitHub's Actions cache - it is a

@@ -9,6 +9,9 @@ already documents that the scheduled workflow's database is a completely separat
 yours, persisted independently in GitHub's Actions cache. Before this file existed, a company you
 added locally would never be searched by anything running on GitHub - only by your own machine.
 
+The repo this pushes to is repo_config.MAIN_REPO_URL, not a constant of its own - see
+repo_config.py if you're forking this project for your own use, that's the one file to edit.
+
 Pushes straight to `main` (not a side branch), on purpose - unlike job_cache.json (see
 job_cache_sync.py), which refreshes every ~3h and would clutter main's history if committed
 there, adding or removing a company is a rare, human-meaningful event worth a normal, visible
@@ -30,7 +33,9 @@ import shutil
 import subprocess
 from pathlib import Path
 
-REPO_URL = "https://github.com/shaad459/jobfinder-ai.git"
+from repo_config import MAIN_REPO_URL
+
+REPO_URL = MAIN_REPO_URL
 LOCAL_CLONE_DIR = Path.home() / ".jobscout_ai" / "jobfinder-ai-companies-sync"
 CONFIG_FILE_NAME = "companies_config.json"
 # Relative to the repo root - companies_config.json lives alongside the other app config, not at
