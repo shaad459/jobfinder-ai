@@ -422,6 +422,12 @@ if "selected_profile_ids" not in st.session_state:
     # differently per resume.
     st.session_state.tailored_paths = {}
     st.session_state.match_report_path = None
+    # Tracks which profile_ids have already been auto-pushed to resume-private THIS session -
+    # see the upload handler below. Without this, the "harmless and cheap after the first time"
+    # re-run behavior (Streamlit re-executes this block on every rerun while the uploader still
+    # holds a file) would re-run a git clone/push on every single rerun instead of just once per
+    # genuinely new upload.
+    st.session_state.auto_synced_resume_ids = set()
 
 if "startup_cleanup_done" not in st.session_state:
     deleted = delete_stale_jobs(max_age_days=7)
@@ -540,6 +546,34 @@ if uploaded_file is not None:
         # see RESUME_SELECT_KEY's comment above.
         st.session_state[RESUME_SELECT_KEY] = list(st.session_state.selected_profile_ids)
 
+    # Auto-push your active resume library to resume-private right after an upload, so the
+    # scheduled email workflow picks up whatever you just searched with WITHOUT a separate,
+    # easy-to-forget trip to the "Sync my active resumes" button below. Guarded by
+    # auto_synced_resume_ids so this only fires once per genuinely new profile_id per session,
+    # not on every rerun the uploader still holds the file (see the comment at the top of this
+    # block) - a git clone/push on every rerun would be neither harmless nor cheap.
+    if new_profile_id not in st.session_state.auto_synced_resume_ids:
+        resumes_to_sync = []
+        for lib_p in list_profiles(active_only=True):
+            lib_resume_path = get_resume_file_path(lib_p["id"])
+            if lib_resume_path:
+                resumes_to_sync.append({
+                    "profile_id": lib_p["id"],
+                    "path": str(lib_resume_path),
+                    "label": lib_p.get("label"),
+                })
+        with st.spinner("Syncing your active resumes to your private resume repo for scheduled email alerts..."):
+            auto_synced_ok, auto_sync_message = sync_all_active_resumes(resumes_to_sync)
+        st.session_state.auto_synced_resume_ids.add(new_profile_id)
+        if auto_synced_ok:
+            st.caption(f"📧 {auto_sync_message}")
+        else:
+            # Never block the upload itself on this - same best-effort contract as the
+            # companies/search-queries auto-sync in repository.py. Surfaced as a warning (not
+            # silently swallowed) since a stale scheduled digest is easy to miss otherwise; you
+            # can always retry from the "Sync my active resumes" button below.
+            st.warning(f"Resume added, but couldn't auto-sync it to your scheduled email alerts: {auto_sync_message}")
+
 library = list_profiles(active_only=True)
 
 # Self-heal: a resume saved before label-defaulting existed (or created via the earlier web-app
@@ -650,13 +684,16 @@ else:
                                         key=f"ats_dl_{p['id']}")
 
                 # Opt-in for the scheduled email digest: the GitHub Actions workflow now loops
-                # over your WHOLE active library (see run_scheduled_search.py), so this button
-                # re-syncs every currently-active resume to the private repo in one go, not just
-                # this one - a retired/deleted resume also stops being pushed on the next sync.
+                # over your WHOLE active library (see run_scheduled_search.py). Uploading a new
+                # resume already auto-syncs your active library (see the uploader above) - this
+                # button is for the cases that don't: retiring/restoring a resume changes what
+                # SHOULD be synced without triggering an upload, and it's a manual way to retry
+                # if the automatic sync ever failed (network hiccup, git not configured, etc.).
                 st.caption(
                     f"Your daily email digest searches all {len(library)} of your active "
-                    "resume(s) below. Use this to push your current active library to the "
-                    "private repo the scheduled workflow reads from."
+                    "resume(s) below - kept in sync automatically whenever you upload a resume. "
+                    "Use this button to force a re-sync (e.g. after retiring one, or to retry a "
+                    "failed automatic sync)."
                 )
                 if st.button("Sync my active resumes for scheduled email alerts",
                               key=f"email_sync_{p['id']}"):
