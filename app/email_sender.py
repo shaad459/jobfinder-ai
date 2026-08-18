@@ -105,7 +105,7 @@ def _build_new_postings_html(jobs: list[dict]) -> str:
       <h2 style="color:#111;">JobScout AI - {len(jobs)} new posting{plural} spotted</h2>
       <p style="color:#555;font-size:13px;">
         These just showed up in the job cache refresh and haven't been AI-scored yet - that
-        happens on the next daily digest (or the next time you open the app). This heads-up is
+        happens on the next scheduled digest run (or the next time you open the app). This heads-up is
         sent before any Gemini scoring so you can be first to apply if one looks promising,
         without waiting for a full match verdict.
       </p>
@@ -121,7 +121,8 @@ def _build_new_postings_html(jobs: list[dict]) -> str:
 def send_new_postings_alert(jobs: list[dict]):
     """Lightweight, UNSCORED heads-up for postings the ~3-hourly job-cache refresh has never
     seen before (see refresh_job_cache.py) - deliberately separate from send_digest_email above,
-    which only fires once a day and only for jobs Gemini has actually scored Strong/Good. This
+    which only fires on the ~3-hourly digest schedule and only for jobs Gemini has actually
+    scored Strong/Good. This
     one skips scoring entirely so it can go out fast, on the theory that "a brand-new posting in
     a role family you search for exists" is itself useful enough to act on immediately, even
     before you know how good a fit it is.

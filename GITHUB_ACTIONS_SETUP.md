@@ -1,7 +1,24 @@
 # Setting up the daily email alert
 
 One-time setup for `.github/workflows/daily-job-alert.yml`, which runs `run_scheduled_search.py`
-once a day on GitHub's servers and emails you any new Strong/Good matches.
+every 3 hours on GitHub's servers and emails you any new Strong/Good matches.
+
+**Why every 3 hours instead of once a day:** spreading Gemini scoring calls across 8 smaller runs
+instead of 1 large one avoids a single run's batch tripping a per-minute rate limit and
+backlogging everything behind it. It does **not** increase the total number of jobs scored per
+day - the same new postings get scored either way, just in smaller batches, more often.
+
+**Cache-first, not a second live fetch:** `refresh-job-cache.yml` (section 6 below) already runs
+every ~3 hours and pushes a broad sweep of postings to a shared `data-cache` branch, offset ~20
+minutes before this workflow. `run_scheduled_search.py` pulls that branch down first
+(`job_cache_sync.sync_job_cache`) and reads each configured company from that local cache before
+ever hitting Workday/JSearch/Adzuna live again - only a company the cache has nothing for gets a
+live fetch. This matters because JSearch/Adzuna both have their own external rate limits
+independent of Gemini's; fetching the same company/query combination twice every 3 hours (once
+for the cache refresh, once here) would burn that quota for zero new information. If the cache
+sync itself fails for any reason (a brand-new repo where `refresh-job-cache.yml` hasn't run yet,
+a transient network error), every company just falls back to a live fetch - same behavior as
+before this cache-first mechanic existed, never a hard failure.
 
 ## 1. Generate a Gmail App Password
 
@@ -104,7 +121,7 @@ Go to your repo's **Actions** tab → "Daily job alert" → **Run workflow** (th
 `workflow_dispatch`) rather than waiting for the schedule. Watch the run's logs for errors, and
 check your inbox once it finishes. The very first run will likely email you a fairly large batch
 (everything currently open across your 5 configured companies) since nothing's been scored yet -
-after that, each day's email should only contain postings that are genuinely new.
+after that, each run's email should only contain postings that are genuinely new.
 
 ## Updating the resume(s) later
 
@@ -205,6 +222,27 @@ but it's still a hand-maintained, representative list, not exhaustive - if your 
 certifications aren't well covered, matching still works via Gemini's own judgment (the
 GROUNDING RULE in `matcher.py`'s prompt), just without this deterministic assist. Extending the
 table for a category that matters to you is a small, contained edit - see that file's docstring.
+
+## GitHub auto-disables inactive scheduled workflows after 60 days
+
+This is a real platform constraint, not something either workflow's code can work around: GitHub
+automatically disables a scheduled workflow (the `schedule:` trigger on both
+`daily-job-alert.yml` and `refresh-job-cache.yml`) if the **repository** has had no commits/pushes
+for 60 consecutive days. Manual runs via `workflow_dispatch` (the **Run workflow** button in the
+Actions tab) don't count as activity for this purpose, and running the workflow itself doesn't
+count either - it's specifically about pushes to the repo.
+
+Practically: if you stop actively developing this repo (no commits, no resume syncs pushing to
+`resume-private` - note that push doesn't count either, since it's a different repo - no company
+or resume-driven config syncs to `main`) for two months straight, both scheduled workflows will
+silently stop firing. You won't get an error email; the Actions tab will just show the workflow as
+disabled, with a banner explaining why. Re-enabling is one click (**Actions** tab → select the
+workflow → **Enable workflow**), or push any commit to the repo before the 60 days elapse.
+
+If you want a completely hands-off setup that never needs a login check-in, one option is a small
+scheduled no-op commit (e.g. a separate workflow that touches a timestamp file and pushes it) - not
+set up here, since it's an extra moving part for a problem that a once-every-couple-months glance
+at the repo already solves.
 
 ## One thing worth knowing
 
