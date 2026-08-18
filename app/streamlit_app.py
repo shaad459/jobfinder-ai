@@ -41,9 +41,9 @@ from resume_builder import build_ats_resume_pdf
 from resume_tailor import tailor_profile_for_job, tailored_resume_filename
 from job_cache_sync import sync_job_cache
 from pdf_export import export_matches_to_pdf
-from resume_sync import sync_resume_for_email_alerts
+from resume_sync import sync_all_active_resumes
 from resume_storage import save_resume_file, get_resume_file_path
-from search_service import run_search_for_profiles
+from search_service import run_search_for_profiles, job_sort_key
 from database import init_db
 from connectors.workday_connector import parse_workday_url
 from repository import (
@@ -649,27 +649,32 @@ else:
                                         file_name=ats_resume_path, mime="application/pdf",
                                         key=f"ats_dl_{p['id']}")
 
-                # Opt-in for the scheduled email digest: the GitHub Actions workflow still only
-                # reads from ONE resume in a separate private repo (see GITHUB_ACTIONS_SETUP.md) -
-                # it doesn't yet loop over your whole library the way search does, so pushing a
-                # resume here replaces whichever one it was using, rather than adding to it.
+                # Opt-in for the scheduled email digest: the GitHub Actions workflow now loops
+                # over your WHOLE active library (see run_scheduled_search.py), so this button
+                # re-syncs every currently-active resume to the private repo in one go, not just
+                # this one - a retired/deleted resume also stops being pushed on the next sync.
                 st.caption(
-                    "Your daily email digest currently searches with whichever ONE resume was "
-                    "last pushed here, not your whole library. Pushing this one replaces it."
+                    f"Your daily email digest searches all {len(library)} of your active "
+                    "resume(s) below. Use this to push your current active library to the "
+                    "private repo the scheduled workflow reads from."
                 )
-                if st.button("Use this resume for my scheduled email alerts",
+                if st.button("Sync my active resumes for scheduled email alerts",
                               key=f"email_sync_{p['id']}"):
-                    resume_path = get_resume_file_path(p["id"])
-                    if not resume_path:
-                        st.error("Couldn't find the original file for this resume - try "
-                                 "re-uploading it.")
+                    resumes_to_sync = []
+                    for lib_p in library:
+                        lib_resume_path = get_resume_file_path(lib_p["id"])
+                        if lib_resume_path:
+                            resumes_to_sync.append({
+                                "profile_id": lib_p["id"],
+                                "path": str(lib_resume_path),
+                                "label": lib_p.get("label"),
+                            })
+                    with st.spinner("Pushing your active resume library to your private resume repo..."):
+                        synced_ok, sync_message = sync_all_active_resumes(resumes_to_sync)
+                    if synced_ok:
+                        st.success(sync_message)
                     else:
-                        with st.spinner("Pushing resume to your private resume repo..."):
-                            synced_ok, sync_message = sync_resume_for_email_alerts(str(resume_path))
-                        if synced_ok:
-                            st.success(sync_message)
-                        else:
-                            st.error(sync_message)
+                        st.error(sync_message)
             st.divider()
 
     st.divider()
@@ -712,6 +717,57 @@ else:
             if not search_all and not company_input.strip():
                 st.warning("Enter a company, or check 'search all configured companies'.")
             else:
+                # Live, batch-by-batch progress WHILE the search runs (see
+                # search_service.run_search_for_profiles' on_progress/on_log_line), instead of
+                # one opaque spinner that reveals nothing until the whole multi-company search
+                # finishes - or, on a bad rate-limit run, finishes with nothing to show at all.
+                # Deliberately lightweight (plain text lines, no interactive buttons/session
+                # state) since it gets redrawn on every batch; the full interactive card view
+                # further down still takes over once the search actually completes.
+                live_status_slot = st.empty()
+                live_results_slot = st.empty()
+                progress = {"seen": set(), "scored": [], "rate_limit_hits": 0}
+
+                def _on_progress(profile, company, batch_jobs):
+                    for job in batch_jobs:
+                        seen_key = (job.get("url"), profile["id"])
+                        if seen_key in progress["seen"]:
+                            continue
+                        progress["seen"].add(seen_key)
+                        tier = job.get("match_tier")
+                        score = job.get("match_score")
+                        progress["scored"].append({
+                            "title": job.get("title"), "company": job.get("company"),
+                            "label": profile.get("label"), "tier": tier, "score": score,
+                            "is_real": tier not in (None, "Pending") and (score or 0) > 0,
+                            "is_pending": tier == "Pending",
+                        })
+
+                    real_so_far = [s for s in progress["scored"] if s["is_real"]]
+                    pending_so_far = [s for s in progress["scored"] if s["is_pending"]]
+                    with live_results_slot.container():
+                        st.caption(
+                            f"{len(real_so_far)} match(es) found so far"
+                            + (f" · {len(pending_so_far)} still waiting on a Gemini verdict"
+                               if pending_so_far else "")
+                        )
+                        for s in sorted(real_so_far, key=lambda s: -(s["score"] or 0))[:15]:
+                            st.markdown(
+                                f'<div class="jsa-model-stat">{_esc(s["title"])} · '
+                                f'{_esc(s["company"])} · as {_esc(s["label"])}: '
+                                f'<strong>{_esc(s["score"])} ({_esc(s["tier"])})</strong></div>',
+                                unsafe_allow_html=True,
+                            )
+
+                def _on_log_line(line):
+                    if _RATE_LIMIT_WAIT_PATTERN.search(line):
+                        progress["rate_limit_hits"] += 1
+                        real_so_far = len([s for s in progress["scored"] if s["is_real"]])
+                        live_status_slot.warning(
+                            f"⏳ Hit Gemini's rate limit ({progress['rate_limit_hits']}x so far) "
+                            f"- {real_so_far} match(es) found so far, continuing automatically..."
+                        )
+
                 with st.spinner(
                     "Searching and scoring across your selected resumes - this can take a while "
                     "for a fresh search, especially for a full company sweep..."
@@ -723,7 +779,12 @@ else:
                         location=location_input.strip(),
                         relocation_ok=relocation_ok,
                         skip_cache=skip_cache,
+                        on_progress=_on_progress,
+                        on_log_line=_on_log_line,
                     )
+
+                live_status_slot.empty()
+                live_results_slot.empty()
 
                 st.session_state.last_matches = result["jobs"]
                 log = result["log"]
@@ -848,9 +909,26 @@ else:
             # is a genuine verdict.
             return max((s.get("match_score") or 0) for s in job.get("scores") or [{}])
 
-        real_matches = [j for j in st.session_state.last_matches if _job_best_score(j) > 0]
+        def _job_is_pending(job):
+            # A "Pending" score (see search_service.run_search_for_profile) is NOT the same
+            # thing as a prefilter/prescreen placeholder above, even though both currently use
+            # match_score=0/None - a placeholder is a real, final verdict (excluded, on purpose),
+            # while Pending means "we don't have a verdict yet." Without this check, Pending
+            # jobs fell into the same "excluded_count" bucket as genuine rejects below and were
+            # never actually shown - which was the whole reason a rate-limited search looked like
+            # it found nothing, even after the fix that was supposed to surface them.
+            return any(s.get("match_tier") == "Pending" for s in job.get("scores") or [])
+
+        real_matches = [
+            j for j in st.session_state.last_matches
+            if _job_best_score(j) > 0 or _job_is_pending(j)
+        ]
         excluded_count = len(st.session_state.last_matches) - len(real_matches)
-        sorted_matches = sorted(real_matches, key=lambda j: -_job_best_score(j))
+        # job_sort_key (shared with search_service.py, and with the live in-progress view above)
+        # puts a real verdict before a Pending one, live results before cache before past, and
+        # score as the tiebreaker - not just raw score like this used to, which would have mixed
+        # Pending cards in among real ones by coincidence of both scoring 0/None.
+        sorted_matches = sorted(real_matches, key=job_sort_key)
 
         header_cols = st.columns([3, 1])
         with header_cols[0]:

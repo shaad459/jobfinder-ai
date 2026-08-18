@@ -25,9 +25,46 @@ from repository import (
 
 _JOB_DISPLAY_FIELDS = ("url", "title", "company", "location", "description", "posted_date", "source")
 
+# Tags every returned job/match with WHERE it came from this run, so callers (streamlit_app.py's
+# live progress feed, and the final result ordering below) can prioritize a freshly-fetched live
+# posting over one that only came from the 12h shared cache, and both over a job that wasn't
+# touched by this run at all (a past match carried forward - see run_search_for_profiles). Lower
+# number = shown first.
+SOURCE_PRIORITY = {"live": 0, "cache": 1, "past": 2}
+
+
+def job_sort_key(job):
+    """Shared ordering used both for the final {"jobs": [...]} run_search_for_profiles returns
+    and for streamlit_app.py's live re-render of the same list while a search is still running -
+    kept in one place so the two never quietly drift apart.
+
+    Primary: does this job have an actual Gemini verdict yet for ANY of its scores, vs. only
+    "Pending" placeholders (see run_search_for_profile) - a job nobody's scored yet always sorts
+    after every job that's been scored, regardless of source, so a page of pending cards never
+    buries a real match. Secondary: SOURCE_PRIORITY - live before cache before past, per the
+    explicit ask ("priority should be live first, cached later"). Tertiary: best match_score
+    across this job's scores, highest first - the original sole sort key, now a tiebreaker within
+    a source group rather than the only signal.
+    """
+    scores = job.get("scores") or []
+    best_score = max((s.get("match_score") or 0) for s in scores)
+    has_real_verdict = any((s.get("match_tier") or "") != "Pending" and (s.get("match_score") or 0) > 0
+                            for s in scores)
+    best_source_priority = min(
+        (SOURCE_PRIORITY.get(s.get("result_source"), 2) for s in scores), default=2)
+    return (0 if has_real_verdict else 1, best_source_priority, -best_score)
+
 
 def run_search_for_profile(profile, profile_id, company, title_override, location, relocation_ok,
-                            include_aggregators=False, skip_cache=False):
+                            include_aggregators=False, skip_cache=False, on_progress=None):
+    """on_progress, when given, is called as soon as EACH batch resolves - not just once at the
+    end - with (profile, company, batch_jobs). batch_jobs already carries whatever verdict that
+    batch got (a real Stage 2 score, a Stage 0/1 placeholder reject, a Stage 0c history reuse, or
+    nothing yet if scoring itself failed - see matcher.score_all_jobs's on_batch_scored, which
+    this reuses directly). This is what lets streamlit_app.py show "here are 10 matches so far"
+    while a big multi-company search is still running, instead of one opaque spinner that reveals
+    nothing until the whole thing finishes or a rate limit empties it out.
+    """
     query = title_override or (profile.get("job_titles") or ["product owner"])[0]
 
     # Cache-first, ALWAYS - not just when "search live" (skip_cache) is unchecked. This used to
@@ -52,6 +89,10 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
     jobs_by_url = {j["url"]: j for j in cached_jobs}
     jobs_by_url.update({j["url"]: j for j in live_jobs})
     jobs = list(jobs_by_url.values())
+    live_urls = {j["url"] for j in live_jobs}
+
+    def _tag_source(job):
+        return {**job, "result_source": "live" if job["url"] in live_urls else "cache"}
 
     already_scored = get_scored_job_urls(profile_id)
     new_jobs = [j for j in jobs if j["url"] not in already_scored]
@@ -60,6 +101,8 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
         for job in batch_scored:
             save_job(job)
             save_match(profile_id, job)
+        if on_progress:
+            on_progress(profile, company, [_tag_source(job) for job in batch_scored])
 
     if new_jobs:
         score_all_jobs(profile, new_jobs, batch_size=10, on_batch_scored=save_batch,
@@ -67,7 +110,7 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
 
     job_urls_this_search = {j["url"] for j in jobs}
     all_matches = get_matches(profile_id)
-    matches_this_search = [m for m in all_matches if m["url"] in job_urls_this_search]
+    matches_this_search = [_tag_source(m) for m in all_matches if m["url"] in job_urls_this_search]
 
     # Anything from this run's job set that STILL has no saved match at this point is genuinely
     # pending, not excluded - a prefilter/prescreen reject already gets a real placeholder
@@ -80,7 +123,7 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
     scored_urls_this_search = {m["url"] for m in matches_this_search}
     pending = [
         {
-            **job,
+            **_tag_source(job),
             "match_tier": "Pending",
             "match_score": None,
             "match_points": [],
@@ -91,38 +134,69 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
         }
         for job in jobs if job["url"] not in scored_urls_this_search
     ]
+    # Failed batches never call save_batch (there's nothing scored to report), so this is the
+    # only place pending jobs become visible to on_progress - fired once, after the fact, rather
+    # than not at all.
+    if pending and on_progress:
+        on_progress(profile, company, pending)
 
     return matches_this_search + pending
 
 
 def run_search_for_profile_all_companies(profile, profile_id, title_override, location,
-                                          relocation_ok, skip_cache=False):
+                                          relocation_ok, skip_cache=False, on_progress=None):
     all_matches = []
     for company in get_all_companies():
         all_matches.extend(run_search_for_profile(
             profile, profile_id, company, title_override, location, relocation_ok,
-            include_aggregators=True, skip_cache=skip_cache))
+            include_aggregators=True, skip_cache=skip_cache, on_progress=on_progress))
     return all_matches
 
 
-def run_search_captured(*args, **kwargs):
+class _TeeStream(io.StringIO):
+    """A StringIO that ALSO forwards each newly-written line to on_line as soon as it's written,
+    instead of only being readable once the whole redirect_stdout block exits. run_search_captured
+    (below) needs the full buffered text either way for the "Search log" expander, but a plain
+    StringIO only exposes that via .getvalue() after the `with` block returns - which is too late
+    for streamlit_app.py to show "Gemini rate limit hit" live, while the search is still running,
+    rather than only in a post-mortem summary once everything (or nothing) has already come back.
+    """
+
+    def __init__(self, on_line=None):
+        super().__init__()
+        self._on_line = on_line
+        self._partial_line = ""
+
+    def write(self, s):
+        n = super().write(s)
+        if self._on_line and s:
+            self._partial_line += s
+            while "\n" in self._partial_line:
+                line, self._partial_line = self._partial_line.split("\n", 1)
+                self._on_line(line)
+        return n
+
+
+def run_search_captured(*args, on_log_line=None, **kwargs):
     """Runs a search while capturing everything it prints, so the same diagnostics the CLI entry
     points show inline (prefilter/prescreen counts, freshness/location notes, warnings) are
-    visible in a UI too, not just in the terminal running the server.
+    visible in a UI too, not just in the terminal running the server. on_log_line, when given, is
+    called with each line AS it's printed (see _TeeStream) rather than only after the whole search
+    finishes - streamlit_app.py uses this to surface a rate-limit hit the moment it happens.
     """
-    buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
+    stream = _TeeStream(on_log_line) if on_log_line else io.StringIO()
+    with contextlib.redirect_stdout(stream):
         all_companies = kwargs.pop("all_companies", False)
         if all_companies:
             result = run_search_for_profile_all_companies(*args, **kwargs)
         else:
             result = run_search_for_profile(*args, **kwargs)
-    return result, buf.getvalue()
+    return result, stream.getvalue()
 
 
 def run_search_for_profiles(profile_ids: list, companies: list = None, title_override: str = None,
                              location: str = "", relocation_ok: bool = False,
-                             skip_cache: bool = False) -> dict:
+                             skip_cache: bool = False, on_progress=None, on_log_line=None) -> dict:
     """Runs a search across EVERY given profile_id against the same set of companies, then merges
     results by job URL so each job carries a list of per-profile scores instead of one score per
     job - the core of the resume-library feature (see api_server.py's /api/search).
@@ -138,9 +212,9 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
     re-sent to Gemini for THAT resume again, but is still scored fresh the first time a different
     resume searches it.
 
-    Returns {"jobs": [...], "log": "..."} - jobs sorted by each job's best score across all
-    requested profiles (descending), so the strongest match for ANY of your resumes surfaces
-    first regardless of which resume produced it.
+    Returns {"jobs": [...], "log": "..."} - jobs ordered by job_sort_key: a real verdict before
+    a "Pending" placeholder, live results before cache before past (SOURCE_PRIORITY), and best
+    match_score as the tiebreaker within each group.
 
     The returned set is also never NARROWER than what was already in the database for these
     profiles: each profile's full past match history (within the last 7 days - see
@@ -149,6 +223,13 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
     (see run_search_for_profile). So a search never makes an earlier run's results disappear -
     only adds to them - and "Pending" cards make an in-progress rate-limit backoff visible
     instead of just looking like a smaller result set.
+
+    on_progress(profile, company, batch_jobs), when given, fires as soon as each batch of EITHER
+    profile resolves - live, mid-search visibility for a UI (see run_search_for_profile) rather
+    than only being able to show anything once the entire multi-profile, multi-company search has
+    finished. on_log_line(line), when given, fires per printed line as it happens (see
+    _TeeStream) - used to surface a Gemini rate-limit hit the moment it occurs, not just in a
+    summary after the fact.
     """
     search_all_companies = companies is None
     company_list = companies if companies is not None else list(get_all_companies().keys())
@@ -165,7 +246,8 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
         if search_all_companies:
             matches, log = run_search_captured(
                 profile, profile_id, title_override, location, relocation_ok,
-                skip_cache=skip_cache, all_companies=True)
+                skip_cache=skip_cache, all_companies=True,
+                on_progress=on_progress, on_log_line=on_log_line)
             matches_by_company = {"all companies": matches}
         else:
             matches_by_company = {}
@@ -173,7 +255,8 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
             for company in company_list:
                 company_matches, company_log = run_search_captured(
                     profile, profile_id, company, title_override, location, relocation_ok,
-                    include_aggregators=False, skip_cache=skip_cache)
+                    include_aggregators=False, skip_cache=skip_cache,
+                    on_progress=on_progress, on_log_line=on_log_line)
                 matches_by_company[company] = company_matches
                 if company_log:
                     log_parts.append(f"-- {company} --\n{company_log}")
@@ -196,7 +279,10 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
         # so everything get_matches returns here is already within that same 7-day freshness
         # window - no separate date filter needed.
         fresh_urls = {job["url"] for job in fresh_matches}
-        past_matches = [m for m in get_matches(profile_id) if m["url"] not in fresh_urls]
+        past_matches = [
+            {**m, "result_source": "past"}
+            for m in get_matches(profile_id) if m["url"] not in fresh_urls
+        ]
 
         for job in fresh_matches + past_matches:
             url = job["url"]
@@ -213,9 +299,10 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
                 "match_reasoning": job.get("match_reasoning"),
                 "dimension_breakdown": job.get("dimension_breakdown"),
                 "opened_at": job.get("opened_at"),
+                "result_source": job.get("result_source"),
             })
 
     jobs = list(merged.values())
-    jobs.sort(key=lambda j: max((s.get("match_score") or 0) for s in j["scores"]), reverse=True)
+    jobs.sort(key=job_sort_key)
 
     return {"jobs": jobs, "log": "\n\n".join(logs)}

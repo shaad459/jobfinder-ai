@@ -42,6 +42,14 @@ def _build_html_body(matches: list[dict]) -> str:
             f'<div style="color:#666;font-size:12px;margin-top:4px;">Matches: {points}</div>'
             if points else ""
         )
+        # Only present when run_scheduled_search.py searched more than one resume - lets you
+        # tell at a glance which resume in your library earned this match, since the same
+        # posting can appear once per resume with a different score/reasoning each time.
+        resume_label = job.get("resume_label")
+        resume_html = (
+            f'<div style="color:#888;font-size:11px;margin-top:2px;">Matched as: {resume_label}</div>'
+            if resume_label else ""
+        )
         rows.append(f"""
             <tr>
               <td style="padding:12px 0;border-bottom:1px solid #e5e5e5;">
@@ -50,6 +58,7 @@ def _build_html_body(matches: list[dict]) -> str:
                 <div style="color:#2563eb;font-size:12px;font-weight:600;margin-top:2px;">
                   {tier} match - score {score}
                 </div>
+                {resume_html}
                 {points_html}
                 <a href="{url}" style="font-size:13px;">View job posting -&gt;</a>
               </td>

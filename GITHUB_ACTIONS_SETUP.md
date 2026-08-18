@@ -29,20 +29,29 @@ On GitHub, click **+** (top right) → **New repository**. Name it `resume-priva
 just update the `repository:` line in `daily-job-alert.yml` to match). Set visibility to
 **Private**. Don't add a README/gitignore/license - keep it empty.
 
-**b. Push your resume to it:**
+**b. Push your resume(s) to it:**
+Easiest path: skip this step entirely and use the Streamlit app instead - open your resume
+library, upload the resume(s) you want searched, then click **"Sync my active resumes for
+scheduled email alerts"** under any resume's "Details / ATS resume / email alerts" expander. See
+**"Updating the resume(s) later"** below for exactly what that does; it pushes every currently
+active resume in your library in one go.
+
+If you'd rather push the first one by hand (e.g. to get the repo non-empty before you've set
+anything up locally), any filename starting with `resume` and ending in `.pdf` or `.docx` works -
+`run_scheduled_search.py` searches every `resume_*.pdf`/`resume_*.docx` (and, for backward
+compatibility, a plain `resume.pdf`/`resume.docx`) it finds in the checked-out repo:
 ```powershell
 cd "$env:TEMP"
 git clone https://github.com/shaad459/resume-private.git
-Copy-Item "D:\training\Ai trainings\pythonprojects\jobfinder-ai\app\sample_data\Shaad Khan Product Owner.pdf" "resume-private\resume.pdf"
+Copy-Item "D:\training\Ai trainings\pythonprojects\jobfinder-ai\app\sample_data\Shaad Khan Product Owner.pdf" "resume-private\resume_1.pdf"
 cd resume-private
-git add resume.pdf
+git add resume_1.pdf
 git commit -m "Add resume"
 git push
 ```
-If your resume is a `.docx` instead of `.pdf`, name the pushed file `resume.docx` and change
-`RESUME_EXT: pdf` to `RESUME_EXT: docx` near the top of `.github/workflows/daily-job-alert.yml`
-before you push that file - `extract_resume_text()` picks its parser from the file extension, so
-these have to match.
+`.docx` works the same way (`resume_1.docx`) - `extract_resume_text()` picks its parser from the
+file extension, so nothing else needs to change to mix `.pdf` and `.docx` resumes in the same
+repo.
 
 **c. Create a token scoped to ONLY that repo:**
 Go to `github.com/settings/personal-access-tokens` → **Generate new token** (this is the
@@ -97,16 +106,24 @@ check your inbox once it finishes. The very first run will likely email you a fa
 (everything currently open across your 5 configured companies) since nothing's been scored yet -
 after that, each day's email should only contain postings that are genuinely new.
 
-## Updating the resume later
+## Updating the resume(s) later
 
-Rather than repeating step 2b by hand, upload the new resume in the Streamlit app as normal,
-then open the **"📧 Scheduled email alerts"** expander that appears below it and click
-**"Use this resume for my scheduled email alerts."** This runs the same `git` clone/commit/push
-against `resume-private` that step 2b describes, from a small local clone kept at
-`~/.jobscout_ai/resume-private` (Windows: `C:\Users\<you>\.jobscout_ai\resume-private`) - it
-overwrites whatever resume was there before, so the next scheduled (or manually triggered) run
-picks up the new one automatically. See `resume_sync.py` for exactly what it does; it only ever
-touches that separate local clone, never `jobfinder-ai`'s own git repo.
+Rather than repeating step 2b by hand, manage everything from the Streamlit app's resume
+library. Upload/retire resumes there as normal, then open any resume's **"Details / ATS resume /
+email alerts"** expander and click **"Sync my active resumes for scheduled email alerts."**
+
+This pushes your WHOLE currently-active library to `resume-private` in one go - one
+`resume_<id>.pdf`/`.docx` file per active resume - not just the resume you clicked from. A
+resume you've since retired or deleted locally is removed from the private repo on the next
+sync too, so the scheduled workflow stops searching it. Runs from a small local clone kept at
+`~/.jobscout_ai/resume-private` (Windows: `C:\Users\<you>\.jobscout_ai\resume-private`). See
+`resume_sync.sync_all_active_resumes` for exactly what it does; it only ever touches that
+separate local clone, never `jobfinder-ai`'s own git repo.
+
+Each resume searches independently in the scheduled run, same as selecting multiple resumes in
+the Streamlit search panel - a job that matches more than one of your resumes shows up once per
+resume in the digest email, each with its own score and a "Matched as: <label>" line so you can
+tell them apart.
 
 ## 6. Set up the job-cache refresh workflow (optional, but recommended)
 

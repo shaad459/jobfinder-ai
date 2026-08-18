@@ -92,6 +92,16 @@ def export_matches_to_pdf(matches: list[dict], output_path: str, tiers: tuple = 
         pdf.cell(0, 6, f"{tier} match - score {score}{coverage_suffix}",
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
+        # Only present when run_scheduled_search.py searched more than one resume - see
+        # email_sender._build_html_body's matching comment.
+        resume_label = job.get("resume_label")
+        if resume_label:
+            pdf.set_font("Helvetica", "I", 9)
+            pdf.set_text_color(120, 120, 120)
+            pdf.cell(0, 5, _sanitize_for_pdf(f"Matched as: {resume_label}"),
+                      new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            pdf.set_text_color(0, 0, 0)
+
         match_points = job.get("match_points") or []
         if match_points:
             pdf.set_font("Helvetica", "", 10)
