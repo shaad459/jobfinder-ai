@@ -46,9 +46,13 @@ from resume_storage import save_resume_file, get_resume_file_path
 from search_service import run_search_for_profiles, job_sort_key
 from database import init_db
 from connectors.workday_connector import parse_workday_url
+from connectors.greenhouse_connector import parse_greenhouse_url
+from connectors.lever_connector import parse_lever_url
 from repository import (
     get_or_create_profile, get_profile_by_hash, get_profile_by_id, get_gemini_call_counts_today,
     delete_stale_jobs, mark_job_opened, get_all_companies, add_company, remove_company,
+    get_all_greenhouse_companies, add_greenhouse_company, remove_greenhouse_company,
+    get_all_lever_companies, add_lever_company, remove_lever_company, get_all_company_names,
     list_profiles, set_profile_label, set_profile_active,
 )
 
@@ -731,7 +735,8 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             search_all = st.checkbox(
-                f"Search all {len(get_all_companies())} configured companies (Workday + JSearch/Adzuna)")
+                f"Search all {len(get_all_company_names())} configured companies "
+                f"(Workday/Greenhouse/Lever + JSearch/Adzuna)")
             company_input = st.text_input("Company", disabled=search_all,
                                            placeholder="e.g. Citi, Google, Barclays")
             title_input = st.text_input(
@@ -846,82 +851,151 @@ else:
                     with st.expander("Search log", expanded=False):
                         st.code(log, language=None)
 
+    def _add_company_and_search(name: str):
+        """Shared post-add flow for any connector type (Workday/Greenhouse/Lever) - immediately
+        searches the company just added, rather than only registering it for "search all
+        configured companies" later. It isn't in the shared job cache yet (refresh-job-cache.yml
+        only knows about companies that existed the last time it ran) - run_search_for_profiles'
+        cache-miss fallback handles that automatically: an empty cache read triggers a live
+        direct-connector fetch, whose results get saved to the local cache too. Location is
+        deliberately left unfiltered here (unlike a normal search) since your selected resumes
+        may have different locations and this is meant to be a quick "does anything show up at
+        all" check, not a filtered result - run a normal search afterward for proper location
+        filtering. Factored out of the Workday-only add-company form so Greenhouse's and Lever's
+        forms below can share it instead of tripling this logic.
+        """
+        with st.spinner(f'Searching "{name}" for the first time...'):
+            added_result = run_search_for_profiles(
+                profile_ids=list(st.session_state.selected_profile_ids),
+                companies=[name], title_override=None, location="", relocation_ok=True,
+            )
+
+        added_jobs = added_result["jobs"]
+        real_added = [j for j in added_jobs
+                      if any((s.get("match_score") or 0) > 0 for s in j["scores"])]
+        # Stashed in session_state rather than shown directly here - a st.rerun() right after
+        # rendering something usually fires before the browser gets a chance to paint it, so this
+        # is picked up and shown once, right after the rerun, by the block just below "Manage
+        # companies" instead (same pattern as startup_cleanup_note/job_cache_sync_note above).
+        st.session_state.new_company_search_note = (
+            f'Added "{name}" and searched it: {len(real_added)} match(es) found across your '
+            f'selected resumes ({len(added_jobs) - len(real_added)} excluded by the '
+            f'pre-filter/prescreen). It will also be included in future "search all configured '
+            f'companies" runs.'
+        )
+        st.session_state.new_company_search_log = added_result["log"]
+        # Merge by URL rather than plain concatenation, in case a job from this company was
+        # already present in last_matches from a broader earlier search.
+        merged = {j["url"]: j for j in (st.session_state.last_matches or [])}
+        for j in added_jobs:
+            merged[j["url"]] = j
+        st.session_state.last_matches = list(merged.values())
+
     with st.expander("Manage companies"):
-        st.caption('Companies searched by "search all configured companies." Paste a Workday '
-                   "careers URL to add another one - no need to know Workday's internal naming.")
-        companies = get_all_companies()
-        for name in sorted(companies):
-            row_cols = st.columns([4, 1])
+        st.caption('Companies searched by "search all configured companies," across three '
+                   "direct-API connector types below - Workday, Greenhouse, and Lever. Paste a "
+                   "company's careers/job-board URL in the matching tab to add one; no need to "
+                   "know that ATS's internal naming.")
+
+        workday_companies = get_all_companies()
+        greenhouse_companies = get_all_greenhouse_companies()
+        lever_companies = get_all_lever_companies()
+        all_rows = (
+            [(name, "Workday") for name in workday_companies]
+            + [(name, "Greenhouse") for name in greenhouse_companies]
+            + [(name, "Lever") for name in lever_companies]
+        )
+        for name, source in sorted(all_rows):
+            row_cols = st.columns([3, 1, 1])
             with row_cols[0]:
                 st.write(name)
             with row_cols[1]:
-                if st.button("Remove", key=f"remove_company_{name}"):
-                    remove_company(name)
+                st.caption(source)
+            with row_cols[2]:
+                if st.button("Remove", key=f"remove_company_{source}_{name}"):
+                    if source == "Workday":
+                        remove_company(name)
+                    elif source == "Greenhouse":
+                        remove_greenhouse_company(name)
+                    else:
+                        remove_lever_company(name)
                     st.rerun()
 
         st.divider()
-        with st.form("add_company_form", clear_on_submit=True):
-            new_company_name = st.text_input("Display name", placeholder="e.g. Tesla")
-            new_company_url = st.text_input(
-                "Workday careers URL",
-                placeholder="https://tesla.wd1.myworkdayjobs.com/TeslaCareers")
-            add_company_submitted = st.form_submit_button("Add company")
+        workday_tab, greenhouse_tab, lever_tab = st.tabs(["Workday", "Greenhouse", "Lever"])
 
-        if add_company_submitted:
-            if not new_company_name.strip():
-                st.error("Enter a display name for the company.")
-            elif not new_company_url.strip():
-                st.error("Paste the company's Workday careers URL.")
-            elif not st.session_state.selected_profile_ids:
-                st.error("Select at least one resume in the library above first.")
-            else:
-                try:
-                    parsed = parse_workday_url(new_company_url)
-                    add_company(new_company_name.strip(), parsed["company"],
-                                parsed["datacenter"], parsed["site"])
+        with workday_tab:
+            with st.form("add_workday_company_form", clear_on_submit=True):
+                wd_name = st.text_input("Display name", placeholder="e.g. Tesla", key="wd_name")
+                wd_url = st.text_input(
+                    "Workday careers URL",
+                    placeholder="https://tesla.wd1.myworkdayjobs.com/TeslaCareers", key="wd_url")
+                add_workday_submitted = st.form_submit_button("Add company")
 
-                    # Immediately search the company just added, rather than only registering it
-                    # for "search all configured companies" later. It isn't in the shared job
-                    # cache yet (refresh-job-cache.yml only knows about companies that existed
-                    # the last time it ran) - run_search_for_profiles' cache-miss fallback
-                    # handles that automatically: an empty cache read triggers a live
-                    # Workday/JSearch/Adzuna fetch, whose results get saved to the local cache
-                    # too. Location is deliberately left unfiltered here (unlike a normal search)
-                    # since your selected resumes may have different locations and this is meant
-                    # to be a quick "does anything show up at all" check, not a filtered result -
-                    # run a normal search afterward for proper location filtering.
-                    with st.spinner(f'Searching "{new_company_name.strip()}" for the first time...'):
-                        added_result = run_search_for_profiles(
-                            profile_ids=list(st.session_state.selected_profile_ids),
-                            companies=[new_company_name.strip()],
-                            title_override=None, location="", relocation_ok=True,
-                        )
+            if add_workday_submitted:
+                if not wd_name.strip():
+                    st.error("Enter a display name for the company.")
+                elif not wd_url.strip():
+                    st.error("Paste the company's Workday careers URL.")
+                elif not st.session_state.selected_profile_ids:
+                    st.error("Select at least one resume in the library above first.")
+                else:
+                    try:
+                        parsed = parse_workday_url(wd_url)
+                        add_company(wd_name.strip(), parsed["company"], parsed["datacenter"],
+                                    parsed["site"])
+                        _add_company_and_search(wd_name.strip())
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(str(e))
 
-                    added_jobs = added_result["jobs"]
-                    real_added = [j for j in added_jobs
-                                  if any((s.get("match_score") or 0) > 0 for s in j["scores"])]
-                    # Stashed in session_state rather than shown directly here - a st.rerun()
-                    # right after rendering something usually fires before the browser gets a
-                    # chance to paint it, so this is picked up and shown once, right after the
-                    # rerun, by the block just below "Manage companies" instead (same pattern as
-                    # startup_cleanup_note/job_cache_sync_note above).
-                    st.session_state.new_company_search_note = (
-                        f'Added "{new_company_name.strip()}" and searched it: '
-                        f'{len(real_added)} match(es) found across your selected resumes '
-                        f'({len(added_jobs) - len(real_added)} excluded by the pre-filter/'
-                        f'prescreen). It will also be included in future "search all configured '
-                        f'companies" runs.'
-                    )
-                    st.session_state.new_company_search_log = added_result["log"]
-                    # Merge by URL rather than plain concatenation, in case a job from this
-                    # company was already present in last_matches from a broader earlier search.
-                    merged = {j["url"]: j for j in (st.session_state.last_matches or [])}
-                    for j in added_jobs:
-                        merged[j["url"]] = j
-                    st.session_state.last_matches = list(merged.values())
-                    st.rerun()
-                except ValueError as e:
-                    st.error(str(e))
+        with greenhouse_tab:
+            with st.form("add_greenhouse_company_form", clear_on_submit=True):
+                gh_name = st.text_input("Display name", placeholder="e.g. Stripe", key="gh_name")
+                gh_url = st.text_input(
+                    "Greenhouse job board URL",
+                    placeholder="https://boards.greenhouse.io/stripe", key="gh_url")
+                add_greenhouse_submitted = st.form_submit_button("Add company")
+
+            if add_greenhouse_submitted:
+                if not gh_name.strip():
+                    st.error("Enter a display name for the company.")
+                elif not gh_url.strip():
+                    st.error("Paste the company's Greenhouse job board URL.")
+                elif not st.session_state.selected_profile_ids:
+                    st.error("Select at least one resume in the library above first.")
+                else:
+                    try:
+                        parsed = parse_greenhouse_url(gh_url)
+                        add_greenhouse_company(gh_name.strip(), parsed["board_token"])
+                        _add_company_and_search(gh_name.strip())
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(str(e))
+
+        with lever_tab:
+            with st.form("add_lever_company_form", clear_on_submit=True):
+                lv_name = st.text_input("Display name", placeholder="e.g. Ramp", key="lv_name")
+                lv_url = st.text_input(
+                    "Lever job board URL",
+                    placeholder="https://jobs.lever.co/ramp", key="lv_url")
+                add_lever_submitted = st.form_submit_button("Add company")
+
+            if add_lever_submitted:
+                if not lv_name.strip():
+                    st.error("Enter a display name for the company.")
+                elif not lv_url.strip():
+                    st.error("Paste the company's Lever job board URL.")
+                elif not st.session_state.selected_profile_ids:
+                    st.error("Select at least one resume in the library above first.")
+                else:
+                    try:
+                        parsed = parse_lever_url(lv_url)
+                        add_lever_company(lv_name.strip(), parsed["site"])
+                        _add_company_and_search(lv_name.strip())
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(str(e))
 
     if st.session_state.get("new_company_search_note"):
         st.success(st.session_state.new_company_search_note)

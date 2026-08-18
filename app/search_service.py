@@ -20,7 +20,8 @@ import io
 from job_aggregator import fetch_company_jobs, get_company_jobs_from_cache
 from matcher import score_all_jobs
 from repository import (
-    get_all_companies, get_matches, get_profile_by_id, get_scored_job_urls, save_job, save_match,
+    get_all_company_names, get_matches, get_profile_by_id,
+    get_scored_job_urls, save_job, save_match,
 )
 
 _JOB_DISPLAY_FIELDS = ("url", "title", "company", "location", "description", "posted_date", "source")
@@ -146,7 +147,7 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
 def run_search_for_profile_all_companies(profile, profile_id, title_override, location,
                                           relocation_ok, skip_cache=False, on_progress=None):
     all_matches = []
-    for company in get_all_companies():
+    for company in get_all_company_names():
         all_matches.extend(run_search_for_profile(
             profile, profile_id, company, title_override, location, relocation_ok,
             include_aggregators=True, skip_cache=skip_cache, on_progress=on_progress))
@@ -201,9 +202,10 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
     results by job URL so each job carries a list of per-profile scores instead of one score per
     job - the core of the resume-library feature (see api_server.py's /api/search).
 
-    companies=None means "every configured company" (get_all_companies()), same as the old
-    "search all companies" checkbox, and also switches on include_aggregators the same way that
-    path always did (broader JSearch/Adzuna coverage on top of each Workday feed).
+    companies=None means "every configured company" (get_all_company_names() - the union across
+    Workday, Greenhouse, and Lever), same as the old "search all companies" checkbox, and also
+    switches on include_aggregators the same way that path always did (broader JSearch/Adzuna
+    coverage on top of each company's own direct-connector feed).
 
     Each profile's search still runs its own independent Stage 0/-1 title filtering and its own
     get_scored_job_urls dedup (see matcher.py / repository.py) - a job irrelevant to your Business
@@ -232,7 +234,7 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
     summary after the fact.
     """
     search_all_companies = companies is None
-    company_list = companies if companies is not None else list(get_all_companies().keys())
+    company_list = companies if companies is not None else get_all_company_names()
 
     merged = {}
     logs = []

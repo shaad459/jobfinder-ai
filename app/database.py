@@ -110,6 +110,30 @@ def init_db():
             default_companies,
         )
 
+    # Greenhouse and Lever configured companies - same purpose and shape as `companies` above
+    # (Workday), kept as separate tables rather than folding into `companies` because each ATS
+    # needs a different, single config value (a board_token / a site slug) instead of Workday's
+    # three-part company/datacenter/site, and a shared polymorphic schema would mean every reader
+    # of `companies` (get_all_companies, workday_connector.fetch_workday_jobs, and anything that
+    # assumes its fixed 3-column shape) would need to start branching on a "type" column it never
+    # had before. Two small, source-specific tables keep the existing Workday path completely
+    # untouched. No default seed rows - unlike Workday's original 5 hardcoded companies, these
+    # start empty and are populated entirely through the Streamlit "Manage companies" UI.
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS greenhouse_companies (
+            name TEXT PRIMARY KEY,
+            board_token TEXT NOT NULL,
+            added_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS lever_companies (
+            name TEXT PRIMARY KEY,
+            site TEXT NOT NULL,
+            added_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     # Idempotent migrations - CREATE TABLE IF NOT EXISTS doesn't retroactively alter a table
     # that already existed before a column was added, so each of these is a no-op once the
     # column is already there (SQLite raises OperationalError on a duplicate column, which we

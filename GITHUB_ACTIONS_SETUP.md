@@ -190,13 +190,14 @@ nothing's been cached before. After that, each run should only alert on genuinel
 
 **c. Adding a company automatically reaches this workflow too.** Unlike `daily-job-alert.yml`
 (which keeps its own separate `jobfinder.db`, restored from Actions cache - see "One thing worth
-knowing" below), this workflow reads its company list from `app/companies_config.json`, which is
-committed to `main` automatically whenever you add or remove a company in the Streamlit UI's
-"Manage companies" panel (see `company_sync.py`). No manual step needed - just note that this
-push happens in the background right when you click Add/Remove, using your machine's existing
-git credentials, so it needs a working internet connection at that moment to actually reach
-GitHub (it fails silently toward the console if it can't, and the company is still saved
-locally either way).
+knowing" below), this workflow reads its company list from `app/companies_config.json`
+(Workday), `app/greenhouse_companies_config.json`, and `app/lever_companies_config.json` - one
+file per direct-API connector type, each committed to `main` automatically whenever you add or
+remove a company under the matching tab in the Streamlit UI's "Manage companies" panel (see
+`company_sync.py`). No manual step needed - just note that this push happens in the background
+right when you click Add/Remove, using your machine's existing git credentials, so it needs a
+working internet connection at that moment to actually reach GitHub (it fails silently toward
+the console if it can't, and the company is still saved locally either way).
 
 **d. What roles it searches for also comes from your resumes, automatically.** The query terms
 this workflow searches (per company) are the union of every ACTIVE resume's own extracted job

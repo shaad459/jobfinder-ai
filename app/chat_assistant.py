@@ -42,7 +42,7 @@ from pdf_export import export_matches_to_pdf
 from database import init_db
 from repository import (
     get_or_create_profile, get_profile_by_hash, save_job, save_match,
-    get_scored_job_urls, get_matches, delete_stale_jobs, mark_job_opened, get_all_companies,
+    get_scored_job_urls, get_matches, delete_stale_jobs, mark_job_opened, get_all_company_names,
 )
 
 INTENT_PROMPT_TEMPLATE = """You are the command interpreter for a job-search assistant. Classify the user's
@@ -206,19 +206,21 @@ def _do_search(profile: dict, profile_id: int, intent: dict, include_aggregators
 
 
 def _do_search_all_companies(profile: dict, profile_id: int, intent: dict) -> list[dict]:
-    """"All companies" means the 5 configured Workday companies specifically, not the broader
-    "search anything, anywhere" approach BUILD_PLAN.md item 4 deliberately moved away from (it's
-    what caused the real rate-limit stress earlier in the project) - looping the same company-
-    scoped fetch_company_jobs() over a small, known company list keeps that same discipline.
+    """"All companies" means the configured companies specifically (Workday + Greenhouse + Lever
+    - see repository.get_all_company_names), not the broader "search anything, anywhere" approach
+    BUILD_PLAN.md item 4 deliberately moved away from (it's what caused the real rate-limit
+    stress earlier in the project) - looping the same company-scoped fetch_company_jobs() over a
+    small, known company list keeps that same discipline.
 
     JSearch/Adzuna ARE included here (include_aggregators=True), on top of each company's own
-    Workday feed - a normal single-company search ("search citi") stays Workday-only and cheaper,
-    but this sweep is already spending more calls by touching 5 companies at once, so the extra
-    2 API calls per company for broader coverage is a reasonable trade here specifically.
+    direct-connector feed - a normal single-company search ("search citi") stays connector-only
+    and cheaper, but this sweep is already spending more calls by touching every configured
+    company at once, so the extra 2 API calls per company for broader coverage is a reasonable
+    trade here specifically.
     """
-    companies = get_all_companies()
-    print(f"Searching all {len(companies)} configured companies (Workday + JSearch/Adzuna): "
-          f"{', '.join(companies)}")
+    companies = get_all_company_names()
+    print(f"Searching all {len(companies)} configured companies (Workday/Greenhouse/Lever + "
+          f"JSearch/Adzuna): {', '.join(companies)}")
     all_matches = []
     for company in companies:
         company_intent = dict(intent)

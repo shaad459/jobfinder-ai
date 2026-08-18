@@ -371,6 +371,106 @@ def _sync_companies_to_github():
     print(f"companies_config.json sync: {message}" if ok else f"companies_config.json sync failed: {message}")
 
 
+def get_all_greenhouse_companies() -> dict:
+    """Returns the configured Greenhouse companies as {name: {board_token}} - same read-fresh-
+    every-call contract as get_all_companies() (Workday), so a company added via the Streamlit UI
+    is immediately usable without a restart.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, board_token FROM greenhouse_companies ORDER BY name")
+    rows = cursor.fetchall()
+    conn.close()
+    return {row["name"]: {"board_token": row["board_token"]} for row in rows}
+
+
+def add_greenhouse_company(name: str, board_token: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO greenhouse_companies (name, board_token) VALUES (?, ?)
+        ON CONFLICT(name) DO UPDATE SET board_token=excluded.board_token
+    """, (name, board_token))
+    conn.commit()
+    conn.close()
+    _sync_greenhouse_companies_to_github()
+
+
+def remove_greenhouse_company(name: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM greenhouse_companies WHERE name = ?", (name,))
+    conn.commit()
+    conn.close()
+    _sync_greenhouse_companies_to_github()
+
+
+def get_all_lever_companies() -> dict:
+    """Returns the configured Lever companies as {name: {site}} - same read-fresh-every-call
+    contract as get_all_companies() (Workday), so a company added via the Streamlit UI is
+    immediately usable without a restart.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, site FROM lever_companies ORDER BY name")
+    rows = cursor.fetchall()
+    conn.close()
+    return {row["name"]: {"site": row["site"]} for row in rows}
+
+
+def add_lever_company(name: str, site: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO lever_companies (name, site) VALUES (?, ?)
+        ON CONFLICT(name) DO UPDATE SET site=excluded.site
+    """, (name, site))
+    conn.commit()
+    conn.close()
+    _sync_lever_companies_to_github()
+
+
+def remove_lever_company(name: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM lever_companies WHERE name = ?", (name,))
+    conn.commit()
+    conn.close()
+    _sync_lever_companies_to_github()
+
+
+def get_all_company_names() -> list[str]:
+    """Union of every configured company across all three connector types (Workday, Greenhouse,
+    Lever), sorted - this is the list "search all configured companies" actually means now.
+    job_aggregator.fetch_company_jobs() figures out which connector a given name belongs to on
+    its own (it checks all three registries), so callers here don't need to care - they just need
+    the full set of names to loop over. A name is expected to appear in at most one registry;
+    nothing currently enforces that, so a duplicate across two connector types would just be
+    fetched twice under the same display name rather than erroring.
+    """
+    names = set(get_all_companies()) | set(get_all_greenhouse_companies()) | set(get_all_lever_companies())
+    return sorted(names)
+
+
+def _sync_greenhouse_companies_to_github():
+    """Best-effort push of the current Greenhouse company list to
+    greenhouse_companies_config.json on GitHub - same contract as _sync_companies_to_github()
+    above, just for the Greenhouse registry.
+    """
+    ok, message = company_sync.sync_greenhouse_companies_config(get_all_greenhouse_companies())
+    print(f"greenhouse_companies_config.json sync: {message}" if ok
+          else f"greenhouse_companies_config.json sync failed: {message}")
+
+
+def _sync_lever_companies_to_github():
+    """Best-effort push of the current Lever company list to lever_companies_config.json on
+    GitHub - same contract as _sync_companies_to_github() above, just for the Lever registry.
+    """
+    ok, message = company_sync.sync_lever_companies_config(get_all_lever_companies())
+    print(f"lever_companies_config.json sync: {message}" if ok
+          else f"lever_companies_config.json sync failed: {message}")
+
+
 def _sync_search_queries_to_github():
     """Best-effort push of the active resumes' job titles to search_queries_config.json on
     GitHub (see search_queries_sync.py) - so the scheduled 3-hourly job-cache refresh (which has

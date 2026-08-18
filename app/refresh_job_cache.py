@@ -63,17 +63,25 @@ import company_sync
 import search_queries_sync
 from database import init_db
 from job_aggregator import fetch_company_jobs
-from repository import get_all_companies
+from repository import get_all_companies, get_all_greenhouse_companies, get_all_lever_companies
 
 
-def _load_companies() -> dict:
-    companies = company_sync.load_companies_config()
-    if companies:
-        return companies
-    # Fallback only - the local DB is authoritative here just for a manual run before
-    # companies_config.json has ever been pushed (see company_sync.py's docstring).
+def _load_companies() -> list[str]:
+    """Union of every configured company name across all three connector types (Workday,
+    Greenhouse, Lever), each loaded from its own git-synced config file the same way Workday's
+    always was - falling back to the local DB registry only if THAT specific config file has
+    never been synced yet (e.g. right after upgrading this script to know about Greenhouse/Lever
+    for the first time, before you've added any company through either). fetch_company_jobs()
+    resolves each name to the right connector on its own, so a plain list of names is all this
+    needs to return - see job_aggregator.fetch_company_jobs's docstring.
+    """
     init_db()
-    return get_all_companies()
+
+    workday = company_sync.load_companies_config() or get_all_companies()
+    greenhouse = company_sync.load_greenhouse_companies_config() or get_all_greenhouse_companies()
+    lever = company_sync.load_lever_companies_config() or get_all_lever_companies()
+
+    return sorted(set(workday) | set(greenhouse) | set(lever))
 
 
 def _load_queries() -> list[str]:

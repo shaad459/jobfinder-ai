@@ -1,7 +1,9 @@
-"""Keeps companies_config.json - the git-tracked source of truth for which Workday companies get
-searched - in sync between wherever you add/remove a company (normally the Streamlit UI, backed
-by the local `companies` SQLite table - see repository.add_company/remove_company) and GitHub,
-where refresh_job_cache.py's scheduled run reads it from a fresh checkout with NO access to your
+"""Keeps the git-tracked *_companies_config.json files - the source of truth for which companies
+get searched, one per connector type (Workday, Greenhouse, Lever) - in sync between wherever you
+add/remove a company (normally the Streamlit UI, backed by the local `companies` /
+`greenhouse_companies` / `lever_companies` SQLite tables - see repository.py's
+add_company/remove_company and its Greenhouse/Lever counterparts) and GitHub, where
+refresh_job_cache.py's scheduled run reads them from a fresh checkout with NO access to your
 local jobfinder.db.
 
 This gap is real, not hypothetical: GITHUB_ACTIONS_SETUP.md's "one thing worth knowing" section
@@ -27,6 +29,13 @@ Caveat worth knowing upfront (the same tradeoff resume_sync.py accepts for resum
 this pushes straight to origin/main, if you have local commits on your dev machine you haven't
 pushed yet, your NEXT manual `git push` may be rejected until you `git pull` first - recoverable,
 not destructive, just not silent.
+
+All three connector types share ONE local clone (LOCAL_CLONE_DIR) and ONE git identity - there's
+no reason to keep three separate clones just because there are three config files living in the
+same repo. _sync_config_file() below is the one place that actually talks to git; the three
+public sync_*_config() functions are thin, source-specific wrappers around it so each keeps its
+own docstring and its own exact message wording (worth keeping stable since the Streamlit UI
+surfaces these messages directly).
 """
 import json
 import shutil
@@ -37,10 +46,17 @@ from repo_config import MAIN_REPO_URL
 
 REPO_URL = MAIN_REPO_URL
 LOCAL_CLONE_DIR = Path.home() / ".jobscout_ai" / "jobfinder-ai-companies-sync"
+
 CONFIG_FILE_NAME = "companies_config.json"
 # Relative to the repo root - companies_config.json lives alongside the other app config, not at
 # the repo root itself.
 CONFIG_REPO_PATH = "app/companies_config.json"
+
+GREENHOUSE_CONFIG_FILE_NAME = "greenhouse_companies_config.json"
+GREENHOUSE_CONFIG_REPO_PATH = "app/greenhouse_companies_config.json"
+
+LEVER_CONFIG_FILE_NAME = "lever_companies_config.json"
+LEVER_CONFIG_REPO_PATH = "app/lever_companies_config.json"
 
 
 def _run_git(args: list[str], cwd: Path) -> subprocess.CompletedProcess:
@@ -62,15 +78,43 @@ def sync_companies_config(companies: dict) -> tuple[bool, str]:
     manual `git push` inside LOCAL_CLONE_DIR) - a much smaller regression than crashing the "add
     company" button over a network hiccup.
     """
+    return _sync_config_guarded(
+        companies, CONFIG_REPO_PATH, "companies_config.json", "Update configured companies",
+    )
+
+
+def sync_greenhouse_companies_config(companies: dict) -> tuple[bool, str]:
+    """Same contract as sync_companies_config() above, for the Greenhouse registry - companies is
+    the FULL current {name: {board_token}} dict from repository.get_all_greenhouse_companies().
+    """
+    return _sync_config_guarded(
+        companies, GREENHOUSE_CONFIG_REPO_PATH, "greenhouse_companies_config.json",
+        "Update configured Greenhouse companies",
+    )
+
+
+def sync_lever_companies_config(companies: dict) -> tuple[bool, str]:
+    """Same contract as sync_companies_config() above, for the Lever registry - companies is the
+    FULL current {name: {site}} dict from repository.get_all_lever_companies().
+    """
+    return _sync_config_guarded(
+        companies, LEVER_CONFIG_REPO_PATH, "lever_companies_config.json",
+        "Update configured Lever companies",
+    )
+
+
+def _sync_config_guarded(companies: dict, config_repo_path: str, file_label: str,
+                          commit_message: str) -> tuple[bool, str]:
     try:
-        return _sync_companies_config(companies)
+        return _sync_config_file(companies, config_repo_path, file_label, commit_message)
     except subprocess.TimeoutExpired:
         return False, "A git command took too long and was cancelled - check your internet connection."
     except Exception as e:
-        return False, f"Unexpected error while syncing companies_config.json: {e}"
+        return False, f"Unexpected error while syncing {file_label}: {e}"
 
 
-def _sync_companies_config(companies: dict) -> tuple[bool, str]:
+def _sync_config_file(companies: dict, config_repo_path: str, file_label: str,
+                       commit_message: str) -> tuple[bool, str]:
     if shutil.which("git") is None:
         return False, "git isn't installed or isn't on your PATH."
 
@@ -90,20 +134,20 @@ def _sync_companies_config(companies: dict) -> tuple[bool, str]:
         if clone.returncode != 0:
             return False, f"Couldn't clone jobfinder-ai: {clone.stderr.strip()[:300]}"
 
-    config_path = LOCAL_CLONE_DIR / CONFIG_REPO_PATH
+    config_path = LOCAL_CLONE_DIR / config_repo_path
     config_path.parent.mkdir(parents=True, exist_ok=True)
     with open(config_path, "w", encoding="utf-8") as f:
         json.dump(companies, f, indent=2, sort_keys=True)
         f.write("\n")
 
-    _run_git(["add", CONFIG_REPO_PATH], cwd=LOCAL_CLONE_DIR)
-    status = _run_git(["status", "--porcelain", CONFIG_REPO_PATH], cwd=LOCAL_CLONE_DIR)
+    _run_git(["add", config_repo_path], cwd=LOCAL_CLONE_DIR)
+    status = _run_git(["status", "--porcelain", config_repo_path], cwd=LOCAL_CLONE_DIR)
     if not status.stdout.strip():
-        return True, "companies_config.json on GitHub already matches - nothing to push."
+        return True, f"{file_label} on GitHub already matches - nothing to push."
 
-    commit = _run_git(["commit", "-m", "Update configured companies"], cwd=LOCAL_CLONE_DIR)
+    commit = _run_git(["commit", "-m", commit_message], cwd=LOCAL_CLONE_DIR)
     if commit.returncode != 0:
-        return False, f"Couldn't commit companies_config.json: {commit.stderr.strip()[:300]}"
+        return False, f"Couldn't commit {file_label}: {commit.stderr.strip()[:300]}"
 
     push = _run_git(["push"], cwd=LOCAL_CLONE_DIR)
     if push.returncode != 0:
@@ -112,7 +156,15 @@ def _sync_companies_config(companies: dict) -> tuple[bool, str]:
             f"first if origin/main moved). git said: {push.stderr.strip()[:300]}"
         )
 
-    return True, "Pushed companies_config.json - the next scheduled cache refresh will pick this up."
+    return True, f"Pushed {file_label} - the next scheduled cache refresh will pick this up."
+
+
+def _load_config(file_name: str) -> dict:
+    config_path = Path(__file__).resolve().parent / file_name
+    if not config_path.exists():
+        return {}
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def load_companies_config() -> dict:
@@ -123,8 +175,18 @@ def load_companies_config() -> dict:
     before this feature's very first company add/remove), so callers should fall back to
     repository.get_all_companies() in that case.
     """
-    config_path = Path(__file__).resolve().parent / CONFIG_FILE_NAME
-    if not config_path.exists():
-        return {}
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return _load_config(CONFIG_FILE_NAME)
+
+
+def load_greenhouse_companies_config() -> dict:
+    """Same contract as load_companies_config(), for greenhouse_companies_config.json - falls
+    back to repository.get_all_greenhouse_companies() when {} (never synced, or zero configured).
+    """
+    return _load_config(GREENHOUSE_CONFIG_FILE_NAME)
+
+
+def load_lever_companies_config() -> dict:
+    """Same contract as load_companies_config(), for lever_companies_config.json - falls back to
+    repository.get_all_lever_companies() when {} (never synced, or zero configured).
+    """
+    return _load_config(LEVER_CONFIG_FILE_NAME)

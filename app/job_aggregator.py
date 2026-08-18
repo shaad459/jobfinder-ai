@@ -1,8 +1,13 @@
 from datetime import datetime, timezone
 from connectors.workday_connector import fetch_workday_jobs
+from connectors.greenhouse_connector import fetch_greenhouse_jobs
+from connectors.lever_connector import fetch_lever_jobs
 from connectors.jsearch_connector import fetch_jsearch_jobs
 from connectors.adzuna_connector import fetch_adzuna_jobs
-from repository import get_all_companies, get_cached_jobs_for_company
+from repository import (
+    get_all_companies, get_all_greenhouse_companies, get_all_lever_companies,
+    get_cached_jobs_for_company,
+)
 
 
 def fetch_all_jobs(query: str, location: str = "", country: str = "in", max_results_per_source: int = 60) -> list[dict]:
@@ -14,6 +19,20 @@ def fetch_all_jobs(query: str, location: str = "", country: str = "in", max_resu
             all_jobs.extend(jobs)
         except Exception as e:
             print(f"Warning: Workday fetch failed for {company}: {e}")
+
+    for company in get_all_greenhouse_companies():
+        try:
+            jobs = fetch_greenhouse_jobs(company, search_text=query, max_results=max_results_per_source)
+            all_jobs.extend(jobs)
+        except Exception as e:
+            print(f"Warning: Greenhouse fetch failed for {company}: {e}")
+
+    for company in get_all_lever_companies():
+        try:
+            jobs = fetch_lever_jobs(company, search_text=query, max_results=max_results_per_source)
+            all_jobs.extend(jobs)
+        except Exception as e:
+            print(f"Warning: Lever fetch failed for {company}: {e}")
 
     try:
         jsearch_query = f"{query} in {location}" if location else query
@@ -92,29 +111,54 @@ def fetch_company_jobs(company: str, query: str, location: str = "", relocation_
     missing or unparseable is excluded rather than assumed fresh, since we can't confirm it
     satisfies the age limit.
 
-    For companies not in the configured companies list, the query and company name are searched together
-    via JSearch/Adzuna's own relevance ranking, then narrowed client-side to just that
+    For companies not in any configured connector's list, the query and company name are searched
+    together via JSearch/Adzuna's own relevance ranking, then narrowed client-side to just that
     employer. No client-side title-relevance filtering beyond that - a query/company mismatch
     (e.g. noisy or loosely-related results) is left for the Gemini prescreen stage to judge,
     rather than a hand-rolled keyword heuristic trying to approximate the same judgment.
 
-    include_aggregators_for_workday: normally a configured Workday company is looked up ONLY via
-    its direct Workday connector - JSearch/Adzuna aren't queried for it at all, since Workday's
-    own feed is treated as authoritative. Set this to True to ALSO run the JSearch/Adzuna search
-    for such a company and merge the results in - broader coverage in case Workday's own feed is
-    missing something an aggregator has indexed, at the cost of 2 extra API calls per company.
-    Off by default so a normal single-company search keeps its existing, cheaper behavior;
-    chat_assistant.py turns it on specifically for "search all companies."
+    A company can be configured under at most one connector type - Workday is checked first,
+    then Greenhouse, then Lever, and whichever matches first wins (this only matters if you
+    somehow add the same display name under two connector types, which nothing currently
+    prevents). Greenhouse's and Lever's own postings APIs have no server-side search, so `query`
+    is applied there as a client-side title substring match instead - see the docstrings on
+    fetch_greenhouse_jobs/fetch_lever_jobs.
+
+    include_aggregators_for_workday: normally a configured company (Workday, Greenhouse, or
+    Lever) is looked up ONLY via its own direct connector - JSearch/Adzuna aren't queried for it
+    at all, since that connector's own feed is treated as authoritative. Set this to True to ALSO
+    run the JSearch/Adzuna search for such a company and merge the results in - broader coverage
+    in case the direct feed is missing something an aggregator has indexed, at the cost of 2
+    extra API calls per company. Off by default so a normal single-company search keeps its
+    existing, cheaper behavior; chat_assistant.py turns it on specifically for "search all
+    companies." Named "_for_workday" for historical reasons (it predates Greenhouse/Lever
+    support) - kept as-is rather than renamed, since search_service.py and chat_assistant.py
+    already pass it by this name.
     """
-    matching_key = next((key for key in get_all_companies() if key.lower() == company.lower()), None)
+    workday_key = next((key for key in get_all_companies() if key.lower() == company.lower()), None)
+    greenhouse_key = None if workday_key else next(
+        (key for key in get_all_greenhouse_companies() if key.lower() == company.lower()), None)
+    lever_key = None if (workday_key or greenhouse_key) else next(
+        (key for key in get_all_lever_companies() if key.lower() == company.lower()), None)
+    matching_key = workday_key or greenhouse_key or lever_key
 
     jobs = []
 
-    if matching_key:
+    if workday_key:
         try:
-            jobs.extend(fetch_workday_jobs(matching_key, search_text=query, max_results=max_results))
+            jobs.extend(fetch_workday_jobs(workday_key, search_text=query, max_results=max_results))
         except Exception as e:
-            print(f"Warning: Workday fetch failed for {matching_key}: {e}")
+            print(f"Warning: Workday fetch failed for {workday_key}: {e}")
+    elif greenhouse_key:
+        try:
+            jobs.extend(fetch_greenhouse_jobs(greenhouse_key, search_text=query, max_results=max_results))
+        except Exception as e:
+            print(f"Warning: Greenhouse fetch failed for {greenhouse_key}: {e}")
+    elif lever_key:
+        try:
+            jobs.extend(fetch_lever_jobs(lever_key, search_text=query, max_results=max_results))
+        except Exception as e:
+            print(f"Warning: Lever fetch failed for {lever_key}: {e}")
 
     if not matching_key or include_aggregators_for_workday:
         try:
