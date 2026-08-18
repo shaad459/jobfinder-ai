@@ -92,6 +92,7 @@ secret**. Add each of these (values from your local `.env` for the API keys):
 |---|---|
 | `PRIVATE_RESUME_PAT` | the fine-grained token from step 2c |
 | `GEMINI_API_KEY` | same as your local `.env` |
+| `GEMINI_API_KEY_2`, `_3`, `_4`, ... | *(optional)* additional Gemini keys for rotation - see "Rotating across multiple Gemini API keys" below |
 | `JSEARCH_API_KEY` | same as your local `.env` |
 | `ADZUNA_APP_ID` | same as your local `.env` |
 | `ADZUNA_APP_KEY` | same as your local `.env` |
@@ -102,6 +103,30 @@ secret**. Add each of these (values from your local `.env` for the API keys):
 None of these ever appear in your code or commit history - they're injected as environment
 variables only at the moment the workflow runs, and GitHub scrubs any exact-match occurrence out
 of the logs automatically.
+
+## Rotating across multiple Gemini API keys (optional)
+
+If you have more than one Gemini API key (e.g. from separate Google accounts/projects),
+`gemini_utils.call_gemini` will round-robin every call across all of them instead of hammering a
+single key's own per-minute quota - see that file's docstring for exactly how the rotation and
+rate-limit fallback work. This is entirely opt-in: with only `GEMINI_API_KEY` set, nothing about
+this changes.
+
+**a. Locally:** add `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3`, etc. to your `.env` (see
+`.env.example`) - numbered, starting at `_2`, with no gap (a missing `_3` stops the scan there
+even if `_4` is set, so a typo'd variable name doesn't get silently skipped).
+
+**b. For the scheduled workflows:** add the same numbered secrets in step 3 above, then make sure
+`daily-job-alert.yml`'s "Run search and send digest" step passes each one through as an env var
+(`GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}`, etc.) - only `refresh-job-cache.yml` doesn't
+need this, since that workflow never calls Gemini at all (see `refresh_job_cache.py`'s docstring).
+
+**How many keys is worth adding:** each additional key spreads load further below its own
+per-minute quota, but the real ceiling that matters for THIS project is Gemini's daily quota per
+key (not just per-minute) - rotating across keys multiplies your effective daily budget too, not
+just your per-minute headroom, since each key's daily quota is tracked separately. Diminishing
+returns kick in once you have comfortably more daily quota than this project's actual call volume
+needs; there's no reason to add a 5th key just because you can.
 
 ## 4. Push the new files
 

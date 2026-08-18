@@ -120,6 +120,36 @@ def _normalize(text: str) -> str:
     return re.sub(r"\s+", " ", (text or "").lower()).strip()
 
 
+def _cert_display_and_norm(cert) -> tuple[str, str]:
+    """Returns (display_text, normalized_text) for one candidate_certifications entry.
+
+    profile_extractor.py's EXTRACTION_PROMPT represents each certification as a structured dict -
+    {"name": ..., "abbreviation": ..., "issuing_body": ...} - not a bare string, same as every
+    other consumer of profile["certifications"] already expects (resume_builder.py,
+    streamlit_app.py both do `cert.get("abbreviation") or cert.get("name")`). This module used to
+    assume a bare string instead, which meant `_normalize(held)` crashed with AttributeError the
+    moment a candidate had any certification at all - before matcher.py's score_jobs_batch ever
+    reached its call_gemini() call, so the failure never even showed up as a logged Gemini call,
+    just a silently-skipped, endlessly-retried "Pending" batch.
+
+    Matching the existing display convention, the display text prefers the abbreviation when
+    present. The normalized text used for CERTIFICATION_ALIASES matching combines name AND
+    abbreviation so a canonical key can match whichever form the candidate actually holds it
+    under (e.g. "psm" matches an abbreviation-only mention, "aws certified solutions architect"
+    matches a name-only one). A bare string (older data, or a caller that already extracted one)
+    is used as-is for both, so this stays backward compatible.
+    """
+    if isinstance(cert, dict):
+        name = cert.get("name") or ""
+        abbreviation = cert.get("abbreviation") or ""
+        display = abbreviation or name
+        norm = _normalize(f"{name} {abbreviation}")
+    else:
+        display = str(cert) if cert else ""
+        norm = _normalize(display)
+    return display, norm
+
+
 def build_certification_grounding(candidate_certifications: list, job_description: str) -> str | None:
     """Returns a short hint string for ONE job's prompt entry, or None if nothing in the
     candidate's certifications maps to generic phrasing actually present in THIS job's
@@ -133,7 +163,7 @@ def build_certification_grounding(candidate_certifications: list, job_descriptio
     matches = []  # list of (held_cert_as_written, [matched generic phrases])
 
     for held in candidate_certifications:
-        held_norm = _normalize(held)
+        held_display, held_norm = _cert_display_and_norm(held)
         if not held_norm:
             continue
         # One-way match only - see the module docstring's "MATCHING DIRECTION" section for why
@@ -148,7 +178,7 @@ def build_certification_grounding(candidate_certifications: list, job_descriptio
             if phrase in description_norm
         ))
         if matched_phrases:
-            matches.append((held, matched_phrases))
+            matches.append((held_display, matched_phrases))
 
     if not matches:
         return None
