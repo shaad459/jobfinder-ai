@@ -21,6 +21,20 @@ from repository import get_all_avature_companies
 # match against.
 _JOB_DETAIL_HREF_PATTERN = re.compile(r"/JobDetail/", re.IGNORECASE)
 
+# The trailing numeric id in a /JobDetail/<title-slug>/<id> url (e.g. ".../363021") - the actual
+# stable posting identifier, used as `external_id` (see database.py's comment on the jobs table).
+# The title-slug half of the same url is NOT stable: if the company edits the job's title after
+# posting it, the slug changes and the url changes with it, even though it's the same requisition
+# - this is exactly the drift external_id exists to catch, so a title edit doesn't make this
+# connector re-run prescreen/scoring on what's really the same job it already checked.
+_JOB_DETAIL_ID_PATTERN = re.compile(r"/JobDetail/[^/]+/(\d+)/?(?:\?.*)?$")
+
+
+def _extract_external_id(url: str) -> str | None:
+    match = _JOB_DETAIL_ID_PATTERN.search(url or "")
+    return match.group(1) if match else None
+
+
 # Mirrors the "load more results" pagination query params seen on Avature's own search results
 # (jobOffset=0 is page 1, 10 is page 2, etc., matching jobRecordsPerPage). Capped at _MAX_PAGES so
 # a company whose pagination doesn't match this assumed contract can't loop forever - it will just
@@ -131,6 +145,7 @@ def fetch_avature_jobs(company_name: str, search_text: str = "", max_results: in
                 "url": absolute_url,
                 "description": "",
                 "source": "avature",
+                "external_id": _extract_external_id(absolute_url),
             })
             if len(normalized) >= max_results:
                 return normalized

@@ -17,12 +17,22 @@ to _fit_similarity_matrix() below, nothing else would need to change.
 1. Near-duplicate reuse (find_history_action, action="reuse"): the same posting often shows up
    more than once - re-posted later, or surfaced again via a different source (Workday directly
    vs. a JSearch/Adzuna aggregate of the same listing under a different URL). Plain URL-based
-   dedup (repository.get_scored_job_urls) can't catch that. When a new job's description is a
-   near-exact textual match (>= EXACT_DUP_THRESHOLD) to something ALREADY Gemini-scored for this
-   exact resume AND at the same company, its verdict is reused outright and Gemini is skipped
-   entirely for that job. Restricted to the same company (not just similar text) specifically to
-   avoid two different companies' independently-written, coincidentally-similar-sounding JDs
-   getting treated as "the same job" - company/location specifics wouldn't necessarily transfer.
+   dedup (repository.get_scored_job_urls) can't catch that. Two ways in:
+     a. EXACT match on external_id (the source ATS's own stable job/requisition id - see
+        database.py's comment on the jobs table and each connectors/*_connector.py) - checked
+        FIRST, before any text comparison, since it's a guaranteed identity rather than a
+        similarity guess: the same Workday requisition, Greenhouse/Lever job id, Oracle
+        requisition, or Avature posting resurfacing under a different url (a title edit changed
+        Avature's slug, a tracking query param got added) is unambiguously the same job. Skips
+        the TF-IDF step entirely when it fires.
+     b. Near-exact textual similarity (>= EXACT_DUP_THRESHOLD) to something ALREADY Gemini-scored
+        for this exact resume AND at the same company - the original, similarity-based fallback
+        for everything without a usable external_id (an older connector, JSearch/Adzuna, or
+        extraction that came back empty). Restricted to the same company (not just similar text)
+        specifically to avoid two different companies' independently-written, coincidentally-
+        similar-sounding JDs getting treated as "the same job" - company/location specifics
+        wouldn't necessarily transfer.
+   Either way, the verdict is reused outright and Gemini is skipped entirely for that job.
 
 2. Weak-pattern pre-exclusion (find_history_action, action="skip_weak"): a new job that's
    MODERATELY similar (WEAK_REUSE_THRESHOLD - EXACT_DUP_THRESHOLD) to a job that already scored
@@ -108,22 +118,36 @@ def _fit_similarity_matrix(new_description: str, history_descriptions: list[str]
 
 
 def find_history_action(new_job: dict, history: list[dict]) -> dict | None:
-    """new_job: dict with at least 'title', 'company', 'description'.
+    """new_job: dict with at least 'title', 'company', 'description' - and, when the connector
+        could extract one, 'external_id' (see database.py's comment on the jobs table).
     history: this profile's own past matches, each a dict with 'title', 'company', 'description',
         'match_tier', 'match_score', 'match_points', 'match_gaps', 'match_reasoning',
-        'dimension_breakdown', 'url' - i.e. repository.get_matches(profile_id)'s shape.
+        'dimension_breakdown', 'url', 'external_id' - i.e. repository.get_matches(profile_id)'s
+        shape (get_matches selects jobs.* via its JOIN, so external_id comes along for free).
 
     Returns None if no history action applies (falls through to the normal Stage 0/1/2 pipeline
     unchanged), or a dict: {"action": "reuse"|"skip_weak", "source": <history entry>,
     "similarity": float}.
     """
+    usable_history = [h for h in history if _is_usable_as_history_source(h)]
+    if not usable_history:
+        return None
+
+    # Exact external_id match - a guaranteed identity, not a similarity guess, so it's checked
+    # first and skips the TF-IDF step entirely. See the module docstring's point 1a.
+    new_external_id = new_job.get("external_id")
+    if new_external_id:
+        for h in usable_history:
+            if h.get("external_id") == new_external_id:
+                return {"action": "reuse", "source": h, "similarity": 1.0}
+
     new_description = _normalize_text(new_job.get("description"))
     if not new_description or len(new_description) < 50:
         # Too little text for TF-IDF similarity to mean anything - fail open, same philosophy
         # as every other filter in this pipeline (matcher.py's Stage 0 checks).
         return None
 
-    usable_history = [h for h in history if h.get("description") and _is_usable_as_history_source(h)]
+    usable_history = [h for h in usable_history if h.get("description")]
     if not usable_history:
         return None
 
@@ -151,19 +175,25 @@ def find_history_action(new_job: dict, history: list[dict]) -> dict | None:
 def apply_reuse(job: dict, action: dict) -> dict:
     """Builds the scored-job dict for a "reuse" action - copies the source verdict (including
     its real dimension_breakdown, since it reflects an actually-Gemini-checked near-identical
-    posting) onto the new job, tagged as inferred.
+    posting) onto the new job, tagged as inferred. action["similarity"] == 1.0 specifically means
+    an exact external_id match (see find_history_action) rather than a genuine 100% text-
+    similarity score - worded accordingly below rather than reporting a slightly misleading
+    "100% text match".
     """
     source = action["source"]
-    pct = round(action["similarity"] * 100)
     job = dict(job)
     job["match_tier"] = source.get("match_tier")
     job["match_score"] = source.get("match_score")
     job["match_points"] = source.get("match_points") or []
     job["match_gaps"] = source.get("match_gaps") or []
     job["dimension_breakdown"] = source.get("dimension_breakdown") or {}
+    if action["similarity"] >= 1.0:
+        basis = "confirmed same posting (matching job id) as one already scored"
+    else:
+        pct = round(action["similarity"] * 100)
+        basis = f"{pct}% text match to an already-scored posting at the same company"
     job["match_reasoning"] = (
-        f"{HISTORY_INFERRED_MARKER}{pct}% text match to an already-scored posting at the same "
-        f"company): {source.get('match_reasoning') or ''}"
+        f"{HISTORY_INFERRED_MARKER}{basis}): {source.get('match_reasoning') or ''}"
     )
     return job
 

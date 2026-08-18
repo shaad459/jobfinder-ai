@@ -100,6 +100,11 @@ def fetch_oracle_jobs(company_name: str, search_text: str = "", max_results: int
                     if req_id else None),
             "description": req.get("ShortDescriptionStr") or "",
             "source": "oracle_cloud",
+            # Oracle's own requisition Id - already the piece the url above is built from, so
+            # this is just carrying it through explicitly as `external_id` (see database.py's
+            # comment on the jobs table) rather than requiring every caller to re-parse it back
+            # out of the url.
+            "external_id": str(req_id) if req_id else None,
         })
         if len(normalized) >= max_results:
             break

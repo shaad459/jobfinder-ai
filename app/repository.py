@@ -173,17 +173,27 @@ def set_profile_active(profile_id: int, active: bool):
 
 
 def save_job(job: dict):
+    """Upserts one job row, keyed by `url` (the table's actual PRIMARY KEY - unchanged, so
+    existing `matches.job_url` foreign-key references never break). `external_id` - the source
+    ATS's own stable job/requisition id, when the connector could extract one (see each
+    connectors/*_connector.py and database.py's comment on the jobs table) - is saved alongside
+    it as a secondary identity used for dedup - see job_similarity.find_history_action's
+    exact-external_id path (matcher.py's Stage 0c) - not as a second primary key. A job dict with
+    no "external_id" key (an older connector, or extraction that came back empty) just stores
+    NULL there, same as it always implicitly did before this column existed.
+    """
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO jobs (url, title, company, location, description, posted_date, source)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO jobs (url, title, company, location, description, posted_date, source, external_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(url) DO UPDATE SET
             title=excluded.title, company=excluded.company, location=excluded.location,
-            description=excluded.description, posted_date=excluded.posted_date, source=excluded.source
+            description=excluded.description, posted_date=excluded.posted_date, source=excluded.source,
+            external_id=excluded.external_id
     """, (
         job.get("url"), job.get("title"), job.get("company"), job.get("location"),
-        job.get("description"), job.get("posted_date"), job.get("source"),
+        job.get("description"), job.get("posted_date"), job.get("source"), job.get("external_id"),
     ))
     conn.commit()
     conn.close()
@@ -313,8 +323,8 @@ def get_cached_jobs_for_company(company: str) -> list[dict]:
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT url, title, company, location, description, posted_date, source FROM jobs "
-        "WHERE lower(company) LIKE '%' || lower(?) || '%'",
+        "SELECT url, title, company, location, description, posted_date, source, external_id "
+        "FROM jobs WHERE lower(company) LIKE '%' || lower(?) || '%'",
         (company,),
     )
     rows = cursor.fetchall()

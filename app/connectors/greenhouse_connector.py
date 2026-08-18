@@ -76,6 +76,10 @@ def fetch_greenhouse_jobs(company_name: str, search_text: str = "", max_results:
             "url": job.get("absolute_url"),
             "description": _html_to_text(job.get("content") or ""),
             "source": "greenhouse",
+            # Greenhouse's own numeric job id - a stable identity used as `external_id` (see
+            # database.py's comment on the jobs table), unlike absolute_url which can change if
+            # Greenhouse ever appends/drops a tracking query param.
+            "external_id": str(job["id"]) if job.get("id") is not None else None,
         })
         if len(normalized) >= max_results:
             break

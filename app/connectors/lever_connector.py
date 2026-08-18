@@ -75,6 +75,10 @@ def fetch_lever_jobs(company_name: str, search_text: str = "", max_results: int 
             "url": job.get("hostedUrl"),
             "description": job.get("descriptionPlain") or job.get("description") or "",
             "source": "lever",
+            # Lever's own UUID job id - a stable identity used as `external_id` (see database.py's
+            # comment on the jobs table), unlike hostedUrl which embeds a title-derived slug that
+            # can drift if the posting's title is ever edited.
+            "external_id": job.get("id"),
         })
         if len(normalized) >= max_results:
             break

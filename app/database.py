@@ -37,6 +37,18 @@ def init_db():
         )
     """)
 
+    # external_id (added as a migration below, since this table pre-dates it on an existing
+    # install): the source ATS's OWN stable job/requisition identifier (Workday's "R-288316",
+    # Greenhouse's/Lever's numeric/UUID job id, Oracle's requisition Id, the trailing numeric id
+    # in an Avature JobDetail URL) - extracted per-connector (see each connectors/*_connector.py)
+    # and used as a secondary, more reliable dedup key alongside `url` (still this table's actual
+    # PRIMARY KEY, so existing FK relationships from `matches.job_url` are untouched). The gap
+    # this closes: `url` alone can drift for the SAME underlying posting - a title edit changes
+    # Avature's slug, a tracking query param gets added/dropped - which would otherwise look like
+    # a brand-new job and get sent through prescreen/scoring again for no reason. Nullable and
+    # NOT unique-constrained at the DB level (existing rows from before this column existed, and
+    # any source where extraction fails, just have external_id=NULL and fall back to url-only
+    # dedup exactly as before - see job_similarity.find_history_action's exact-id path).
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS jobs (
             url TEXT PRIMARY KEY,
@@ -46,6 +58,7 @@ def init_db():
             description TEXT,
             posted_date TEXT,
             source TEXT,
+            external_id TEXT,
             fetched_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -187,11 +200,21 @@ def init_db():
         "ALTER TABLE profiles ADD COLUMN label TEXT",
         "ALTER TABLE profiles ADD COLUMN active INTEGER NOT NULL DEFAULT 1",
         "ALTER TABLE profiles ADD COLUMN resume_filename TEXT",
+        # jobs.external_id - see the comment above the `jobs` CREATE TABLE for what this is and
+        # why. Added as a migration (rather than only in the CREATE TABLE body) because `jobs`
+        # already existed on any install from before this column was introduced.
+        "ALTER TABLE jobs ADD COLUMN external_id TEXT",
     ):
         try:
             cursor.execute(statement)
         except sqlite3.OperationalError:
             pass
+
+    # Index creation happens AFTER the migration above, not inside the CREATE TABLE block, so it
+    # never runs against a table that doesn't have external_id yet - the ALTER TABLE just above
+    # always executes first within this same call, guaranteeing the column exists by this point
+    # even on an existing install that predates it.
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_jobs_external_id ON jobs (external_id)")
 
     conn.commit()
     conn.close()
