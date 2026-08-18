@@ -1,13 +1,25 @@
 name: Daily job alert
 
-# Runs once a day and emails you any new Strong/Good matches. See GITHUB_ACTIONS_SETUP.md for
+# Runs every 3 hours and emails you any new Strong/Good matches. See GITHUB_ACTIONS_SETUP.md for
 # the one-time secrets setup this needs (resume, API keys, Gmail app password).
 #
-# Cron below is 01:30 UTC = 07:00 IST - edit the schedule line to change the time. You can
-# always trigger a run manually from the repo's Actions tab too (workflow_dispatch below).
+# Cron below is "20 */3 * * *" - offset 20 minutes after refresh-job-cache.yml's "0 */3 * * *"
+# so the shared job cache has usually finished landing on the data-cache branch before this
+# workflow's cache-first read (job_cache_sync.sync_job_cache, see run_scheduled_search.py) tries
+# to pull it. That's a "usually," not a guarantee - refresh-job-cache.yml's own run time varies
+# with how many companies/queries it's fetching, so an occasional overlap where this run reads a
+# slightly-stale (or not-yet-updated) cache is expected and harmless: sync_job_cache() is
+# best-effort, and any company the cache has nothing for just falls back to a live fetch, same as
+# before cache-first existed. Edit either schedule line to change the times (keep some offset
+# between them). You can always trigger a run manually from the repo's Actions tab too
+# (workflow_dispatch below).
+#
+# Why every 3h instead of once a day: run_scheduled_search.py's own docstring covers this in
+# detail, but in short, it's about spreading Gemini scoring calls across more, smaller runs
+# rather than reducing total daily volume.
 on:
   schedule:
-    - cron: "30 1 * * *"
+    - cron: "20 */3 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -17,23 +29,25 @@ jobs:
       run:
         working-directory: app
 
-    # Edit this if your resume is a .docx instead of a .pdf - extract_resume_text() picks its
-    # parser from the file extension, so this has to match the filename you push to the private
-    # resume repo below.
+    # Set to "true" if you're open to relocating / want location ignored entirely - matches the
+    # Streamlit "I'm open to relocating / any location" checkbox, which defaults to unchecked.
     env:
-      RESUME_EXT: pdf
+      RELOCATION_OK: "false"
 
     steps:
       - uses: actions/checkout@v4
 
-      # Pulls your resume from a SEPARATE private repo instead of storing it as a chunked/base64
-      # secret. Avoids the 48 KB-per-secret limit entirely (a previous version of this workflow
-      # hit that with a truncated resume - see git history), and updating the resume going
-      # forward is just "push a new file to that repo" instead of re-running a chunking script.
+      # Pulls your resume(s) from a SEPARATE private repo instead of storing them as
+      # chunked/base64 secrets. Avoids the 48 KB-per-secret limit entirely (a previous version
+      # of this workflow hit that with a truncated resume - see git history), and updating a
+      # resume going forward is just "push a new file to that repo" (see the Streamlit resume
+      # library's "Sync my active resumes for scheduled email alerts" button /
+      # resume_sync.sync_all_active_resumes) instead of re-running a chunking script.
       # PRIVATE_RESUME_PAT is a fine-grained Personal Access Token scoped to read-only access to
       # ONLY that one private repo - see GITHUB_ACTIONS_SETUP.md for how to create it. Checked
-      # out under app/private-data so the relative RESUME_PATH below (used with
-      # working-directory: app) resolves correctly.
+      # out under app/private-data so RESUME_DIR (used with working-directory: app) resolves to
+      # it by default - run_scheduled_search.py searches EVERY resume_<id>.pdf/.docx file it
+      # finds there, not just one, so this repo can hold your whole active resume library.
       - name: Checkout private resume repo
         uses: actions/checkout@v4
         with:
@@ -64,8 +78,17 @@ jobs:
       - name: Run search and send digest
         run: python run_scheduled_search.py
         env:
-          RESUME_PATH: private-data/resume.${{ env.RESUME_EXT }}
+          RESUME_DIR: private-data
+          RELOCATION_OK: ${{ env.RELOCATION_OK }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Optional - only used if you've added extra Gemini keys for rotation (see
+          # GITHUB_ACTIONS_SETUP.md's "Rotating across multiple Gemini API keys" section and
+          # gemini_utils.py). Referencing a secret that was never created just resolves to an
+          # empty string, which gemini_utils.py already treats as "not configured" - safe to
+          # leave these as-is if you only have one key.
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
           JSEARCH_API_KEY: ${{ secrets.JSEARCH_API_KEY }}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
