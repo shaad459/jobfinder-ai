@@ -92,6 +92,16 @@ def export_matches_to_pdf(matches: list[dict], output_path: str, tiers: tuple = 
         pdf.cell(0, 6, f"{tier} match - score {score}{coverage_suffix}",
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
+        # PM role classification (matcher.py's PM ROLE CLASSIFICATION) - None for anything that
+        # never reached Stage 2 Gemini scoring (see database.py's comment on matches.pm_archetype),
+        # so this line is skipped rather than printing a misleading "None" tag.
+        pm_archetype = job.get("pm_archetype")
+        if pm_archetype:
+            pdf.set_font("Helvetica", "", 9)
+            pdf.set_text_color(37, 99, 235)
+            pdf.cell(0, 5, _sanitize_for_pdf(pm_archetype), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            pdf.set_text_color(0, 0, 0)
+
         # Only present when run_scheduled_search.py searched more than one resume - see
         # email_sender._build_html_body's matching comment.
         resume_label = job.get("resume_label")

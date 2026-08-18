@@ -5,6 +5,82 @@ from gemini_utils import call_gemini
 from connectors.workday_connector import fetch_workday_job_description
 from repository import get_matches
 
+PM_SEMANTIC_TAXONOMY = """PM SEMANTIC TAXONOMY (use this for both the role classification and the equivalence-
+class credit described below): Product Manager job descriptions use wildly different jargon for the same
+underlying competency. Every PM-flavored term you encounter belongs to one of these four sub-domains, each
+with its own internal equivalence classes - terms WITHIN the same bracketed cluster are different labels for
+the same underlying competency and should be treated as mutually reinforcing evidence of it, but clusters are
+NOT interchangeable with each other, and a specific NAMED tool/framework the job calls out as a hard
+requirement is still a real gap if genuinely absent, even when a same-cluster cousin is present (see the
+HIERARCHICAL PARTIAL-CREDIT RULE below for exactly how to score that case).
+
+1. Product Strategy & Discovery
+   - Vision/Strategy: [OKRs / Objectives & Key Results, North Star Metric, product-market fit, value
+     proposition]. Owning a goal framed as "objective + a specific measurable result" counts as OKR-style
+     evidence even if the resume never uses the literal word "OKR."
+   - Discovery: [user research, persona development, customer interviews, user journey mapping, structured
+     user feedback gathering]. Mapping an existing process/workflow from the user's perspective, or
+     systematically collecting user feedback to shape a feature, counts as discovery evidence even without
+     the literal phrase "user research."
+   - Market Analysis: [competitive analysis, TAM, SWOT, market sizing]. This cluster is genuinely distinct
+     from the two above - internal/enterprise product work rarely touches it, and its absence should not be
+     treated as a red flag for an internal-tooling candidate; only credit it if actually present.
+
+2. Execution & Delivery (Agile/Scrum)
+   - Agile frameworks: [Scrum, Kanban, SAFe, Scrumban]. A Scrum certification or explicit Scrum experience is
+     real evidence of general Agile fluency, but does NOT by itself prove SAFe or Kanban specifically if a
+     job names one of those as a hard requirement.
+   - Product artifacts: [PRDs, BRDs, change requests (CRs), user stories, product backlog, epics, acceptance
+     criteria, functional requirements]. Authoring BRDs, CRs, or "functional requirements" documents counts
+     as PRD-equivalent evidence - they serve the same function of defining what gets built, even if the
+     resume never uses the literal word "PRD."
+   - Roadmapping: [prioritization frameworks - RICE, MoSCoW, Kano model -, release planning, milestones].
+     Explicit experience with ANY one of these frameworks is real evidence of prioritization-framework
+     fluency in general, even when a job names a different one by name specifically.
+
+3. Data & Analytics
+   - Product metrics: [North Star Metric, Retention, Churn, LTV, CAC, MAU/DAU, Conversion Rate]. These are
+     consumer/growth lifecycle metrics - do NOT treat operational-efficiency metrics (transaction volume
+     reduction, call volume reduction, cycle-time reduction, adoption %) as equivalent to them. They are a
+     genuinely different measurement category; only credit this cluster when a lifecycle/growth metric is
+     actually named.
+   - Experimentation: [A/B testing, multivariate testing, hypothesis validation, cohort analysis]. An
+     explicit A/B/controlled comparison test counts as real experimentation evidence even in an internal
+     enterprise-tool context (e.g. testing two UI placements against each other), not only in a consumer
+     growth setting.
+   - Data tools: [Amplitude, Mixpanel, Google Analytics, SQL, Looker, Tableau, Power BI]. Familiarity with
+     two or more tools in this cluster is real evidence of general data-tooling fluency - but if a job names
+     one specific tool as a hard requirement and the candidate's profile shows none of that specific tool,
+     still list it as a gap; cluster familiarity earns "partial," not "match," on that specific tool.
+
+4. Technical & Cross-Functional Alignment
+   - Technical PM: [APIs, SDKs, system architecture, microservices, cloud infrastructure (AWS/GCP/Azure),
+     CI/CD pipelines]. REST API integration experience and using an automated pipeline tool (e.g. GitHub
+     Actions) both count as real evidence within this cluster, even without formal system-architecture
+     ownership - but do not assume cloud infrastructure experience is present just because API integration
+     is; those are separate items within the cluster.
+   - Growth PM: [funnel optimization, user acquisition, onboarding loops, monetization, SEO/SEM]. Genuinely
+     distinct from technical/enterprise PM work - only credit if actually present.
+   - Design/UX alignment: [wireframing, prototyping, Figma, usability testing, human-centered design].
+     Figma/Miro/wireframing experience is strong evidence of UX collaboration even without the literal phrase
+     "usability testing," though a job that specifically requires owning structured usability testing should
+     still note that as a partial gap unless testing sessions are explicitly described.
+
+PM ROLE CLASSIFICATION: classify each job as one of "Technical PM", "Growth PM", or "Generalist PM" based on
+which cluster(s) above the job description leans on most heavily - heavy API/architecture/cloud/CI-CD
+language -> "Technical PM"; heavy funnel/acquisition/monetization/SEO language -> "Growth PM"; anything else
+(including most enterprise-internal, delivery-focused, or general product-ownership roles) -> "Generalist
+PM". Return this as "pm_archetype" for every job, scored or not - it describes the JOB, not the candidate.
+
+HIERARCHICAL PARTIAL-CREDIT RULE: when a job names a specific item from one of the numbered clusters above
+(e.g. "RICE prioritization" from the Roadmapping cluster) and the candidate's profile instead shows a
+DIFFERENT item from that SAME cluster (e.g. MoSCoW), treat that as "partial" - not "none" - on whichever
+dimension it falls under, with a note naming both the required item and the candidate's actual equivalent
+(e.g. "Job wants RICE; candidate has MoSCoW - same prioritization-framework cluster, not the named
+framework itself"). This is a same-cluster credit, not a license to credit across DIFFERENT clusters - e.g.
+Data-tool familiarity never earns credit toward the separate Technical PM cluster, and vice versa."""
+
+
 MATCH_PROMPT_TEMPLATE = """You are a job-matching assistant. Given a candidate's profile and a batch of job
 listings, score how well each job fits the candidate.
 
@@ -14,15 +90,20 @@ Candidate profile:
 Jobs (indexed):
 {jobs_json}
 
+""" + PM_SEMANTIC_TAXONOMY + """
+
 GROUNDING RULE (critical): Only credit the candidate with a skill, domain, or specialization if it is
 explicitly present in their profile (skills list, job titles, or summary) - or a clear, unambiguous
-synonym. Do NOT assume a broader category covers a narrower specialization. For example, "financial
-services" experience does NOT automatically mean the candidate has "payments" or "pricing" experience
-specifically - those must appear explicitly to be credited. When a job's title or description names a
-specific required domain, technology, or certification, check literally whether it (or a clear synonym)
-appears in the candidate's profile.
+synonym, OR a same-cluster equivalent per the PM SEMANTIC TAXONOMY above. Do NOT assume a broader category
+covers a narrower specialization, and do NOT credit across DIFFERENT taxonomy clusters. For example,
+"financial services" experience does NOT automatically mean the candidate has "payments" or "pricing"
+experience specifically - those must appear explicitly (or as a same-cluster equivalent) to be credited.
+When a job's title or description names a specific required domain, technology, or certification, check
+literally whether it (or a clear synonym, or a same-cluster equivalent) appears in the candidate's profile.
 
 For EACH job, return:
+- "pm_archetype": "Technical PM", "Growth PM", or "Generalist PM" - per the PM ROLE CLASSIFICATION rule
+  above. Classify every job this way regardless of tier/score, including jobs that turn out Weak.
 - "tier": "Strong" ONLY if ALL of the job's explicitly stated hard requirements (must-haves, required
   skills, required domain experience) are genuinely present in the candidate's profile. If even one
   clearly-required, specific item is missing, the tier must be "Good" (if the rest of the fit is strong)
@@ -47,6 +128,8 @@ For EACH job, return:
   Judge each dimension the same way you judge the rest of this assessment - using real understanding of
   synonyms and equivalent wording (e.g. a "Product Owner" background counts toward a "Product Manager"
   role dimension; "Pune" and "Pune, Maharashtra" are the same location) - never literal string matching.
+  Apply the HIERARCHICAL PARTIAL-CREDIT RULE above when scoring "skills" specifically: a same-cluster
+  equivalent (e.g. MoSCoW when RICE is requested) earns "partial", never "none" and never a silent "match".
 
 CERTIFICATIONS AND "PREFERRED" SKILLS (in addition to the hard-requirements rule above): jobs often name
 a specific certification, skill, or domain as "preferred" rather than required - e.g. "CSM preferred",
@@ -69,6 +152,7 @@ Return ONLY a valid JSON array (no markdown fences, no extra text), in this exac
 [
   {{
     "index": 0,
+    "pm_archetype": "Technical PM",
     "tier": "Strong",
     "score": 92,
     "matching_points": ["10 years in Product Management", "Agile/Scrum backlog ownership"],
@@ -119,6 +203,10 @@ SCREENED_OUT_PLACEHOLDER = {
     "match_gaps": ["Not evaluated in detail - screened out before detailed scoring as an unlikely match."],
     "match_reasoning": "Filtered by the prescreen pass; treat as low-confidence, not a definitive verdict.",
     "dimension_breakdown": {},
+    # Never classified - the prescreen stage doesn't run the PM SEMANTIC TAXONOMY prompt, only
+    # Stage 2 (score_jobs_batch) does. None (not a guessed default) so the UI/PDF can tell "not
+    # classified" apart from a real "Generalist PM" verdict.
+    "pm_archetype": None,
 }
 
 # --- Stage 0: cheap, non-Gemini pre-filter -----------------------------------------------
@@ -248,6 +336,7 @@ def _prefiltered_placeholder(reason: str) -> dict:
         "match_reasoning": ("Excluded before Gemini by the keyword/experience pre-filter - "
                              "not a Gemini-verified verdict."),
         "dimension_breakdown": {},
+        "pm_archetype": None,  # never reached the classification prompt - see SCREENED_OUT_PLACEHOLDER
     }
 
 
@@ -550,6 +639,7 @@ def score_all_jobs(profile: dict, jobs: list[dict], batch_size: int = 10,
             if idx is None or idx >= len(batch):
                 continue
             job = dict(batch[idx])
+            job["pm_archetype"] = assessment.get("pm_archetype")
             job["match_tier"] = assessment.get("tier")
             job["match_score"] = assessment.get("score")
             job["match_points"] = assessment.get("matching_points", [])

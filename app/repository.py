@@ -205,18 +205,20 @@ def save_match(profile_id: int, job: dict):
     cursor.execute("""
         INSERT INTO matches (
             profile_id, job_url, match_tier, match_score, match_points, match_gaps,
-            match_reasoning, dimension_breakdown
+            match_reasoning, dimension_breakdown, pm_archetype
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(profile_id, job_url) DO UPDATE SET
             match_tier=excluded.match_tier, match_score=excluded.match_score,
             match_points=excluded.match_points, match_gaps=excluded.match_gaps,
             match_reasoning=excluded.match_reasoning,
-            dimension_breakdown=excluded.dimension_breakdown, scored_at=CURRENT_TIMESTAMP
+            dimension_breakdown=excluded.dimension_breakdown,
+            pm_archetype=excluded.pm_archetype, scored_at=CURRENT_TIMESTAMP
     """, (
         profile_id, job.get("url"), job.get("match_tier"), job.get("match_score"),
         json.dumps(job.get("match_points", [])), json.dumps(job.get("match_gaps", [])),
         job.get("match_reasoning"), json.dumps(job.get("dimension_breakdown", {})),
+        job.get("pm_archetype"),
     ))
     conn.commit()
     conn.close()
@@ -592,7 +594,7 @@ def get_matches(profile_id: int) -> list[dict]:
     cursor.execute("""
         SELECT jobs.*, matches.match_tier, matches.match_score, matches.match_points,
                matches.match_gaps, matches.match_reasoning, matches.opened_at,
-               matches.dimension_breakdown
+               matches.dimension_breakdown, matches.pm_archetype
         FROM matches
         JOIN jobs ON matches.job_url = jobs.url
         WHERE matches.profile_id = ?

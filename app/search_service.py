@@ -131,6 +131,7 @@ def run_search_for_profile(profile, profile_id, company, title_override, locatio
             "match_gaps": [],
             "match_reasoning": "Not yet scored - will be picked up automatically on a future search.",
             "dimension_breakdown": {},
+            "pm_archetype": None,
             "opened_at": None,
         }
         for job in jobs if job["url"] not in scored_urls_this_search
@@ -301,6 +302,7 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
                 "match_gaps": job.get("match_gaps"),
                 "match_reasoning": job.get("match_reasoning"),
                 "dimension_breakdown": job.get("dimension_breakdown"),
+                "pm_archetype": job.get("pm_archetype"),
                 "opened_at": job.get("opened_at"),
                 "result_source": job.get("result_source"),
             })

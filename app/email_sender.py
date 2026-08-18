@@ -50,13 +50,22 @@ def _build_html_body(matches: list[dict]) -> str:
             f'<div style="color:#888;font-size:11px;margin-top:2px;">Matched as: {resume_label}</div>'
             if resume_label else ""
         )
+        # PM role classification (matcher.py's PM ROLE CLASSIFICATION) - None for anything that
+        # never reached Stage 2 Gemini scoring (see database.py's comment on matches.pm_archetype),
+        # so this tag is simply omitted rather than showing a misleading "None" tag.
+        pm_archetype = job.get("pm_archetype")
+        archetype_html = (
+            f'<span style="color:#7c3aed;font-size:11px;font-weight:600;margin-left:8px;'
+            f'background:#f3e8ff;padding:1px 8px;border-radius:999px;">{pm_archetype}</span>'
+            if pm_archetype else ""
+        )
         rows.append(f"""
             <tr>
               <td style="padding:12px 0;border-bottom:1px solid #e5e5e5;">
                 <div style="font-weight:600;font-size:15px;color:#111;">{title}</div>
                 <div style="color:#555;font-size:13px;">{company} - {location}</div>
                 <div style="color:#2563eb;font-size:12px;font-weight:600;margin-top:2px;">
-                  {tier} match - score {score}
+                  {tier} match - score {score}{archetype_html}
                 </div>
                 {resume_html}
                 {points_html}

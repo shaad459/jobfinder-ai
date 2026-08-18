@@ -63,6 +63,15 @@ def init_db():
         )
     """)
 
+    # pm_archetype (added as a migration below, since this table pre-dates it on an existing
+    # install): matcher.py's PM ROLE CLASSIFICATION verdict for this JOB - "Technical PM",
+    # "Growth PM", or "Generalist PM" - from the PM SEMANTIC TAXONOMY baked into
+    # MATCH_PROMPT_TEMPLATE. Classifies the job posting itself, not the candidate, so it's stable
+    # across every resume that gets matched against the same job. NULL for anything that never
+    # reached Stage 2 Gemini scoring (a Stage 0 pre-filter exclusion, a prescreen reject, or a
+    # job_similarity "skip_weak" inference against a different posting - see matcher.py's
+    # SCREENED_OUT_PLACEHOLDER/_prefiltered_placeholder and job_similarity.apply_skip_weak) - the
+    # UI/PDF should treat NULL as "not classified", not silently default to one archetype.
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS matches (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,6 +83,7 @@ def init_db():
             match_gaps TEXT,
             match_reasoning TEXT,
             dimension_breakdown TEXT,
+            pm_archetype TEXT,
             opened_at TEXT,
             scored_at TEXT DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (profile_id) REFERENCES profiles (id),
@@ -204,6 +214,10 @@ def init_db():
         # why. Added as a migration (rather than only in the CREATE TABLE body) because `jobs`
         # already existed on any install from before this column was introduced.
         "ALTER TABLE jobs ADD COLUMN external_id TEXT",
+        # matches.pm_archetype - see the comment above the `matches` CREATE TABLE for what this
+        # is and why. Same reasoning as external_id above: `matches` predates this column on any
+        # existing install, so CREATE TABLE IF NOT EXISTS alone wouldn't add it retroactively.
+        "ALTER TABLE matches ADD COLUMN pm_archetype TEXT",
     ):
         try:
             cursor.execute(statement)

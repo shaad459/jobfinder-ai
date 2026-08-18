@@ -187,6 +187,11 @@ def apply_reuse(job: dict, action: dict) -> dict:
     job["match_points"] = source.get("match_points") or []
     job["match_gaps"] = source.get("match_gaps") or []
     job["dimension_breakdown"] = source.get("dimension_breakdown") or {}
+    # Same posting (near-duplicate text, or a guaranteed external_id match) - its PM archetype
+    # (matcher.py's PM ROLE CLASSIFICATION) describes the JOB, not the candidate, so it carries
+    # over exactly like dimension_breakdown does. Contrast with apply_skip_weak below, where the
+    # source is a genuinely DIFFERENT posting and no classification is copied.
+    job["pm_archetype"] = source.get("pm_archetype")
     if action["similarity"] >= 1.0:
         basis = "confirmed same posting (matching job id) as one already scored"
     else:
@@ -212,6 +217,9 @@ def apply_skip_weak(job: dict, action: dict) -> dict:
     job["match_points"] = []
     job["match_gaps"] = source.get("match_gaps") or []
     job["dimension_breakdown"] = {}
+    # Unlike apply_reuse, this job is a DIFFERENT posting from the source - never classified by
+    # Gemini itself, so left unset rather than borrowing the source's pm_archetype.
+    job["pm_archetype"] = None
     job["match_reasoning"] = (
         f"{HISTORY_INFERRED_MARKER}{pct}% text match to a posting already scored Weak for the "
         f"same reason - not independently re-checked by Gemini): {source.get('match_reasoning') or ''}"
