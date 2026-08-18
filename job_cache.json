@@ -490,14 +490,14 @@
     "external_id": "JR-0025438"
   },
   {
-    "title": "Data Engineer",
+    "title": "Vice President, Head of Unix Operations",
     "company": "Barclays",
-    "location": "Building 300-Whippany Campus, Jefferson Park",
+    "location": "New York, 745 7th Avenue",
     "posted_date": "2026-08-18",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-300-Whippany-Campus-Jefferson-Park/Data-Engineer_JR-0000116697",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Vice-President--Head-of-Unix-Operations_JR-0000101332",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000116697"
+    "external_id": "JR-0000101332"
   },
   {
     "title": "Platform Engineer",
@@ -1080,16 +1080,6 @@
     "external_id": "JR-0000122807-1"
   },
   {
-    "title": "Director - GTC Business Management India",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-08-14",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/Director---GTB-Business-Management-Offshore-India_JR-0000128275",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000128275"
-  },
-  {
     "title": "Executive Assistant",
     "company": "Barclays",
     "location": "San Francisco, Four Embarcadero Center",
@@ -1578,6 +1568,16 @@
     "source": "adzuna"
   },
   {
+    "title": "Virtual Accounts Product Manager - VP",
+    "company": "Citi",
+    "location": "3 Locations",
+    "posted_date": "2026-08-18",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/New-Castle-Delaware-United-States/Virtual-Accounts-Product-Manager---VP_26972991-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "26972991-1"
+  },
+  {
     "title": "Technology Product Management Lead Analyst",
     "company": "Citi",
     "location": "Mississauga Ontario Canada",
@@ -1708,16 +1708,6 @@
     "external_id": "26984097"
   },
   {
-    "title": "Senior Product Manager, Digital Payments - Small Business",
-    "company": "Citi",
-    "location": "4 Locations",
-    "posted_date": "2026-08-07",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Irving-Texas-United-States/Senior-Product-Manager--Digital-Payments---Small-Business_26981449",
-    "description": null,
-    "source": "workday",
-    "external_id": "26981449"
-  },
-  {
     "title": "Technical Product Manager \u2013 Fixed Income Technology",
     "company": "Citi",
     "location": "London  United Kingdom",
@@ -1756,6 +1746,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26966510"
+  },
+  {
+    "title": "In-Business Risk 1LOD Sr. Lead Analyst - SVP",
+    "company": "Citi",
+    "location": "Mississauga Ontario Canada",
+    "posted_date": "2026-08-18",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Mississauga-Ontario-Canada/In-Business-Risk-1LOD-Sr-Lead-Analyst---SVP_26987240-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "26987240-1"
   },
   {
     "title": "Business Analytics Analyst",
@@ -1846,16 +1846,6 @@
     "description": null,
     "source": "workday",
     "external_id": "26978647"
-  },
-  {
-    "title": "Regional Marketing Senior Lead Analyst",
-    "company": "Citi",
-    "location": "2 Locations",
-    "posted_date": "2026-08-13",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/San-Francisco-California-United-States/Regional-Marketing-Senior-Lead-Analyst_26981127-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "26981127-1"
   },
   {
     "title": "Credit Risk Business Analyst",
@@ -2366,6 +2356,56 @@
     "external_id": "R0428365"
   },
   {
+    "title": "Senior Specialist, Partner Enablement & Scalable Frameworks",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia",
+    "posted_date": "2026-08-18",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Specialist--Partner-Enablement---Scalable-Frameworks_R-287737",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287737"
+  },
+  {
+    "title": "Lead Software Engineer",
+    "company": "Mastercard",
+    "location": "Atlanta, Georgia",
+    "posted_date": "2026-08-18",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Lead-Software-Engineer_R-288500",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-288500"
+  },
+  {
+    "title": "Manager, Account Management | Community Institutions",
+    "company": "Mastercard",
+    "location": "New York City, New York",
+    "posted_date": "2026-08-18",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/New-York-City-New-York/Manager--Account-Management---Community-Institutions_R-288580-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-288580-1"
+  },
+  {
+    "title": "Manager Solutions Architect, Agent Suite",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia",
+    "posted_date": "2026-08-18",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Manager-Solutions-Architect--Agent-Suite_R-288276",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-288276"
+  },
+  {
+    "title": "Agentic Solutions Specialist",
+    "company": "Mastercard",
+    "location": "Mexico City, Mexico",
+    "posted_date": "2026-08-18",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Mexico-City-Mexico/Agentic-Solutions-Specialist_R-288303-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-288303-1"
+  },
+  {
     "title": "Senior Specialist, Product Experience Design",
     "company": "Mastercard",
     "location": "Dublin, Ireland",
@@ -2714,56 +2754,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-288209"
-  },
-  {
-    "title": "Lead, AI Security Engineer",
-    "company": "Mastercard",
-    "location": "O'Fallon, Missouri",
-    "posted_date": "2026-08-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Lead--AI-Security-Engineer_R-282736-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-282736-1"
-  },
-  {
-    "title": "Manager, Product Delivery",
-    "company": "Mastercard",
-    "location": "Besiktas, Istanbul Turkey",
-    "posted_date": "2026-08-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Besiktas-Istanbul-Turkey/Manager--Product-Delivery_R-288537",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288537"
-  },
-  {
-    "title": "Vice President, Product Management, Advanced Analytics and AI",
-    "company": "Mastercard",
-    "location": "Dubai, United Arab Emirates",
-    "posted_date": "2026-08-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dubai-United-Arab-Emirates/Vice-President--Product-Management--Advanced-Analytics-and-AI_R-287463-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287463-1"
-  },
-  {
-    "title": "Lead Technical Product Manager",
-    "company": "Mastercard",
-    "location": "Dublin, Ireland",
-    "posted_date": "2026-08-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Lead-Technical-Product-Manager_R-286709",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286709"
-  },
-  {
-    "title": "Manager - Revenue Operations (Strategy and Transformation)",
-    "company": "Mastercard",
-    "location": "Gurgaon, India",
-    "posted_date": "2026-08-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Gurgaon-India/Manager---Revenue-Operations--Strategy-and-Transformation-_R-287561",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287561"
   },
   {
     "title": "Senior Specialist, Product Development",
