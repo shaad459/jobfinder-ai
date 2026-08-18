@@ -206,8 +206,9 @@ def _do_search(profile: dict, profile_id: int, intent: dict, include_aggregators
 
 
 def _do_search_all_companies(profile: dict, profile_id: int, intent: dict) -> list[dict]:
-    """"All companies" means the configured companies specifically (Workday + Greenhouse + Lever
-    - see repository.get_all_company_names), not the broader "search anything, anywhere" approach
+    """"All companies" means the configured companies specifically (Workday + Greenhouse + Lever +
+    Avature + Oracle Cloud Recruiting - see repository.get_all_company_names), not the broader
+    "search anything, anywhere" approach
     BUILD_PLAN.md item 4 deliberately moved away from (it's what caused the real rate-limit
     stress earlier in the project) - looping the same company-scoped fetch_company_jobs() over a
     small, known company list keeps that same discipline.
@@ -219,7 +220,8 @@ def _do_search_all_companies(profile: dict, profile_id: int, intent: dict) -> li
     trade here specifically.
     """
     companies = get_all_company_names()
-    print(f"Searching all {len(companies)} configured companies (Workday/Greenhouse/Lever + "
+    print(f"Searching all {len(companies)} configured companies "
+          f"(Workday/Greenhouse/Lever/Avature/Oracle Cloud + "
           f"JSearch/Adzuna): {', '.join(companies)}")
     all_matches = []
     for company in companies:

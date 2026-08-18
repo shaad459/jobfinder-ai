@@ -2,11 +2,13 @@ from datetime import datetime, timezone
 from connectors.workday_connector import fetch_workday_jobs
 from connectors.greenhouse_connector import fetch_greenhouse_jobs
 from connectors.lever_connector import fetch_lever_jobs
+from connectors.avature_connector import fetch_avature_jobs
+from connectors.oracle_connector import fetch_oracle_jobs
 from connectors.jsearch_connector import fetch_jsearch_jobs
 from connectors.adzuna_connector import fetch_adzuna_jobs
 from repository import (
     get_all_companies, get_all_greenhouse_companies, get_all_lever_companies,
-    get_cached_jobs_for_company,
+    get_all_avature_companies, get_all_oracle_companies, get_cached_jobs_for_company,
 )
 
 
@@ -33,6 +35,20 @@ def fetch_all_jobs(query: str, location: str = "", country: str = "in", max_resu
             all_jobs.extend(jobs)
         except Exception as e:
             print(f"Warning: Lever fetch failed for {company}: {e}")
+
+    for company in get_all_avature_companies():
+        try:
+            jobs = fetch_avature_jobs(company, search_text=query, max_results=max_results_per_source)
+            all_jobs.extend(jobs)
+        except Exception as e:
+            print(f"Warning: Avature fetch failed for {company}: {e}")
+
+    for company in get_all_oracle_companies():
+        try:
+            jobs = fetch_oracle_jobs(company, search_text=query, max_results=max_results_per_source)
+            all_jobs.extend(jobs)
+        except Exception as e:
+            print(f"Warning: Oracle Cloud Recruiting fetch failed for {company}: {e}")
 
     try:
         jsearch_query = f"{query} in {location}" if location else query
@@ -118,11 +134,16 @@ def fetch_company_jobs(company: str, query: str, location: str = "", relocation_
     rather than a hand-rolled keyword heuristic trying to approximate the same judgment.
 
     A company can be configured under at most one connector type - Workday is checked first,
-    then Greenhouse, then Lever, and whichever matches first wins (this only matters if you
-    somehow add the same display name under two connector types, which nothing currently
-    prevents). Greenhouse's and Lever's own postings APIs have no server-side search, so `query`
-    is applied there as a client-side title substring match instead - see the docstrings on
-    fetch_greenhouse_jobs/fetch_lever_jobs.
+    then Greenhouse, then Lever, then Avature, then Oracle Cloud Recruiting, and whichever
+    matches first wins (this only matters if you somehow add the same display name under two
+    connector types, which nothing currently prevents). None of Greenhouse's, Lever's, Avature's,
+    or Oracle Cloud Recruiting's own postings feeds have a confirmed server-side search, so
+    `query` is applied to each as a client-side title substring match instead - see the
+    docstrings on fetch_greenhouse_jobs/fetch_lever_jobs/fetch_avature_jobs/fetch_oracle_jobs.
+    Avature and Oracle Cloud Recruiting are newer, less-proven connectors than the original
+    three - see their own connector modules' docstrings for real caveats (Avature has no
+    location/true-posted-date data; Oracle Cloud Recruiting's field names are unverified against
+    a live response).
 
     include_aggregators_for_workday: normally a configured company (Workday, Greenhouse, or
     Lever) is looked up ONLY via its own direct connector - JSearch/Adzuna aren't queried for it
@@ -140,7 +161,11 @@ def fetch_company_jobs(company: str, query: str, location: str = "", relocation_
         (key for key in get_all_greenhouse_companies() if key.lower() == company.lower()), None)
     lever_key = None if (workday_key or greenhouse_key) else next(
         (key for key in get_all_lever_companies() if key.lower() == company.lower()), None)
-    matching_key = workday_key or greenhouse_key or lever_key
+    avature_key = None if (workday_key or greenhouse_key or lever_key) else next(
+        (key for key in get_all_avature_companies() if key.lower() == company.lower()), None)
+    oracle_key = None if (workday_key or greenhouse_key or lever_key or avature_key) else next(
+        (key for key in get_all_oracle_companies() if key.lower() == company.lower()), None)
+    matching_key = workday_key or greenhouse_key or lever_key or avature_key or oracle_key
 
     jobs = []
 
@@ -159,6 +184,16 @@ def fetch_company_jobs(company: str, query: str, location: str = "", relocation_
             jobs.extend(fetch_lever_jobs(lever_key, search_text=query, max_results=max_results))
         except Exception as e:
             print(f"Warning: Lever fetch failed for {lever_key}: {e}")
+    elif avature_key:
+        try:
+            jobs.extend(fetch_avature_jobs(avature_key, search_text=query, max_results=max_results))
+        except Exception as e:
+            print(f"Warning: Avature fetch failed for {avature_key}: {e}")
+    elif oracle_key:
+        try:
+            jobs.extend(fetch_oracle_jobs(oracle_key, search_text=query, max_results=max_results))
+        except Exception as e:
+            print(f"Warning: Oracle Cloud Recruiting fetch failed for {oracle_key}: {e}")
 
     if not matching_key or include_aggregators_for_workday:
         try:

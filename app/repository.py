@@ -439,17 +439,109 @@ def remove_lever_company(name: str):
     _sync_lever_companies_to_github()
 
 
-def get_all_company_names() -> list[str]:
-    """Union of every configured company across all three connector types (Workday, Greenhouse,
-    Lever), sorted - this is the list "search all configured companies" actually means now.
-    job_aggregator.fetch_company_jobs() figures out which connector a given name belongs to on
-    its own (it checks all three registries), so callers here don't need to care - they just need
-    the full set of names to loop over. A name is expected to appear in at most one registry;
-    nothing currently enforces that, so a duplicate across two connector types would just be
-    fetched twice under the same display name rather than erroring.
+def get_all_oracle_companies() -> dict:
+    """Returns the configured Oracle Cloud Recruiting companies as {name: {base_url,
+    site_number}} - same read-fresh-every-call contract as get_all_companies() (Workday), so a
+    company added via the Streamlit UI is immediately usable without a restart.
     """
-    names = set(get_all_companies()) | set(get_all_greenhouse_companies()) | set(get_all_lever_companies())
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, base_url, site_number FROM oracle_companies ORDER BY name")
+    rows = cursor.fetchall()
+    conn.close()
+    return {row["name"]: {"base_url": row["base_url"], "site_number": row["site_number"]}
+            for row in rows}
+
+
+def add_oracle_company(name: str, base_url: str, site_number: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO oracle_companies (name, base_url, site_number) VALUES (?, ?, ?)
+        ON CONFLICT(name) DO UPDATE SET base_url=excluded.base_url, site_number=excluded.site_number
+    """, (name, base_url, site_number))
+    conn.commit()
+    conn.close()
+    _sync_oracle_companies_to_github()
+
+
+def remove_oracle_company(name: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM oracle_companies WHERE name = ?", (name,))
+    conn.commit()
+    conn.close()
+    _sync_oracle_companies_to_github()
+
+
+def get_all_avature_companies() -> dict:
+    """Returns the configured Avature companies as {name: {careers_url}} - same read-fresh-
+    every-call contract as get_all_companies() (Workday), so a company added via the Streamlit UI
+    is immediately usable without a restart.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, careers_url FROM avature_companies ORDER BY name")
+    rows = cursor.fetchall()
+    conn.close()
+    return {row["name"]: {"careers_url": row["careers_url"]} for row in rows}
+
+
+def add_avature_company(name: str, careers_url: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO avature_companies (name, careers_url) VALUES (?, ?)
+        ON CONFLICT(name) DO UPDATE SET careers_url=excluded.careers_url
+    """, (name, careers_url))
+    conn.commit()
+    conn.close()
+    _sync_avature_companies_to_github()
+
+
+def remove_avature_company(name: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM avature_companies WHERE name = ?", (name,))
+    conn.commit()
+    conn.close()
+    _sync_avature_companies_to_github()
+
+
+def get_all_company_names() -> list[str]:
+    """Union of every configured company across all five connector types (Workday, Greenhouse,
+    Lever, Avature, Oracle Cloud Recruiting), sorted - this is the list "search all configured
+    companies" actually means now. job_aggregator.fetch_company_jobs() figures out which
+    connector a given name belongs to on its own (it checks all five registries), so callers here
+    don't need to care - they just need the full set of names to loop over. A name is expected to
+    appear in at most one registry; nothing currently enforces that, so a duplicate across two
+    connector types would just be fetched twice under the same display name rather than erroring.
+    """
+    names = (
+        set(get_all_companies()) | set(get_all_greenhouse_companies())
+        | set(get_all_lever_companies()) | set(get_all_avature_companies())
+        | set(get_all_oracle_companies())
+    )
     return sorted(names)
+
+
+def _sync_oracle_companies_to_github():
+    """Best-effort push of the current Oracle Cloud Recruiting company list to
+    oracle_companies_config.json on GitHub - same contract as _sync_companies_to_github() above,
+    just for the Oracle registry.
+    """
+    ok, message = company_sync.sync_oracle_companies_config(get_all_oracle_companies())
+    print(f"oracle_companies_config.json sync: {message}" if ok
+          else f"oracle_companies_config.json sync failed: {message}")
+
+
+def _sync_avature_companies_to_github():
+    """Best-effort push of the current Avature company list to avature_companies_config.json on
+    GitHub - same contract as _sync_companies_to_github() above, just for the Avature registry.
+    """
+    ok, message = company_sync.sync_avature_companies_config(get_all_avature_companies())
+    print(f"avature_companies_config.json sync: {message}" if ok
+          else f"avature_companies_config.json sync failed: {message}")
 
 
 def _sync_greenhouse_companies_to_github():

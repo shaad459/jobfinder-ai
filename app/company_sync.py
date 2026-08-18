@@ -58,6 +58,12 @@ GREENHOUSE_CONFIG_REPO_PATH = "app/greenhouse_companies_config.json"
 LEVER_CONFIG_FILE_NAME = "lever_companies_config.json"
 LEVER_CONFIG_REPO_PATH = "app/lever_companies_config.json"
 
+AVATURE_CONFIG_FILE_NAME = "avature_companies_config.json"
+AVATURE_CONFIG_REPO_PATH = "app/avature_companies_config.json"
+
+ORACLE_CONFIG_FILE_NAME = "oracle_companies_config.json"
+ORACLE_CONFIG_REPO_PATH = "app/oracle_companies_config.json"
+
 
 def _run_git(args: list[str], cwd: Path) -> subprocess.CompletedProcess:
     return subprocess.run(
@@ -100,6 +106,27 @@ def sync_lever_companies_config(companies: dict) -> tuple[bool, str]:
     return _sync_config_guarded(
         companies, LEVER_CONFIG_REPO_PATH, "lever_companies_config.json",
         "Update configured Lever companies",
+    )
+
+
+def sync_avature_companies_config(companies: dict) -> tuple[bool, str]:
+    """Same contract as sync_companies_config() above, for the Avature registry - companies is
+    the FULL current {name: {careers_url}} dict from repository.get_all_avature_companies().
+    """
+    return _sync_config_guarded(
+        companies, AVATURE_CONFIG_REPO_PATH, "avature_companies_config.json",
+        "Update configured Avature companies",
+    )
+
+
+def sync_oracle_companies_config(companies: dict) -> tuple[bool, str]:
+    """Same contract as sync_companies_config() above, for the Oracle Cloud Recruiting registry -
+    companies is the FULL current {name: {base_url, site_number}} dict from
+    repository.get_all_oracle_companies().
+    """
+    return _sync_config_guarded(
+        companies, ORACLE_CONFIG_REPO_PATH, "oracle_companies_config.json",
+        "Update configured Oracle Cloud Recruiting companies",
     )
 
 
@@ -190,3 +217,17 @@ def load_lever_companies_config() -> dict:
     repository.get_all_lever_companies() when {} (never synced, or zero configured).
     """
     return _load_config(LEVER_CONFIG_FILE_NAME)
+
+
+def load_avature_companies_config() -> dict:
+    """Same contract as load_companies_config(), for avature_companies_config.json - falls back
+    to repository.get_all_avature_companies() when {} (never synced, or zero configured).
+    """
+    return _load_config(AVATURE_CONFIG_FILE_NAME)
+
+
+def load_oracle_companies_config() -> dict:
+    """Same contract as load_companies_config(), for oracle_companies_config.json - falls back to
+    repository.get_all_oracle_companies() when {} (never synced, or zero configured).
+    """
+    return _load_config(ORACLE_CONFIG_FILE_NAME)

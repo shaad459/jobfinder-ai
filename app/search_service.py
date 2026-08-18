@@ -203,7 +203,8 @@ def run_search_for_profiles(profile_ids: list, companies: list = None, title_ove
     job - the core of the resume-library feature (see api_server.py's /api/search).
 
     companies=None means "every configured company" (get_all_company_names() - the union across
-    Workday, Greenhouse, and Lever), same as the old "search all companies" checkbox, and also
+    Workday, Greenhouse, Lever, Avature, and Oracle Cloud Recruiting), same as the old "search all
+    companies" checkbox, and also
     switches on include_aggregators the same way that path always did (broader JSearch/Adzuna
     coverage on top of each company's own direct-connector feed).
 

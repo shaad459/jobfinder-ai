@@ -48,11 +48,15 @@ from database import init_db
 from connectors.workday_connector import parse_workday_url
 from connectors.greenhouse_connector import parse_greenhouse_url
 from connectors.lever_connector import parse_lever_url
+from connectors.avature_connector import parse_avature_url
+from connectors.oracle_connector import parse_oracle_url
 from repository import (
     get_or_create_profile, get_profile_by_hash, get_profile_by_id, get_gemini_call_counts_today,
     delete_stale_jobs, mark_job_opened, get_all_companies, add_company, remove_company,
     get_all_greenhouse_companies, add_greenhouse_company, remove_greenhouse_company,
-    get_all_lever_companies, add_lever_company, remove_lever_company, get_all_company_names,
+    get_all_lever_companies, add_lever_company, remove_lever_company,
+    get_all_avature_companies, add_avature_company, remove_avature_company,
+    get_all_oracle_companies, add_oracle_company, remove_oracle_company, get_all_company_names,
     list_profiles, set_profile_label, set_profile_active,
 )
 
@@ -892,18 +896,26 @@ else:
         st.session_state.last_matches = list(merged.values())
 
     with st.expander("Manage companies"):
-        st.caption('Companies searched by "search all configured companies," across three '
+        st.caption('Companies searched by "search all configured companies," across five '
                    "direct-API connector types below - Workday, Greenhouse, and Lever. Paste a "
                    "company's careers/job-board URL in the matching tab to add one; no need to "
-                   "know that ATS's internal naming.")
+                   "know that ATS's internal naming. Avature and Oracle Cloud Recruiting are "
+                   "newer, less-proven connectors than the other three - Avature has no "
+                   "location or true posted-date data, and Oracle Cloud Recruiting's field names "
+                   "are unverified against a live response, so double-check what comes back from "
+                   "either before relying on it.")
 
         workday_companies = get_all_companies()
         greenhouse_companies = get_all_greenhouse_companies()
         lever_companies = get_all_lever_companies()
+        avature_companies = get_all_avature_companies()
+        oracle_companies = get_all_oracle_companies()
         all_rows = (
             [(name, "Workday") for name in workday_companies]
             + [(name, "Greenhouse") for name in greenhouse_companies]
             + [(name, "Lever") for name in lever_companies]
+            + [(name, "Avature") for name in avature_companies]
+            + [(name, "Oracle Cloud") for name in oracle_companies]
         )
         for name, source in sorted(all_rows):
             row_cols = st.columns([3, 1, 1])
@@ -917,12 +929,17 @@ else:
                         remove_company(name)
                     elif source == "Greenhouse":
                         remove_greenhouse_company(name)
-                    else:
+                    elif source == "Lever":
                         remove_lever_company(name)
+                    elif source == "Avature":
+                        remove_avature_company(name)
+                    else:
+                        remove_oracle_company(name)
                     st.rerun()
 
         st.divider()
-        workday_tab, greenhouse_tab, lever_tab = st.tabs(["Workday", "Greenhouse", "Lever"])
+        workday_tab, greenhouse_tab, lever_tab, avature_tab, oracle_tab = st.tabs(
+            ["Workday", "Greenhouse", "Lever", "Avature", "Oracle Cloud"])
 
         with workday_tab:
             with st.form("add_workday_company_form", clear_on_submit=True):
@@ -993,6 +1010,64 @@ else:
                         parsed = parse_lever_url(lv_url)
                         add_lever_company(lv_name.strip(), parsed["site"])
                         _add_company_and_search(lv_name.strip())
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(str(e))
+
+        with avature_tab:
+            st.caption("Best-effort: scrapes rendered search results (no confirmed public API "
+                       "for Avature career sites), and can't extract a job's location or true "
+                       "posted date - see the connector's docstring for the full caveat. Paste a "
+                       "URL that's already location-filtered on the site itself if you can, to "
+                       "work around the missing location data.")
+            with st.form("add_avature_company_form", clear_on_submit=True):
+                av_name = st.text_input("Display name", placeholder="e.g. Deloitte USI", key="av_name")
+                av_url = st.text_input(
+                    "Avature careers URL",
+                    placeholder="https://usijobs.deloitte.com/en_US/careersusi", key="av_url")
+                add_avature_submitted = st.form_submit_button("Add company")
+
+            if add_avature_submitted:
+                if not av_name.strip():
+                    st.error("Enter a display name for the company.")
+                elif not av_url.strip():
+                    st.error("Paste the company's Avature careers URL.")
+                elif not st.session_state.selected_profile_ids:
+                    st.error("Select at least one resume in the library above first.")
+                else:
+                    try:
+                        parsed = parse_avature_url(av_url)
+                        add_avature_company(av_name.strip(), parsed["careers_url"])
+                        _add_company_and_search(av_name.strip())
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(str(e))
+
+        with oracle_tab:
+            st.caption("Calls Oracle's own public job-requisitions API, but the field names "
+                       "this connector expects are sourced from third-party references, not "
+                       "official docs, and haven't been verified live - see the connector's "
+                       "docstring for the full caveat.")
+            with st.form("add_oracle_company_form", clear_on_submit=True):
+                or_name = st.text_input("Display name", placeholder="e.g. EXL", key="or_name")
+                or_url = st.text_input(
+                    "Oracle Cloud Recruiting careers URL",
+                    placeholder="https://<tenant>.oraclecloud.com/hcmUI/CandidateExperience/"
+                                "en/sites/<siteNumber>/jobs", key="or_url")
+                add_oracle_submitted = st.form_submit_button("Add company")
+
+            if add_oracle_submitted:
+                if not or_name.strip():
+                    st.error("Enter a display name for the company.")
+                elif not or_url.strip():
+                    st.error("Paste the company's Oracle Cloud Recruiting careers URL.")
+                elif not st.session_state.selected_profile_ids:
+                    st.error("Select at least one resume in the library above first.")
+                else:
+                    try:
+                        parsed = parse_oracle_url(or_url)
+                        add_oracle_company(or_name.strip(), parsed["base_url"], parsed["site_number"])
+                        _add_company_and_search(or_name.strip())
                         st.rerun()
                     except ValueError as e:
                         st.error(str(e))

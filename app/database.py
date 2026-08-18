@@ -134,6 +134,31 @@ def init_db():
         )
     """)
 
+    # Avature and Oracle Cloud Recruiting configured companies - same registry pattern as
+    # Workday/Greenhouse/Lever above, but flagged here because their connectors carry real
+    # caveats (see connectors/avature_connector.py and connectors/oracle_connector.py):
+    # avature_connector scrapes rendered HTML rather than calling a documented API (no confirmed
+    # public API exists for Avature job-seeker sites), and oracle_connector calls a real public
+    # API but with field names sourced from third-party reverse-engineering rather than official
+    # docs. `careers_url` (Avature) is the full careers/search page URL as pasted; `base_url` +
+    # `site_number` (Oracle) are the two pieces parsed out of a Candidate Experience URL by
+    # parse_oracle_url.
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS avature_companies (
+            name TEXT PRIMARY KEY,
+            careers_url TEXT NOT NULL,
+            added_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS oracle_companies (
+            name TEXT PRIMARY KEY,
+            base_url TEXT NOT NULL,
+            site_number TEXT NOT NULL,
+            added_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     # Idempotent migrations - CREATE TABLE IF NOT EXISTS doesn't retroactively alter a table
     # that already existed before a column was added, so each of these is a no-op once the
     # column is already there (SQLite raises OperationalError on a duplicate column, which we
