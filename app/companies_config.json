@@ -23,5 +23,10 @@
     "company": "mastercard",
     "datacenter": "wd1",
     "site": "CorporateCareers"
+  },
+  "Wolters Kluwer": {
+    "company": "wk",
+    "datacenter": "wd3",
+    "site": "External"
   }
 }
