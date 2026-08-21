@@ -450,6 +450,16 @@
     "external_id": "JR-0024785-1"
   },
   {
+    "title": "Structured Products Credit Analyst",
+    "company": "Barclays",
+    "location": "New York, 745 7th Avenue",
+    "posted_date": "2026-08-21",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Structured-Products-Credit-Analyst_JR-0000129614-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129614-1"
+  },
+  {
     "title": "Principal Engineer - DCP",
     "company": "Barclays",
     "location": "2 Locations",
@@ -678,16 +688,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000108573"
-  },
-  {
-    "title": "Senior Cyber Risk Service Manager - VP",
-    "company": "Barclays",
-    "location": "Building 400-Whippany Campus, Jefferson Park",
-    "posted_date": "2026-08-20",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/Senior-Cyber-Risk-Service-Manager---VP_JR-0000129454",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129454"
   },
   {
     "title": "Analyst  Financial Crime Validation Office",
@@ -1038,6 +1038,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000099275-1"
+  },
+  {
+    "title": "Senior ServiceNow Engineer",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-08-19",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Senior-ServiceNow-Engineer_JR-0000103040",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000103040"
   },
   {
     "title": "Customer Service Advisor",
@@ -1430,16 +1440,6 @@
     "external_id": "JR-0000088273-1"
   },
   {
-    "title": "Business Analyst - Direct Channels",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-08-19",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Business-Analyst---Direct-Channels_JR-0000121337",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000121337"
-  },
-  {
     "title": "Corporate Operations Senior Data Analyst",
     "company": "Barclays",
     "location": "Dublin, Molesworth Street",
@@ -1466,6 +1466,16 @@
     "url": "https://www.adzuna.in/details/5832093644?utm_medium=api&utm_source=27480221",
     "description": "Job Description Purpose of the role To support the organisation, achieve its strategic objectives by the identification of business requirements and solutions that address business problems and opportunities. Accountabilities Identification and analysis of business problems and client requirements that require change within the organisation. Development of business requirements that will address business problems and opportunities. Collaboration with stakeholders to ensure that proposed solutio\u2026",
     "source": "adzuna"
+  },
+  {
+    "title": "Securities Finance Product Manager, Vice President",
+    "company": "Citi",
+    "location": "New York New York United States",
+    "posted_date": "2026-08-21",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/New-York-New-York-United-States/Securities-Finance-Product-Developer---VP_26973296-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "26973296-1"
   },
   {
     "title": "Product Analyst",
@@ -2116,6 +2126,46 @@
     "external_id": "R0440973"
   },
   {
+    "title": "Manager, Network Economics & Value Optimization",
+    "company": "Mastercard",
+    "location": "Purchase, New York",
+    "posted_date": "2026-08-21",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Purchase-New-York/Manager--Network-Economics---Value-Optimization_R-279183",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-279183"
+  },
+  {
+    "title": "Senior Software Engineer (Full Stack)",
+    "company": "Mastercard",
+    "location": "New York City, New York",
+    "posted_date": "2026-08-21",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/New-York-City-New-York/Senior-Software-Engineer--Full-Stack-_R-287835-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287835-1"
+  },
+  {
+    "title": "Lead Software Engineer (SDET)",
+    "company": "Mastercard",
+    "location": "Toronto, Canada (Ethoca)",
+    "posted_date": "2026-08-21",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Toronto-Canada-Ethoca/Lead-Software-Engineer_R-286842",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-286842"
+  },
+  {
+    "title": "Manager, Software Engineering",
+    "company": "Mastercard",
+    "location": "Toronto, Canada (Ethoca)",
+    "posted_date": "2026-08-21",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Toronto-Canada-Ethoca/Manager--Software-Engineering_R-286841",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-286841"
+  },
+  {
     "title": "Digital Payments Product Management - Data Insights and Analysis",
     "company": "Mastercard",
     "location": "Lisbon, Portugal",
@@ -2406,16 +2456,6 @@
     "external_id": "R-275725"
   },
   {
-    "title": "Lead Technical Program Manager",
-    "company": "Mastercard",
-    "location": "O'Fallon, Missouri",
-    "posted_date": "2026-08-20",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Lead-Technical-Program-Manager_R-276649-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-276649-1"
-  },
-  {
     "title": "Consultant, Advisors & Consulting Services, Marketing",
     "company": "Mastercard",
     "location": "Purchase, New York",
@@ -2484,36 +2524,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-282640-1"
-  },
-  {
-    "title": "Senior Product Manager - Technical",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-08-20",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Product-Manager---Technical_R-281528",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-281528"
-  },
-  {
-    "title": "Product Manager, Card on File Tokenization (Localization)",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-08-20",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Product-Manager--Card-on-File-Tokenization--Localization-_R-287993",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287993"
-  },
-  {
-    "title": "Customer Success Manager, Credit Risk",
-    "company": "Mastercard",
-    "location": "Sao Paulo, Brazil",
-    "posted_date": "2026-08-20",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Sao-Paulo-Brazil/Customer-Success-Manager--Credit-Risk_R-280652-2",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-280652-2"
   },
   {
     "title": "Lead Product Manager Tech",
@@ -2892,6 +2902,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-287410"
+  },
+  {
+    "title": "Senior Analyst, Total Rewards, Compensation Delivery",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia",
+    "posted_date": "2026-08-21",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Analyst--Total-Rewards--Compensation-Delivery_R-282464",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-282464"
   },
   {
     "title": "Analyst, Payments Assurance Team, Warsaw, POLAND",
