@@ -1110,16 +1110,6 @@
     "external_id": "JR-0000083538-1"
   },
   {
-    "title": "Team Assistant",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-08-21",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Team-Assistant_JR-0000127910-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000127910-1"
-  },
-  {
     "title": "Investment Banking, Analyst",
     "company": "Barclays",
     "location": "Calgary, 888 3rd Street SW",
@@ -1428,6 +1418,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000114762"
+  },
+  {
+    "title": "Data Analyst",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-08-19",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Data-Analyst_JR-0000088273-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000088273-1"
   },
   {
     "title": "Corporate Operations Senior Data Analyst",
