@@ -440,6 +440,16 @@
     "external_id": "JR-0025559"
   },
   {
+    "title": "2027 Technology Developer Graduate Programme Singapore",
+    "company": "Barclays",
+    "location": "Singapore, Marina Bay Financial Tower 2",
+    "posted_date": "2026-08-25",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Singapore-Marina-Bay-Financial-Tower-2/XMLNAME-2027-Technology-Developer-Graduate-Programme-Singapore_JR-0000128148",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000128148"
+  },
+  {
     "title": "Senior Java Engineer \u2013 AVP",
     "company": "Barclays",
     "location": "Building 300-Whippany Campus, Jefferson Park",
@@ -1030,14 +1040,14 @@
     "external_id": "JR-0000110399"
   },
   {
-    "title": "Transaction Banking Account Manager",
+    "title": "2027 Technology Analyst Graduate Programme Singapore",
     "company": "Barclays",
-    "location": "Paris, Origami",
-    "posted_date": "2026-08-21",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Paris-Origami/Transaction-Banking-Account-Manager_JR-0000117870",
+    "location": "Singapore, Marina Bay Financial Tower 2",
+    "posted_date": "2026-08-25",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Singapore-Marina-Bay-Financial-Tower-2/XMLNAME-2027-Technology-Analyst-Graduate-Programme-Singapore_JR-0000128146",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000117870"
+    "external_id": "JR-0000128146"
   },
   {
     "title": "Executive Assistant",
@@ -1380,6 +1390,16 @@
     "external_id": "JR-0000126122-1"
   },
   {
+    "title": "Transaction Banking Account Manager",
+    "company": "Barclays",
+    "location": "Paris, Origami",
+    "posted_date": "2026-08-21",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Paris-Origami/Transaction-Banking-Account-Manager_JR-0000117870",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000117870"
+  },
+  {
     "title": "Senior Customer Service Advisor",
     "company": "Barclays",
     "location": "Grays, 9 High Street",
@@ -1428,26 +1448,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000119044"
-  },
-  {
-    "title": "IFC Data - Data Architect",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-08-21",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/IFC-Data---Data-Architect_JR-0000105534",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000105534"
-  },
-  {
-    "title": "Analyst - Investment Banking",
-    "company": "Barclays",
-    "location": "Mumbai, Altimus",
-    "posted_date": "2026-08-21",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Altimus/Analyst---Investment-Banking_JR-0000128987-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000128987-1"
   },
   {
     "title": "Senior Corporate Operations Analyst",
@@ -1506,6 +1506,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26982046"
+  },
+  {
+    "title": "Research Product Manager, Assistant Vice President",
+    "company": "Citi",
+    "location": "London  United Kingdom",
+    "posted_date": "2026-08-25",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/London--United-Kingdom/Research-Product-Manager--Assistant-Vice-President_26989809",
+    "description": null,
+    "source": "workday",
+    "external_id": "26989809"
   },
   {
     "title": "Securities Finance Product Manager, Vice President",
@@ -1576,16 +1586,6 @@
     "description": null,
     "source": "workday",
     "external_id": "26986067"
-  },
-  {
-    "title": "LMS Product Manager, SVP",
-    "company": "Citi",
-    "location": "Sao Paulo Sao Paulo Brazil",
-    "posted_date": "2026-08-18",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Sao-Paulo-Sao-Paulo-Brazil/LMS-Product-Manager--SVP_26985070",
-    "description": null,
-    "source": "workday",
-    "external_id": "26985070"
   },
   {
     "title": "SVP, HR Technology Product Manager",
@@ -2148,6 +2148,26 @@
     "external_id": "R0443956-1"
   },
   {
+    "title": "Manager, Product Management CAE SEA (Malaysia)",
+    "company": "Mastercard",
+    "location": "Kuala Lumpur, Malaysia",
+    "posted_date": "2026-08-25",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Kuala-Lumpur-Malaysia/Manager--Product-Management-CAE-SEA--Malaysia-_R-289045",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289045"
+  },
+  {
+    "title": "Managing Consultant, Strategy & Transformation",
+    "company": "Mastercard",
+    "location": "Manila, Philippines",
+    "posted_date": "2026-08-25",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Manila-Philippines/Managing-Consultant--Strategy---Transformation_R-289220",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289220"
+  },
+  {
     "title": "Lead Network Engineer (Tier 3 Network support)",
     "company": "Mastercard",
     "location": "Kuala Lumpur, Malaysia",
@@ -2528,26 +2548,6 @@
     "external_id": "R-282000"
   },
   {
-    "title": "Customer Success Manager, Credit Risk",
-    "company": "Mastercard",
-    "location": "Toronto, Canada",
-    "posted_date": "2026-08-22",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Toronto-Canada/Customer-Success-Manager--Credit-Risk_R-282546-2",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-282546-2"
-  },
-  {
-    "title": "Consultant, Advisors & Consulting Services, Marketing",
-    "company": "Mastercard",
-    "location": "Buenos Aires, Argentina",
-    "posted_date": "2026-08-22",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Buenos-Aires-Argentina/Consultant--Advisors---Consulting-Services--Marketing_R-271281",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-271281"
-  },
-  {
     "title": "Senior PMT",
     "company": "Mastercard",
     "location": "Pune, Maharashtra",
@@ -2623,6 +2623,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-276438-1"
+  },
+  {
+    "title": "Consultant, Advisors & Consulting Services, Marketing",
+    "company": "Mastercard",
+    "location": "Buenos Aires, Argentina",
+    "posted_date": "2026-08-22",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Buenos-Aires-Argentina/Consultant--Advisors---Consulting-Services--Marketing_R-271281",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-271281"
   },
   {
     "title": "Senior Analyst, Financial Planning & Analysis \u2022 Services (SERV)",
@@ -3043,15 +3053,5 @@
     "description": null,
     "source": "workday",
     "external_id": "R-278709-1"
-  },
-  {
-    "title": "Analyst, Franchise Services",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-08-18",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Analyst--Franchise-Services_R-287899",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287899"
   }
 ]
