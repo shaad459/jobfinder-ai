@@ -1,5 +1,25 @@
 [
   {
+    "title": "Senior Manager - Corporate Services",
+    "company": "Apex Group",
+    "location": "Singapore",
+    "posted_date": "2026-08-26",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Singapore/Associate-Director---Corporate-Services_JR-0025046",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0025046"
+  },
+  {
+    "title": "Senior Client Services Administrator",
+    "company": "Apex Group",
+    "location": "3 Locations",
+    "posted_date": "2026-08-26",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Brisbane/Senior-Client-Services-Administrator_JR-0025668",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0025668"
+  },
+  {
     "title": "Senior Due Diligence Associate",
     "company": "Apex Group",
     "location": "Valencia",
@@ -270,26 +290,6 @@
     "external_id": "JR-0022284"
   },
   {
-    "title": "Compliance Executive",
-    "company": "Apex Group",
-    "location": "Abu Dhabi",
-    "posted_date": "2026-08-19",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Abu-Dhabi/Compliance-Executive_JR-0021017",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0021017"
-  },
-  {
-    "title": "Senior Business Analyst",
-    "company": "Apex Group",
-    "location": "2 Locations",
-    "posted_date": "2026-08-19",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---East/Senior-Business-Analyst_JR-0025497",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0025497"
-  },
-  {
     "title": "Investor KYC Assistant Manager",
     "company": "Apex Group",
     "location": "London",
@@ -368,6 +368,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0025244"
+  },
+  {
+    "title": "Senior Business Analyst",
+    "company": "Apex Group",
+    "location": "2 Locations",
+    "posted_date": "2026-08-19",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---East/Senior-Business-Analyst_JR-0025497",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0025497"
   },
   {
     "title": "Treasury - Head of Funding - SVP",
@@ -468,6 +478,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0025559"
+  },
+  {
+    "title": "VP - Project Manager, Planning & Execution APAC (Markets)",
+    "company": "Barclays",
+    "location": "Hong Kong, Cheung Kong Center",
+    "posted_date": "2026-08-26",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Hong-Kong-Cheung-Kong-Center/VP---Project-Manager--Planning---Execution-APAC--Markets-_JR-0000119159-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000119159-1"
   },
   {
     "title": "FinTech Product Manager, VP",
@@ -1060,16 +1080,6 @@
     "external_id": "JR-0000113421-1"
   },
   {
-    "title": "Business Analyst \u2013 AVP - Customer Onboarding, Compliance & Surveillance Systems",
-    "company": "Barclays",
-    "location": "Mumbai, Nirlon Knowledge Park (BX) 9th & 11-12 floor",
-    "posted_date": "2026-08-25",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Nirlon-Knowledge-Park-BX-9th--11-12-floor/Business-Analyst---AVP---Customer-Onboarding--Compliance---Surveillance-Systems_JR-0000108388",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000108388"
-  },
-  {
     "title": "Data Analyst",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
@@ -1420,6 +1430,16 @@
     "external_id": "JR-0000124703"
   },
   {
+    "title": "Business Analyst \u2013 AVP - Customer Onboarding, Compliance & Surveillance Systems",
+    "company": "Barclays",
+    "location": "Mumbai, Nirlon Knowledge Park (BX) 9th & 11-12 floor",
+    "posted_date": "2026-08-25",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Nirlon-Knowledge-Park-BX-9th--11-12-floor/Business-Analyst---AVP---Customer-Onboarding--Compliance---Surveillance-Systems_JR-0000108388",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000108388"
+  },
+  {
     "title": "ALM Transformation Analyst",
     "company": "Barclays",
     "location": "Chennai, DLF IT Park",
@@ -1628,6 +1648,16 @@
     "external_id": "26988760"
   },
   {
+    "title": "Product Analyst",
+    "company": "Citi",
+    "location": "Gurugram Haryana India",
+    "posted_date": "2026-08-26",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Gurugram-Haryana-India/Product-Analyst_26988762",
+    "description": null,
+    "source": "workday",
+    "external_id": "26988762"
+  },
+  {
     "title": "Digital Communications Product Manager",
     "company": "Citi",
     "location": "Heredia  Costa Rica",
@@ -1676,16 +1706,6 @@
     "description": null,
     "source": "workday",
     "external_id": "26985766"
-  },
-  {
-    "title": "Custody Product Transformation - Senior Product Manager (Vice President)",
-    "company": "Citi",
-    "location": "Dublin  Ireland",
-    "posted_date": "2026-08-20",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Dublin--Ireland/Custody-Product-Transformation---Senior-Product-Manager--Vice-President-_26987824-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "26987824-1"
   },
   {
     "title": "Technology Product Management Lead Analyst",
@@ -2268,16 +2288,6 @@
     "external_id": "R0446779"
   },
   {
-    "title": "DWS - Regional Finance Analyst (APAC) - Associate",
-    "company": "Deutsche Bank",
-    "location": "Manila Net Quad Center",
-    "posted_date": "2026-08-12",
-    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Manila-Net-Quad-Center/DWS---Regional-Finance-Analyst--APAC----Associate_R0446778",
-    "description": null,
-    "source": "workday",
-    "external_id": "R0446778"
-  },
-  {
     "title": "Tecnology Analyst",
     "company": "Deutsche Bank",
     "location": "Pune - Business Bay",
@@ -2296,6 +2306,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R0445993-1"
+  },
+  {
+    "title": "Manager, Financial Planning & Analysis (West Southeast Asia)",
+    "company": "Mastercard",
+    "location": "Singapore",
+    "posted_date": "2026-08-26",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Singapore/Manager--Financial-Planning---Analysis--West-Southeast-Asia-_R-287517",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287517"
   },
   {
     "title": "Manager, Product Integration",
@@ -2688,16 +2708,6 @@
     "external_id": "R-289220"
   },
   {
-    "title": "Lead Network Engineer (Tier 3 Network support)",
-    "company": "Mastercard",
-    "location": "Kuala Lumpur, Malaysia",
-    "posted_date": "2026-08-26",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Kuala-Lumpur-Malaysia/Lead-Network-Engineer--Tier-3-Network-support-_R-273539",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-273539"
-  },
-  {
     "title": "Senior PMT",
     "company": "Mastercard",
     "location": "Pune, Maharashtra",
@@ -2723,6 +2733,16 @@
     "url": "https://www.adzuna.in/details/5841438895?utm_medium=api&utm_source=27480221",
     "description": "Our Purpose _Mastercard powers economies and empowers people in 200 countries and territories worldwide. Together with our customers, we're helping build a sustainable economy where everyone can prosper. We support a wide range of digital payments choices, making transactions secure, simple, smart and accessible. Our technology and innovation, partnerships and networks combine to deliver a unique set of products and services that help people, businesses and governments realize their greatest po\u2026",
     "source": "adzuna"
+  },
+  {
+    "title": "Analyst, Franchise Business Partner, Southeast Asia (East), Manila Philippines",
+    "company": "Mastercard",
+    "location": "Manila, Philippines",
+    "posted_date": "2026-08-26",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Manila-Philippines/Analyst--Franchise-Business-Partner--Southeast-Asia--East---Manila-Philippines_R-287491",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287491"
   },
   {
     "title": "Internship Program, Americas, 2027 \u2013 Mexico City, Mexico",
@@ -3085,26 +3105,6 @@
     "external_id": "R-286476"
   },
   {
-    "title": "Data Engineer II",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-08-13",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Data-Engineer-II_R-287043",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287043"
-  },
-  {
-    "title": "Analyst/Senior Staffing Analyst, Advisors Client Services",
-    "company": "Mastercard",
-    "location": "2 Locations",
-    "posted_date": "2026-08-13",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Kuala-Lumpur-Malaysia/Analyst-Senior-Staffing-Analyst--Advisors-Client-Services_R-281018",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-281018"
-  },
-  {
     "title": "Senior Analyst, Financial Planning & Analysis",
     "company": "Mastercard",
     "location": "Bogota, Colombia",
@@ -3203,15 +3203,5 @@
     "description": null,
     "source": "workday",
     "external_id": "R-282780-1"
-  },
-  {
-    "title": "Senior Analyst, Settlement Operations",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-08-19",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Analyst--Settlement-Operations_R-288376",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288376"
   }
 ]
