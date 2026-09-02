@@ -1210,16 +1210,6 @@
     "external_id": "JR-0000106123"
   },
   {
-    "title": "IT Asset Catalog Analyst",
-    "company": "Barclays",
-    "location": "Knutsford, Radbroke Hall",
-    "posted_date": "2026-09-02",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/IT-Asset-Catalog-Analyst_JR-0000110496",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000110496"
-  },
-  {
     "title": "Vulnerability Management Analyst- CIO- BPL",
     "company": "Barclays",
     "location": "Canary Wharf, 1 Churchill Place",
@@ -1450,6 +1440,16 @@
     "external_id": "JR-0000124027-1"
   },
   {
+    "title": "GTC Business Support Analyst",
+    "company": "Barclays",
+    "location": "Gurugram, DLF Downtown",
+    "posted_date": "2026-09-01",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/GTC-Business-Support-Analyst_JR-0000130531",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000130531"
+  },
+  {
     "title": "Business Analyst",
     "company": "Barclays",
     "location": "India",
@@ -1636,16 +1636,6 @@
     "external_id": "26987824-1"
   },
   {
-    "title": "Technology Lead Business Analyst - VP",
-    "company": "Citi",
-    "location": "London  United Kingdom",
-    "posted_date": "2026-09-02",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/London--United-Kingdom/Technology-Lead-Business-Analyst---VP_26990758",
-    "description": null,
-    "source": "workday",
-    "external_id": "26990758"
-  },
-  {
     "title": "Corporate Actions Business Analyst",
     "company": "Citi",
     "location": "Warsaw  Poland",
@@ -1824,6 +1814,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26986175"
+  },
+  {
+    "title": "Reengineering and Project Lead Analyst",
+    "company": "Citi",
+    "location": "Dublin  Ireland",
+    "posted_date": "2026-08-20",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Dublin--Ireland/Reengineering-and-Project-Lead-Analyst_26987022",
+    "description": null,
+    "source": "workday",
+    "external_id": "26987022"
   },
   {
     "title": "Banamex - IT Business Analyst Jr - C09",
@@ -2154,6 +2154,26 @@
     "description": null,
     "source": "workday",
     "external_id": "R0439835-1"
+  },
+  {
+    "title": "Senior Full Stack Software Engineer",
+    "company": "Mastercard",
+    "location": "O'Fallon, Missouri",
+    "posted_date": "2026-09-02",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Senior-Full-Stack-Software-Engineer_R-289068",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289068"
+  },
+  {
+    "title": "Senior Technical Program Manager",
+    "company": "Mastercard",
+    "location": "Toronto, Canada (Ethoca)",
+    "posted_date": "2026-09-02",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Toronto-Canada-Ethoca/Senior-Technical-Program-Manager_R-289290",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289290"
   },
   {
     "title": "Consultant, Advisors & Consulting Services, Strategy & Transformation",
@@ -2543,26 +2563,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-280383"
-  },
-  {
-    "title": "Director, Finance Business Partner",
-    "company": "Mastercard",
-    "location": "Purchase, New York",
-    "posted_date": "2026-09-01",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Purchase-New-York/Director--Finance-Business-Partner_R-288740",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288740"
-  },
-  {
-    "title": "Senior Specialist, Talent Acquisition (12 Month FTC)",
-    "company": "Mastercard",
-    "location": "2 Locations",
-    "posted_date": "2026-09-01",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/London-England-Angel-Lane/Senior-Specialist--Talent-Acquisition--12-Month-FTC-_R-286765",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286765"
   },
   {
     "title": "Director, Product Management",
