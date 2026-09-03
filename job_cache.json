@@ -490,6 +490,16 @@
     "external_id": "JR-0023245-1"
   },
   {
+    "title": "Full Stack Engineer",
+    "company": "Barclays",
+    "location": "Building 400-Whippany Campus, Jefferson Park",
+    "posted_date": "2026-09-03",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/Full-Stack-Engineer_JR-0000098570",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000098570"
+  },
+  {
     "title": "International Corporate Banking Analyst Graduate Program 2027 New York",
     "company": "Barclays",
     "location": "New York, 745 7th Avenue",
@@ -840,16 +850,6 @@
     "external_id": "JR-0000100689-1"
   },
   {
-    "title": "RAD Developer",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-02",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Python-Developer_JR-0000089168",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000089168"
-  },
-  {
     "title": "Salesforce Developer",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
@@ -1088,6 +1088,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000123033"
+  },
+  {
+    "title": "AVP - Transaction Banking Business Analyst",
+    "company": "Barclays",
+    "location": "New York, 745 7th Avenue",
+    "posted_date": "2026-09-03",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/AVP---Transaction-Banking-Business-Analyst_JR-0000128631",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000128631"
   },
   {
     "title": "Structured Derivatives Institutional Sales VP",
@@ -1678,14 +1688,14 @@
     "external_id": "26973296-1"
   },
   {
-    "title": "Lead IT Business Analyst",
+    "title": "Business Analytics Senior Lead Analyst",
     "company": "Citi",
-    "location": "Jacksonville Florida United States",
+    "location": "4 Locations",
     "posted_date": "2026-09-03",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Jacksonville-Florida-United-States/Lead-IT-Business-Analyst_26985716",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Jacksonville-Florida-United-States/Business-Analytics-Senior-Lead-Analyst_26991509",
     "description": null,
     "source": "workday",
-    "external_id": "26985716"
+    "external_id": "26991509"
   },
   {
     "title": "Operations Business Intelligence Lead -  BOGOTA",
@@ -1728,26 +1738,6 @@
     "external_id": "26986355-1"
   },
   {
-    "title": "Technology Business Analyst",
-    "company": "Citi",
-    "location": "Belfast  United Kingdom",
-    "posted_date": "2026-09-01",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Belfast--United-Kingdom/Technology-Business-Analyst_26955271",
-    "description": null,
-    "source": "workday",
-    "external_id": "26955271"
-  },
-  {
-    "title": "Business Analytics Analyst",
-    "company": "Citi",
-    "location": "Bangalore Karnataka India",
-    "posted_date": "2026-09-01",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Bangalore-Karnataka-India/Business-Analytics-Analyst_26988954",
-    "description": null,
-    "source": "workday",
-    "external_id": "26988954"
-  },
-  {
     "title": "HR Business Execution Lead, Senior Manager",
     "company": "Citi",
     "location": "Mississauga Ontario Canada",
@@ -1766,6 +1756,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26991792"
+  },
+  {
+    "title": "Business Analytics Analyst",
+    "company": "Citi",
+    "location": "Bangalore Karnataka India",
+    "posted_date": "2026-09-01",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Bangalore-Karnataka-India/Business-Analytics-Analyst_26988954",
+    "description": null,
+    "source": "workday",
+    "external_id": "26988954"
   },
   {
     "title": "Sr. Business Analyst- Business Execution-Investor Services",
@@ -2228,6 +2228,26 @@
     "external_id": "R0439835-1"
   },
   {
+    "title": "Lead Software Engineer",
+    "company": "Mastercard",
+    "location": "Vancouver, Canada",
+    "posted_date": "2026-09-03",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Vancouver-Canada/Lead-Software-Engineer_R-289269",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289269"
+  },
+  {
+    "title": "Vice President, Product Management, Stablecoins and Open Standard",
+    "company": "Mastercard",
+    "location": "New York City, New York",
+    "posted_date": "2026-09-03",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/New-York-City-New-York/Vice-President--Product-Management--Stablecoins-and-Open-Standard_R-289478",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289478"
+  },
+  {
     "title": "Product Specialist, Product Management, Global Consumer Credit Commercialization",
     "company": "Mastercard",
     "location": "Purchase, New York",
@@ -2606,26 +2626,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-289379-1"
-  },
-  {
-    "title": "Specialist, Product and Sales Analyst \u2013 Digital Product",
-    "company": "Mastercard",
-    "location": "St. Leonards, Australia",
-    "posted_date": "2026-09-03",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/St-Leonards-Australia/Specialist--Product-and-Sales-Analyst---Digital-Product_R-289210",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289210"
-  },
-  {
-    "title": "The Manager, Specialist Sales- Digital Payments, East Arabia",
-    "company": "Mastercard",
-    "location": "Dubai, United Arab Emirates",
-    "posted_date": "2026-09-03",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dubai-United-Arab-Emirates/The-Manager--Specialist-Sales--Digital-Payments--East-Arabia_R-290010",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-290010"
   },
   {
     "title": "Principal Product Management Technical (PMT)",
@@ -3060,6 +3060,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-288920"
+  },
+  {
+    "title": "Specialist, Product and Sales Analyst \u2013 Digital Product",
+    "company": "Mastercard",
+    "location": "St. Leonards, Australia",
+    "posted_date": "2026-09-03",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/St-Leonards-Australia/Specialist--Product-and-Sales-Analyst---Digital-Product_R-289210",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289210"
   },
   {
     "title": "Business Analyst II",
