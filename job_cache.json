@@ -1399,16 +1399,6 @@
     "external_id": "JR-0000093411"
   },
   {
-    "title": "Analyst - Equity Financing Quant Trader",
-    "company": "Barclays",
-    "location": "New York, 745 7th Avenue",
-    "posted_date": "2026-09-03",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Analyst---Equity-Financing-Quant-Trader_JR-0000129824-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129824-1"
-  },
-  {
     "title": "Equity Research Biotech, Financial Associate",
     "company": "Barclays",
     "location": "New York, 745 7th Avenue",
@@ -1497,6 +1487,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000131115"
+  },
+  {
+    "title": "Data Analyst",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-09-03",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Data-Analyst_JR-0000088273-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000088273-1"
   },
   {
     "title": "Technical Business Analyst",
@@ -2236,14 +2236,34 @@
     "external_id": "R0440703"
   },
   {
-    "title": "Consultant, Advisors & Consulting Services-8",
+    "title": "Lead Site Reliability Engineer",
     "company": "Mastercard",
-    "location": "Sao Paulo, Brazil",
+    "location": "Mexico City, Mexico",
     "posted_date": "2026-09-04",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Sao-Paulo-Brazil/Consultant--Advisors---Consulting-Services-8_R-268516",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Mexico-City-Mexico/Lead-Site-Reliability-Engineer_R-279410-1",
     "description": null,
     "source": "workday",
-    "external_id": "R-268516"
+    "external_id": "R-279410-1"
+  },
+  {
+    "title": "Specialist, Transaction Services",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia (Bldg 978)",
+    "posted_date": "2026-09-04",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia-Bldg-978/Specialist--Transaction-Services_R-289146",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289146"
+  },
+  {
+    "title": "Manager, Finance Business Partner",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia",
+    "posted_date": "2026-09-04",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Manager--Finance-Business-Partner_R-289263",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289263"
   },
   {
     "title": "Lead Software Integration Engineer (Release Management) \u2013 HR Platforms",
@@ -2394,16 +2414,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-289318-1"
-  },
-  {
-    "title": "Innovation & Ecosystem Program Manager (German-Speaking)",
-    "company": "Mastercard",
-    "location": "Munich, Germany",
-    "posted_date": "2026-09-04",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Munich-Germany/Innovation---Ecosystem-Program-Manager--German-Speaking-_R-282783",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-282783"
   },
   {
     "title": "Lead Site Reliability Engineer",
@@ -2635,16 +2645,6 @@
     "external_id": "R-288372"
   },
   {
-    "title": "Lead Data Engineer",
-    "company": "Mastercard",
-    "location": "Navi Mumbai, India (Finicity)",
-    "posted_date": "2026-09-03",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Navi-Mumbai-India-Finicity/Lead-Data-Engineer_R-288769",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288769"
-  },
-  {
     "title": "Principal Product Management Technical (PMT)",
     "company": "Mastercard",
     "location": "Pune, Maharashtra",
@@ -2697,6 +2697,26 @@
     "url": "https://www.adzuna.in/details/5852143552?utm_medium=api&utm_source=27480221",
     "description": "Our Purpose _Mastercard powers economies and empowers people in 200 countries and territories worldwide. Together with our customers, we're helping build a sustainable economy where everyone can prosper. We support a wide range of digital payments choices, making transactions secure, simple, smart and accessible. Our technology and innovation, partnerships and networks combine to deliver a unique set of products and services that help people, businesses and governments realize their greatest po\u2026",
     "source": "adzuna"
+  },
+  {
+    "title": "Sales Analyst Intern, Summer 2027 - New York, US",
+    "company": "Mastercard",
+    "location": "2 Locations",
+    "posted_date": "2026-09-04",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/New-York-City-New-York/Sales-Analyst-Intern--Summer-2027---New-York--US_R-287605-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287605-1"
+  },
+  {
+    "title": "Senior Business Analyst",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia",
+    "posted_date": "2026-09-04",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Business-Analyst_R-289429",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289429"
   },
   {
     "title": "Principal Software Engineer",
@@ -3057,16 +3077,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-278875"
-  },
-  {
-    "title": "Senior Analyst, Cybersecurity Product Specialists",
-    "company": "Mastercard",
-    "location": "Bogota, Colombia",
-    "posted_date": "2026-08-27",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Analyst--Cybersecurity-Product-Specialists_R-286734",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286734"
   },
   {
     "title": "Executive Assistant",
