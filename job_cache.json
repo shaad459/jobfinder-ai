@@ -330,16 +330,6 @@
     "external_id": "JR-0022224"
   },
   {
-    "title": "Service Desk Analyst",
-    "company": "Apex Group",
-    "location": "Pune - East",
-    "posted_date": "2026-09-09",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---East/Service-Desk-Analyst_JR-0025725",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0025725"
-  },
-  {
     "title": "Governance & Oversight Associate",
     "company": "Apex Group",
     "location": "Valencia",
@@ -470,6 +460,226 @@
     "external_id": "JR-0024360"
   },
   {
+    "title": "2027 Technology Developer Graduate Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Technology-Developer-Graduate-Programme-Northampton_JR-0000129374",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129374"
+  },
+  {
+    "title": "2027 Business Banking Degree Apprenticeship Programme Manchester",
+    "company": "Barclays",
+    "location": "Manchester, 4 Piccadilly Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/XMLNAME-2027-Business-Banking-Degree-Apprenticeship-Programme-Manchester_JR-0000129406",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129406"
+  },
+  {
+    "title": "2027 Risk Analyst Higher Apprenticeship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Risk-Analyst-Higher-Apprenticeship-Programme-London_JR-0000129133",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129133"
+  },
+  {
+    "title": "2027 Customer Care Apprenticeship Programme Manchester",
+    "company": "Barclays",
+    "location": "Manchester, 4 Piccadilly Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/XMLNAME-2027-Customer-Care-Apprenticeship-Programme-Manchester_JR-0000129129",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129129"
+  },
+  {
+    "title": "2027 Technology Developer Degree Apprenticeship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Developer-Degree-Apprenticeship-Programme-Knutsford_JR-0000129443",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129443"
+  },
+  {
+    "title": "2027 Technology Developer Summer Internship Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Technology-Developer-Summer-Internship-Programme-Northampton_JR-0000129379",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129379"
+  },
+  {
+    "title": "2027 Technology Analyst Degree Apprenticeship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Analyst-Degree-Apprenticeship-Programme-Knutsford_JR-0000129131",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129131"
+  },
+  {
+    "title": "2027 Technology Developer Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Technology-Developer-Summer-Internship-Programme-London_JR-0000129397",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129397"
+  },
+  {
+    "title": "2027 Finance Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Finance-Analyst-Summer-Internship-Programme-London_JR-0000129135",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129135"
+  },
+  {
+    "title": "2027 Technology Developer Graduate Apprenticeship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Technology-Developer-Graduate-Apprenticeship-Programme-Glasgow_JR-0000129447",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129447"
+  },
+  {
+    "title": "2027 Risk Analyst Higher Apprenticeship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Risk-Analyst-Higher-Apprenticeship-Programme-Glasgow_JR-0000129138",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129138"
+  },
+  {
+    "title": "2027 Technology Developer Degree Apprenticeship Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Technology-Developer-Degree-Apprenticeship-Programme-Northampton_JR-0000129431",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129431"
+  },
+  {
+    "title": "2027 Business Banking Degree Apprenticeship Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Business-Banking-Degree-Apprenticeship-Programme-Northampton_JR-0000129419",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129419"
+  },
+  {
+    "title": "2027 Technology Developer Graduate Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Developer-Graduate-Programme-Knutsford_JR-0000129319",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129319"
+  },
+  {
+    "title": "2027 Compliance Analyst Higher Apprenticeship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Compliance-Analyst-Higher-Apprenticeship-Programme-Glasgow_JR-0000129143",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129143"
+  },
+  {
+    "title": "2027 Technology Developer Graduate Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Technology-Developer-Graduate-Programme-Glasgow_JR-0000129313",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129313"
+  },
+  {
+    "title": "2027 Technology Developer Summer Internship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Developer-Summer-Internship-Programme-Knutsford_JR-0000129381",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129381"
+  },
+  {
+    "title": "2027 Business Banking Apprenticeship Programme Manchester",
+    "company": "Barclays",
+    "location": "Manchester, 4 Piccadilly Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/XMLNAME-2027-Business-Banking-Apprenticeship-Programme-Manchester_JR-0000129619",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129619"
+  },
+  {
+    "title": "2027 Technology Developer Summer Internship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Technology-Developer-Summer-Internship-Programme-Glasgow_JR-0000129387",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129387"
+  },
+  {
+    "title": "2027 Business Banking Degree Apprenticeship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Business-Banking-Degree-Apprenticeship-Programme-London_JR-0000129411",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129411"
+  },
+  {
+    "title": "2027 Technology Analyst Business Management Graduate Apprenticeship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Technology-Analyst-Business-Management-Graduate-Apprenticeship-Programme-Glasgow_JR-0000131379",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000131379"
+  },
+  {
+    "title": "AI Architecture Lead",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/AI-Architecture-Lead_JR-0000131968",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000131968"
+  },
+  {
     "title": "Controls Assurance - AVP",
     "company": "Barclays",
     "location": "Gurugram, DLF Downtown",
@@ -508,16 +718,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000117666"
-  },
-  {
-    "title": "Network Engineer - AVP",
-    "company": "Barclays",
-    "location": "Building 400-Whippany Campus, Jefferson Park",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/Network-Engineer---AVP_JR-0000111151-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000111151-1"
   },
   {
     "title": "Full Stack Developer",
@@ -720,6 +920,16 @@
     "external_id": "JR-0000129990"
   },
   {
+    "title": "2027 Operations Analyst Degree Apprenticeship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Operations-Analyst-Degree-Apprenticeship-Programme-London_JR-0000129617",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129617"
+  },
+  {
     "title": "Data Privacy Manager",
     "company": "Barclays",
     "location": "2 Locations",
@@ -850,226 +1060,6 @@
     "external_id": "JR-0000129355"
   },
   {
-    "title": "PBWM Business Support Analyst -High Risk Reviewer",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/PBWM-Business-Support-Analyst--High-Risk-Reviewer_JR-0000131336",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000131336"
-  },
-  {
-    "title": "Commercial & Pricing Manager",
-    "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Commercial---Pricing-Manager_JR-0000129837",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129837"
-  },
-  {
-    "title": "Senior Engineer",
-    "company": "Barclays",
-    "location": "Noida, Candor TechSpace",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Noida-Candor-TechSpace/Senior-Engineer_JR-0000114774",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000114774"
-  },
-  {
-    "title": "Product Engineer - M365 Unified Collaboration & Gen AI",
-    "company": "Barclays",
-    "location": "Knutsford, Radbroke Hall",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Product-Engineer---M365-Unified-Collaboration---Gen-AI_JR-0000093099-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000093099-1"
-  },
-  {
-    "title": "Java Full stack developer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Java-Full-stack-developer_JR-0000106676",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000106676"
-  },
-  {
-    "title": "AVP Software Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/AVP-Software-Engineer_JR-0000112002",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000112002"
-  },
-  {
-    "title": "Private Banking Executive",
-    "company": "Barclays",
-    "location": "Leeds, Park Row",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Leeds-Park-Row/Private-Banking-Executive_JR-0000129416",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129416"
-  },
-  {
-    "title": "Full Stack Developer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Full-Stack-Developer_JR-0000116268-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000116268-1"
-  },
-  {
-    "title": "Colleague Experience Analytics & Adoption Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Colleague-Experience-Analytics---Adoption-Engineer_JR-0000123921",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000123921"
-  },
-  {
-    "title": "Senior Fullstack Developer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Senior-Fullstack-Developer_JR-0000098085-2",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000098085-2"
-  },
-  {
-    "title": "Lead Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Lead-Engineer_JR-0000097297",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000097297"
-  },
-  {
-    "title": "Business Analyst",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Business-Analyst_JR-0000087352-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000087352-1"
-  },
-  {
-    "title": "Derivative Confirmations Manager (Operations)",
-    "company": "Barclays",
-    "location": "Glasgow Campus",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Derivative-Confirmations-Manager--Operations-_JR-0000100626",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000100626"
-  },
-  {
-    "title": "International Corporate Banking Relationship Manager",
-    "company": "Barclays",
-    "location": "Paris, 52 avenue Hoche",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Paris-52-avenue-Hoche/International-Corporate-Banking-Relationship-Manager_JR-0000122371",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000122371"
-  },
-  {
-    "title": "Prime Brokerage/Global Netting Manager - Collateral Management",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Prime-Brokerage-Global-Netting-Manager---Collateral-Management_JR-0000080300-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000080300-1"
-  },
-  {
-    "title": "Product & Proposition Manager",
-    "company": "Barclays",
-    "location": "4 Locations",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Product---Proposition-Manager_JR-0000129907-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129907-1"
-  },
-  {
-    "title": "Product & Proposition Manager",
-    "company": "Barclays",
-    "location": "4 Locations",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Product---Proposition-Manager_JR-0000129911-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129911-1"
-  },
-  {
-    "title": "Senior Product & Proposition Manager",
-    "company": "Barclays",
-    "location": "4 Locations",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Senior-Product---Proposition-Manager_JR-0000128032",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000128032"
-  },
-  {
-    "title": "Front Office Tribe Lead",
-    "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Front-Office-Tribe-Lead_JR-0000122554",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000122554"
-  },
-  {
-    "title": "Software Engineer",
-    "company": "Barclays",
-    "location": "Northampton, Barclays Campus, Pavilion Drive",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/Software-Engineer_JR-0000119491-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000119491-1"
-  },
-  {
-    "title": "Software Engineer",
-    "company": "Barclays",
-    "location": "Northampton, Barclays Campus, Pavilion Drive",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/Software-Engineer_JR-0000121461-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000121461-1"
-  },
-  {
-    "title": "Wealth Manager - Wealth Management",
-    "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-Spinningfields/Wealth-Manager---Wealth-Management_JR-0000099160",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000099160"
-  },
-  {
     "title": "Product Manager",
     "company": "Barclays",
     "location": "India",
@@ -1077,6 +1067,356 @@
     "url": "https://www.adzuna.in/details/5873181151?utm_medium=api&utm_source=27480221",
     "description": "Job Description Purpose of the role Product Managers are responsible for the leading the strategic focus of the product(s), defining the product vision, market strategy, and competitive analysis. They think about the product's future and how it will evolve over time. They work with various teams, including marketing, engineering, operations, and sales, to ensure everyone is aligned on the product strategy. They use data and market research to inform their decisions and prioritize product featur\u2026",
     "source": "adzuna"
+  },
+  {
+    "title": "2027 Customer and Digital - Data and Analytics Summer Internship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Customer-and-Digital---Data-and-Analytics-Summer-Internship-Programme-Glasgow_JR-0000129278",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129278"
+  },
+  {
+    "title": "2027 Technology Cyber and Security Summer Internship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Cyber-and-Security-Summer-Internship-Programme-Knutsford_JR-0000129173",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129173"
+  },
+  {
+    "title": "2027 Human Resources Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Human-Resources-Analyst-Summer-Internship-Programme-London_JR-0000129142",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129142"
+  },
+  {
+    "title": "2027 Risk Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Risk-Analyst-Summer-Internship-Programme-London_JR-0000129108",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129108"
+  },
+  {
+    "title": "2027 Human Resources Analyst Graduate Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Human-Resources-Analyst-Graduate-Programme-London_JR-0000129206",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129206"
+  },
+  {
+    "title": "2027 Retail, Business and Customer Banking Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Retail--Business-and-Customer-Banking-Summer-Internship-Programme-London_JR-0000129194",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129194"
+  },
+  {
+    "title": "2027 Compliance Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Compliance-Analyst-Summer-Internship-Programme-London_JR-0000128942",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000128942"
+  },
+  {
+    "title": "2027 Retail, Business and Customer Banking Graduate Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Retail--Business-and-Customer-Banking-Graduate-Programme-Northampton_JR-0000129087",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129087"
+  },
+  {
+    "title": "2027 Internal Audit Analyst Summer Internship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Internal-Audit-Analyst-Summer-Internship-Programme-Knutsford_JR-0000129570",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129570"
+  },
+  {
+    "title": "2027 Retail, Business and Customer Banking Summer Internship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Retail--Business-and-Customer-Banking-Summer-Internship-Programme-Knutsford_JR-0000129182",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129182"
+  },
+  {
+    "title": "2027 Compliance Analyst Summer Internship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Compliance-Analyst-Summer-Internship-Programme-Glasgow_JR-0000129163",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129163"
+  },
+  {
+    "title": "2027 Operations Analyst Graduate Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Operations-Analyst-Graduate-Programme-London_JR-0000129100",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129100"
+  },
+  {
+    "title": "2027 Retail, Business and Customer Banking Summer Internship Programme Manchester",
+    "company": "Barclays",
+    "location": "Manchester, 4 Piccadilly Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/XMLNAME-2027-Retail--Business-and-Customer-Banking-Summer-Internship-Programme-Manchester_JR-0000129188",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129188"
+  },
+  {
+    "title": "2027 Technology Analyst Graduate Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Analyst-Graduate-Programme-Knutsford_JR-0000129359",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129359"
+  },
+  {
+    "title": "Financial Crime Training Specialist\u200c",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Transaction-Monitoring-Training-and-LPT-Analyst_JR-0000118994",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000118994"
+  },
+  {
+    "title": "2027 Human Resources Analyst Summer Internship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Human-Resources-Analyst-Summer-Internship-Programme-Glasgow_JR-0000129140",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129140"
+  },
+  {
+    "title": "2027 Human Resources Industrial Placement Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Human-Resources-Industrial-Placement-Programme-London_JR-0000129556",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129556"
+  },
+  {
+    "title": "2027 Public Policy and Corporate Responsibility Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Public-Policy-and-Corporate-Responsibility-Analyst-Summer-Internship-Programme-London_JR-0000129126",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129126"
+  },
+  {
+    "title": "2027 Risk Analyst Graduate Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Risk-Analyst-Graduate-Programme-London_JR-0000129101",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129101"
+  },
+  {
+    "title": "2027 Technology Analyst Summer Internship Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Technology-Analyst-Summer-Internship-Programme-Northampton_JR-0000129498",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129498"
+  },
+  {
+    "title": "2027 Marketing Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Marketing-Analyst-Summer-Internship-Programme-London_JR-0000129579",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129579"
+  },
+  {
+    "title": "2027 Technology Analyst Graduate Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Technology-Analyst-Graduate-Programme-Northampton_JR-0000129190",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129190"
+  },
+  {
+    "title": "2027 Technology Analyst Summer Internship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Technology-Analyst-Summer-Internship-Programme-Glasgow_JR-0000129503",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129503"
+  },
+  {
+    "title": "2027 Technology Analyst Graduate Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Technology-Analyst-Graduate-Programme-Glasgow_JR-0000129339",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129339"
+  },
+  {
+    "title": "2027 Risk Analyst Summer Internship Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Risk-Analyst-Summer-Internship-Programme-Glasgow_JR-0000129109",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129109"
+  },
+  {
+    "title": "2027 Risk Analyst Graduate Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Risk-Analyst-Graduate-Programme-Glasgow_JR-0000129169",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129169"
+  },
+  {
+    "title": "2027 Human Resources Analyst Graduate Programme Glasgow",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Human-Resources-Analyst-Graduate-Programme-Glasgow_JR-0000129195",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129195"
+  },
+  {
+    "title": "2027 Operations Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Operations-Analyst-Summer-Internship-Programme-London_JR-0000129118",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129118"
+  },
+  {
+    "title": "2027 Technology Analyst Summer Internship Programme Knutsford",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/XMLNAME-2027-Technology-Analyst-Summer-Internship-Programme-Knutsford_JR-0000129510",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129510"
+  },
+  {
+    "title": "2027 Customer and Digital - Data and Analytics Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Customer-and-Digital---Data-and-Analytics-Summer-Internship-Programme-London_JR-0000129280",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129280"
+  },
+  {
+    "title": "2027 Internal Audit Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Internal-Audit-Analyst-Summer-Internship-Programme-London_JR-0000129548",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129548"
+  },
+  {
+    "title": "2027 Technology Analyst Summer Internship Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Technology-Analyst-Summer-Internship-Programme-London_JR-0000129434",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129434"
+  },
+  {
+    "title": "2027 Marketing Analyst Graduate Programme London",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Marketing-Analyst-Graduate-Programme-London_JR-0000129077",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129077"
+  },
+  {
+    "title": "2027 Retail, Business and Customer Banking Summer Internship Programme Northampton",
+    "company": "Barclays",
+    "location": "Northampton, Barclays Campus, Pavilion Drive",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/XMLNAME-2027-Retail--Business-and-Customer-Banking-Summer-Internship-Programme-Northampton_JR-0000129105",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129105"
+  },
+  {
+    "title": "Customer Service Advisor",
+    "company": "Barclays",
+    "location": "Sunderland, Wear House, Admiral Way",
+    "posted_date": "2026-09-09",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Sunderland-Wear-House-Admiral-Way/Customer-Service-Advisor_JR-0000105231-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000105231-1"
   },
   {
     "title": "Analyst",
@@ -1117,386 +1457,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000088748"
-  },
-  {
-    "title": "Test Engineer",
-    "company": "Barclays",
-    "location": "Glasgow Campus",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Test-Engineer_JR-0000110935",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000110935"
-  },
-  {
-    "title": "Sales, Trading and Structuring Off Cycle Internship Programme 2027 London",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Sales--Trading-and-Structuring-Off-Cycle-Internship-Programme-2027-London_JR-0000124716",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000124716"
-  },
-  {
-    "title": "Application Support - Service Engineer",
-    "company": "Barclays",
-    "location": "Knutsford, Radbroke Hall",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Application-Support---Service-Engineer_JR-0000118756-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000118756-1"
-  },
-  {
-    "title": "Analyst - Financial Control",
-    "company": "Barclays",
-    "location": "Chennai, DLF IT Park",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Chennai-DLF-IT-Park/Analyst---Financial-Control_JR-0000129286",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129286"
-  },
-  {
-    "title": "Software Engineer",
-    "company": "Barclays",
-    "location": "Glasgow Campus",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Software-Engineer_JR-0000096427-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000096427-1"
-  },
-  {
-    "title": "FCS Quality Analyst",
-    "company": "Barclays",
-    "location": "Noida, Candor TechSpace",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Noida-Candor-TechSpace/FCS-Quality-Analyst_JR-0000120715-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000120715-1"
-  },
-  {
-    "title": "FCS People Leader",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/FCS-People-Leader_JR-0000124492-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000124492-1"
-  },
-  {
-    "title": "IFC Data - Data Architect",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/IFC-Data---Data-Architect_JR-0000105534",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000105534"
-  },
-  {
-    "title": "Product control- Analyst",
-    "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Chennai-DLF-IT-Park/Product-control--Analyst_JR-0000075602",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000075602"
-  },
-  {
-    "title": "Analyst - Financial Controller",
-    "company": "Barclays",
-    "location": "Chennai, DLF IT Park",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Chennai-DLF-IT-Park/Analyst---Financial-Controller_JR-0000129282-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129282-1"
-  },
-  {
-    "title": "Application Security Specialist",
-    "company": "Barclays",
-    "location": "Building 400-Whippany Campus, Jefferson Park",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/Application-Security-Specialist_JR-0000095849",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000095849"
-  },
-  {
-    "title": "Equity Research Aerospace & Defense/Defense Tech, AVP",
-    "company": "Barclays",
-    "location": "New York, 745 7th Avenue",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Equity-Research-Aerospace---Defense-Defense-Tech--AVP_JR-0000101827-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000101827-1"
-  },
-  {
-    "title": "Equity Research Biopharmaceuticals VP",
-    "company": "Barclays",
-    "location": "New York, 745 7th Avenue",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Equity-Research-Biopharmaceuticals-VP_JR-0000130486",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000130486"
-  },
-  {
-    "title": "Production Support Engineer",
-    "company": "Barclays",
-    "location": "Building 400-Whippany Campus, Jefferson Park",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/Production-Support-Engineer_JR-0000120502-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000120502-1"
-  },
-  {
-    "title": "Premium Support Engineer",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Premium-Support-Engineer_JR-0000110331-2",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000110331-2"
-  },
-  {
-    "title": "Lead Pricing Data Analyst - BPL",
-    "company": "Barclays",
-    "location": "Northampton, Barclays Campus, Pavilion Drive",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/Lead-Pricing-Data-Analyst---BPL_JR-0000120304",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000120304"
-  },
-  {
-    "title": "Data & Records Business Partner",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Data---Records-Business-Partner_JR-0000123332-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000123332-1"
-  },
-  {
-    "title": "PAM Non-Personal Account (NPA) Vaulting Analyst",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/PAM-Non-Personal-Account--NPA--Vaulting-Analyst_JR-0000114538-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000114538-1"
-  },
-  {
-    "title": "Acquiring Change & Control SME",
-    "company": "Barclays",
-    "location": "Northampton, Barclays Campus, Pavilion Drive",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Northampton-Barclays-Campus-Pavilion-Drive/Acquiring-Change---Control-SME_JR-0000117969",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000117969"
-  },
-  {
-    "title": "Application Support Analyst",
-    "company": "Barclays",
-    "location": "Knutsford, Radbroke Hall",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Application-Support-Analyst_JR-0000103971",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000103971"
-  },
-  {
-    "title": "Transaction Monitoring (TM) Corporate Training Analyst",
-    "company": "Barclays",
-    "location": "Glasgow, Clyde Place",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Clyde-Place/Transaction-Monitoring--TM--Training-Analyst_JR-0000119004-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000119004-1"
-  },
-  {
-    "title": "Transaction Monitoring Analyst",
-    "company": "Barclays",
-    "location": "Noida, Candor TechSpace",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Noida-Candor-TechSpace/Transaction-Monitoring-Analyst_JR-0000131602",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000131602"
-  },
-  {
-    "title": "Analyst - Wholesale Credit Sanctioning - LevFin",
-    "company": "Barclays",
-    "location": "Mumbai, Nirlon Knowledge Park (BX) 9th & 11-12 floor",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Nirlon-Knowledge-Park-BX-9th--11-12-floor/Analyst---Wholesale-Credit-Sanctioning---LevFin_JR-0000096239-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000096239-1"
-  },
-  {
-    "title": "Specialist Customer Care Advisor - Telephony",
-    "company": "Barclays",
-    "location": "Manchester, 4 Piccadilly Place",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/Specialist-Customer-Care_JR-0000103940",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000103940"
-  },
-  {
-    "title": "Marketing & Event Coordinator",
-    "company": "Barclays",
-    "location": "Geneva, 18-20 Chemin de Grange-Canal",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Geneva-18-20-Chemin-de-Grange-Canal/Marketing---Event-Coordinator_JR-0000126281",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000126281"
-  },
-  {
-    "title": "Personal Banker",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/Personal-Banker_JR-0000094013",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000094013"
-  },
-  {
-    "title": "Senior Application Support Analyst",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Senior-Application-Support-Analyst_JR-0000104004",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000104004"
-  },
-  {
-    "title": "FCS Training Analyst",
-    "company": "Barclays",
-    "location": "Noida, Candor TechSpace",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Noida-Candor-TechSpace/FCS-Training-Analyst_JR-0000123372-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000123372-1"
-  },
-  {
-    "title": "Large Holdings Business Analyst",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Large-Holdings-Business-Analyst_JR-0000077899",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000077899"
-  },
-  {
-    "title": "AWS Data Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Data-Engineer_JR-0000089960",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000089960"
-  },
-  {
-    "title": "Data Management Senior analyst",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Data-Management-Senior-analyst_JR-0000123313-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000123313-1"
-  },
-  {
-    "title": "Automation Tester",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Automation-Tester_JR-0000115941-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000115941-1"
-  },
-  {
-    "title": "Senior Analyst",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/Senior-Analyst_JR-0000124283-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000124283-1"
-  },
-  {
-    "title": "Automation Tester",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-08",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Automation-Tester_JR-0000115942",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000115942"
-  },
-  {
-    "title": "Geopolitical Intelligence",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Geopolitical-Intelligence_JR-0000121984-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000121984-1"
-  },
-  {
-    "title": "Private Banking Executive",
-    "company": "Barclays",
-    "location": "The Gate Village, Dubai",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/The-Gate-Village-Dubai/Private-Banking-Executive_JR-0000120676",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000120676"
-  },
-  {
-    "title": "Director, UK Head of Legal eDiscovery & Data Operations Counsel",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Director--UK-Head-of-eDiscovery---Data-Operations-Counsel_JR-0000113263-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000113263-1"
-  },
-  {
-    "title": "AVP - Data Scientist & AI Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-07",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/AVP---Data-Scientist---AI-Engineer_JR-0000111377-4",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000111377-4"
   },
   {
     "title": "Lead Business Analyst",
@@ -1557,7 +1517,7 @@
     "company": "Capco",
     "location": "India",
     "posted_date": "2026-09-09",
-    "url": "https://www.adzuna.in/land/ad/5877184304?se=XjPVE2is8RGnuL6Fc8YS3w&utm_medium=api&utm_source=27480221&v=EE0A48961EED22BCE829A1871761E754D9BB0082",
+    "url": "https://www.adzuna.in/land/ad/5877184304?se=okhv8I2s8RGnuL6Fc8YS3w&utm_medium=api&utm_source=27480221&v=EE0A48961EED22BCE829A1871761E754D9BB0082",
     "description": "This job is with Capco, an inclusive employer and a member of myGwork \u2013 the largest global platform for the LGBTQ business community. Please do not contact the recruiter directly. Job Title: Business Analyst - Digital Transformations About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence acros\u2026",
     "source": "adzuna"
   },
@@ -1566,8 +1526,17 @@
     "company": "Capco",
     "location": "India",
     "posted_date": "2026-09-09",
-    "url": "https://www.adzuna.in/land/ad/5875904792?se=XjPVE2is8RGnuL6Fc8YS3w&utm_medium=api&utm_source=27480221&v=AA54ECA67C7AAA1CC74927E7F6019D189AE618F2",
+    "url": "https://www.adzuna.in/land/ad/5875904792?se=okhv8I2s8RGnuL6Fc8YS3w&utm_medium=api&utm_source=27480221&v=AA54ECA67C7AAA1CC74927E7F6019D189AE618F2",
     "description": "This job is with Capco, an inclusive employer and a member of myGwork \u2013 the largest global platform for the LGBTQ business community. Please do not contact the recruiter directly. Job Title: Business Analyst - Asset Management About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence across 32 ci\u2026",
+    "source": "adzuna"
+  },
+  {
+    "title": "Business Architect - Asset management",
+    "company": "Capco",
+    "location": "India",
+    "posted_date": "2026-09-09",
+    "url": "https://www.adzuna.in/details/5877295069?utm_medium=api&utm_source=27480221",
+    "description": "Job Title: Business Analyst - Asset Management About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence across 32 cities across globe, we support 100 clients across banking, financial and Energy sectors. We are recognized for our deep transformation execution and delivery. WHY JOIN CAPCO? You wi\u2026",
     "source": "adzuna"
   },
   {
@@ -1580,6 +1549,16 @@
     "source": "adzuna"
   },
   {
+    "title": "Product Manager - Custody Services - AVP",
+    "company": "Citi",
+    "location": "Lima Lima Peru",
+    "posted_date": "2026-09-09",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Lima-Lima-Peru/Product-Manager---Custody-Services---AVP_26990533-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "26990533-1"
+  },
+  {
     "title": "Product Management Lead Analyst, Vice President",
     "company": "Citi",
     "location": "Chennai Tamil Nadu India",
@@ -1588,6 +1567,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26991921"
+  },
+  {
+    "title": "Senior Digital Onboarding Platform Product Manager",
+    "company": "Citi",
+    "location": "New York New York United States",
+    "posted_date": "2026-09-09",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/New-York-New-York-United-States/Senior-Digital-Onboarding-Platform-Product-Manager_26992015",
+    "description": null,
+    "source": "workday",
+    "external_id": "26992015"
   },
   {
     "title": "Senior Vice President, Digital Product Manager",
@@ -1729,6 +1718,16 @@
     "external_id": "26989014"
   },
   {
+    "title": "Technology Lead Business Analyst",
+    "company": "Citi",
+    "location": "Mississauga Ontario Canada",
+    "posted_date": "2026-09-09",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Mississauga-Ontario-Canada/Technology-Lead-Business-Analyst_26993526",
+    "description": null,
+    "source": "workday",
+    "external_id": "26993526"
+  },
+  {
     "title": "Lead IT Business Analyst",
     "company": "Citi",
     "location": "Jacksonville Florida United States",
@@ -1737,6 +1736,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26985716"
+  },
+  {
+    "title": "Applied AI Product Owner / Lead Business Analyst - Vice President",
+    "company": "Citi",
+    "location": "Irving Texas United States",
+    "posted_date": "2026-09-09",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Irving-Texas-United-States/Applied-AI-Product-Owner---Lead-Business-Analyst---Vice-President_26985369",
+    "description": null,
+    "source": "workday",
+    "external_id": "26985369"
   },
   {
     "title": "Business Senior Technical Lead Analyst",
@@ -2059,16 +2068,6 @@
     "external_id": "R0441223"
   },
   {
-    "title": "Lead Business Functional Analyst, VP",
-    "company": "Deutsche Bank",
-    "location": "Pune - Margarpatta",
-    "posted_date": "2026-09-09",
-    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Pune---Margarpatta/Lead-Business-Functional-Analyst--AVP_R0427248",
-    "description": null,
-    "source": "workday",
-    "external_id": "R0427248"
-  },
-  {
     "title": "Business Finance Senior Analyst",
     "company": "Deutsche Bank",
     "location": "Mumbai",
@@ -2219,6 +2218,16 @@
     "external_id": "R0443337-1"
   },
   {
+    "title": "Know Your Client (KYC) Analyst, NCT",
+    "company": "Deutsche Bank",
+    "location": "Pune - Business Bay",
+    "posted_date": "2026-09-07",
+    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Pune---Business-Bay/Know-Your-Client--KYC--Analyst--NCT_R0441340-2",
+    "description": null,
+    "source": "workday",
+    "external_id": "R0441340-2"
+  },
+  {
     "title": "Foreign Exchange (FX) Business Analytics and Technology Lead",
     "company": "Deutsche Bank",
     "location": "London, 21 Moorfields",
@@ -2337,6 +2346,46 @@
     "description": null,
     "source": "workday",
     "external_id": "R0442459-1"
+  },
+  {
+    "title": "Lead Software Engineer(DevOps)",
+    "company": "Mastercard",
+    "location": "Vancouver, Canada",
+    "posted_date": "2026-09-09",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Vancouver-Canada/Lead-Software-Engineer_R-289269",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289269"
+  },
+  {
+    "title": "Director, Software Engineering",
+    "company": "Mastercard",
+    "location": "Pune, India",
+    "posted_date": "2026-09-09",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Director--Software-Engineering_R-289542",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289542"
+  },
+  {
+    "title": "Manager, Customer Success",
+    "company": "Mastercard",
+    "location": "Salt Lake City, Utah (Holladay)",
+    "posted_date": "2026-09-09",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Salt-Lake-City-Utah-Holladay/Manager--Customer-Success_R-279461",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-279461"
+  },
+  {
+    "title": "Manager, Business Analysis",
+    "company": "Mastercard",
+    "location": "O'Fallon, Missouri",
+    "posted_date": "2026-09-09",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Manager--Business-Analysis_R-290261-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-290261-1"
   },
   {
     "title": "Senior Technical Program Manager",
@@ -2659,16 +2708,6 @@
     "external_id": "R-286281-1"
   },
   {
-    "title": "Manager, Account Management",
-    "company": "Mastercard",
-    "location": "Karachi, Pakistan",
-    "posted_date": "2026-09-08",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Karachi-Pakistan/Manager--Account-Management_R-286623-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286623-1"
-  },
-  {
     "title": "Cyber Risk Quantification Product Manager",
     "company": "Mastercard",
     "location": "3 Locations",
@@ -2707,36 +2746,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-280794-1"
-  },
-  {
-    "title": "Senior Analyst, Financial Planning & Analysis",
-    "company": "Mastercard",
-    "location": "Gurgaon, India",
-    "posted_date": "2026-09-08",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Gurgaon-India/Senior-Analyst--Financial-Planning---Analysis_R-287054",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287054"
-  },
-  {
-    "title": "Manager, Product Management \u2013 Resiliency Operations (Stand-In & On-Demand Decisioning)",
-    "company": "Mastercard",
-    "location": "Gurgaon, India",
-    "posted_date": "2026-09-08",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Gurgaon-India/Manager--Product-Management---Resiliency-Operations--Stand-In---On-Demand-Decisioning-_R-289205",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289205"
-  },
-  {
-    "title": "Manager, Strategy & Operations, Security Solutions",
-    "company": "Mastercard",
-    "location": "Besiktas, Istanbul Turkey",
-    "posted_date": "2026-09-08",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Besiktas-Istanbul-Turkey/Manager--Strategy---Operations--Security-Solutions_R-290141",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-290141"
   },
   {
     "title": "Lead Product Management Technical (PMT)",
@@ -2791,6 +2800,16 @@
     "url": "https://www.adzuna.in/details/5856447826?utm_medium=api&utm_source=27480221",
     "description": "Our Purpose _Mastercard powers economies and empowers people in 200 countries and territories worldwide. Together with our customers, we're helping build a sustainable economy where everyone can prosper. We support a wide range of digital payments choices, making transactions secure, simple, smart and accessible. Our technology and innovation, partnerships and networks combine to deliver a unique set of products and services that help people, businesses and governments realize their greatest po\u2026",
     "source": "adzuna"
+  },
+  {
+    "title": "Principal Software Engineer, Data Architecture",
+    "company": "Mastercard",
+    "location": "Arlington, Virginia",
+    "posted_date": "2026-09-09",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Arlington-Virginia/Principal-Software-Engineer--Data-Architecture_R-290228",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-290228"
   },
   {
     "title": "Business Analyst II - Product Owner",
@@ -2851,6 +2870,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-287605-1"
+  },
+  {
+    "title": "Senior Analyst, Financial Planning & Analysis",
+    "company": "Mastercard",
+    "location": "Gurgaon, India",
+    "posted_date": "2026-09-08",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Gurgaon-India/Senior-Analyst--Financial-Planning---Analysis_R-287054",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287054"
   },
   {
     "title": "Senior HR Analyst",
@@ -3143,26 +3172,6 @@
     "external_id": "R-289122-1"
   },
   {
-    "title": "Manager, Product Management",
-    "company": "Mastercard",
-    "location": "Singapore",
-    "posted_date": "2026-09-01",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Singapore/Director--Product-Management_R-282359",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-282359"
-  },
-  {
-    "title": "Senior Software Engineer",
-    "company": "Mastercard",
-    "location": "Dublin, Ireland",
-    "posted_date": "2026-09-01",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Software-Engineer_R-280457",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-280457"
-  },
-  {
     "title": "Specialist, Product Management",
     "company": "Mastercard",
     "location": "Miami, Florida",
@@ -3221,15 +3230,5 @@
     "description": null,
     "source": "workday",
     "external_id": "R-289210"
-  },
-  {
-    "title": "Senior Analyst, Technology Account Management (Real Time Payments, RTP)",
-    "company": "Mastercard",
-    "location": "Manila, Philippines",
-    "posted_date": "2026-09-02",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Manila-Philippines/Senior-Analyst--Technology-Account-Management--Real-Time-Payments--RTP-_R-286591",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286591"
   }
 ]
