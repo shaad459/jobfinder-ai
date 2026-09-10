@@ -1,5 +1,15 @@
 [
   {
+    "title": "Junior Sales Analyst",
+    "company": "Apex Group",
+    "location": "Cape Town, Apex House",
+    "posted_date": "2026-09-10",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Cape-Town-Apex-House/Salesforce-Proposal-and-Opportunity-Analyst--Funds-_JR-0016857",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0016857"
+  },
+  {
     "title": "Fund Accountant",
     "company": "Apex Group",
     "location": "Cape Town, Apex House",
@@ -210,16 +220,6 @@
     "external_id": "JR-0022994"
   },
   {
-    "title": "Senior Supervisor - Closed Ended",
-    "company": "Apex Group",
-    "location": "2 Locations",
-    "posted_date": "2026-09-08",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---East/Senior-Supervisor---Closed-Ended_JR-0019510",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0019510"
-  },
-  {
     "title": "Internship (12 Month Programme)",
     "company": "Apex Group",
     "location": "Windhoek",
@@ -380,16 +380,6 @@
     "external_id": "JR-0024130"
   },
   {
-    "title": "Analyst - Financial Reporting",
-    "company": "Apex Group",
-    "location": "6 Locations",
-    "posted_date": "2026-09-03",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Hyderabad-Sy-No-53/Analyst---Financial-Reporting_JR-0025596",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0025596"
-  },
-  {
     "title": "Workday PSA (Lead to Cash) Specialist",
     "company": "Apex Group",
     "location": "Pune - East",
@@ -420,26 +410,6 @@
     "external_id": "JR-0025944"
   },
   {
-    "title": "Senior Engineer - Informatica Data and AI governance- Assistant Vice President 3",
-    "company": "Apex Group",
-    "location": "Pune - Baner",
-    "posted_date": "2026-09-01",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---Baner/Senior-Engineer---Informatica-Data-and-AI-governance--Assistant-Vice-President-3_JR-0021824",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0021824"
-  },
-  {
-    "title": "Vendor Management Analyst",
-    "company": "Apex Group",
-    "location": "Pune - East",
-    "posted_date": "2026-09-01",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---East/Vendor-Management-Analyst_JR-0022697",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0022697"
-  },
-  {
     "title": "Analyst - Vendor Management",
     "company": "Apex Group",
     "location": "Pune - East",
@@ -448,6 +418,26 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0022700"
+  },
+  {
+    "title": "Full Stack Developer",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-09-10",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Full-Stack-Developer_JR-0000115478",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000115478"
+  },
+  {
+    "title": "AI Product Manager",
+    "company": "Barclays",
+    "location": "3 Locations",
+    "posted_date": "2026-09-10",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/AI-Product-Manager_JR-0000114860",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000114860"
   },
   {
     "title": "Wealth Management Commercial Optimisation Manager",
@@ -980,16 +970,6 @@
     "external_id": "JR-0000114986"
   },
   {
-    "title": "Fraud Operations - Team Manager",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Fraud-Operations---Team-Manager_JR-0000125360",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000125360"
-  },
-  {
     "title": "Sales, Trading and Structuring Summer Internship Programme 2027 London",
     "company": "Barclays",
     "location": "Canary Wharf, 1 Churchill Place",
@@ -1008,16 +988,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000124413-1"
-  },
-  {
-    "title": "Partnerships, External Engagement & Governance Support Manager",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Partnerships--External-Engagement---Governance-Support-Manager_JR-0000095357-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000095357-1"
   },
   {
     "title": "Test Technologist-BPL",
@@ -1059,6 +1029,26 @@
     "source": "adzuna"
   },
   {
+    "title": "Business Analysts - AVP",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-09-10",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Business-Analysts---AVP_JR-0000115013-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000115013-1"
+  },
+  {
+    "title": "Test Automation Engineer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-09-10",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Test-Automation-Engineer_JR-0000114814-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000114814-1"
+  },
+  {
     "title": "Lead data engineer- Ab Initio & AWS",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
@@ -1087,16 +1077,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000128111"
-  },
-  {
-    "title": "Senior Analyst",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-09-10",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/Senior-Analyst_JR-0000124862-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000124862-1"
   },
   {
     "title": "Financial Crime Business Analyst",
@@ -1429,26 +1409,6 @@
     "external_id": "JR-0000118994"
   },
   {
-    "title": "2027 Human Resources Analyst Summer Internship Programme Glasgow",
-    "company": "Barclays",
-    "location": "Glasgow Campus",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Human-Resources-Analyst-Summer-Internship-Programme-Glasgow_JR-0000129140",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129140"
-  },
-  {
-    "title": "2027 Human Resources Industrial Placement Programme London",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/XMLNAME-2027-Human-Resources-Industrial-Placement-Programme-London_JR-0000129556",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129556"
-  },
-  {
     "title": "Lead Business Analyst",
     "company": "Barclays",
     "location": "India",
@@ -1506,8 +1466,17 @@
     "title": "BA - Digital Transformation",
     "company": "Capco",
     "location": "India",
+    "posted_date": "2026-09-10",
+    "url": "https://www.adzuna.in/details/5878707907?utm_medium=api&utm_source=27480221",
+    "description": "Job Title: Business Analyst - Digital Transformations About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence across 32 cities across globe, we support 100 clients across banking, financial and Energy sectors. We are recognized for our deep transformation execution and delivery. WHY JOIN CAPCO?\u2026",
+    "source": "adzuna"
+  },
+  {
+    "title": "BA - Digital Transformation",
+    "company": "Capco",
+    "location": "India",
     "posted_date": "2026-09-09",
-    "url": "https://www.adzuna.in/land/ad/5877184304?se=hE9TdjCt8RGnopdMrkkzKQ&utm_medium=api&utm_source=27480221&v=EE0A48961EED22BCE829A1871761E754D9BB0082",
+    "url": "https://www.adzuna.in/land/ad/5877184304?se=slqaf1at8RGWn_T67fT_Ug&utm_medium=api&utm_source=27480221&v=EE0A48961EED22BCE829A1871761E754D9BB0082",
     "description": "This job is with Capco, an inclusive employer and a member of myGwork \u2013 the largest global platform for the LGBTQ business community. Please do not contact the recruiter directly. Job Title: Business Analyst - Digital Transformations About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence acros\u2026",
     "source": "adzuna"
   },
@@ -1516,7 +1485,7 @@
     "company": "Capco",
     "location": "India",
     "posted_date": "2026-09-09",
-    "url": "https://www.adzuna.in/land/ad/5875904792?se=hE9TdjCt8RGnopdMrkkzKQ&utm_medium=api&utm_source=27480221&v=AA54ECA67C7AAA1CC74927E7F6019D189AE618F2",
+    "url": "https://www.adzuna.in/land/ad/5875904792?se=slqaf1at8RGWn_T67fT_Ug&utm_medium=api&utm_source=27480221&v=AA54ECA67C7AAA1CC74927E7F6019D189AE618F2",
     "description": "This job is with Capco, an inclusive employer and a member of myGwork \u2013 the largest global platform for the LGBTQ business community. Please do not contact the recruiter directly. Job Title: Business Analyst - Asset Management About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence across 32 ci\u2026",
     "source": "adzuna"
   },
@@ -1527,15 +1496,6 @@
     "posted_date": "2026-09-09",
     "url": "https://www.adzuna.in/details/5877295069?utm_medium=api&utm_source=27480221",
     "description": "Job Title: Business Analyst - Asset Management About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence across 32 cities across globe, we support 100 clients across banking, financial and Energy sectors. We are recognized for our deep transformation execution and delivery. WHY JOIN CAPCO? You wi\u2026",
-    "source": "adzuna"
-  },
-  {
-    "title": "Business Analyst - Financial Crime Compliance",
-    "company": "Capco",
-    "location": "Bangalore, Karnataka",
-    "posted_date": "2026-09-05",
-    "url": "https://www.adzuna.in/details/5872120146?utm_medium=api&utm_source=27480221",
-    "description": "Business Analyst - Financial Crime Joining Capco means joining an organization that is committed to an inclusive working environment where you\u2019re encouraged to BeYourselfAtWork. We celebrate individuality and recognize that diversity and inclusion, in all forms, is critical to success. It\u2019s important to us that we recruit and develop as diverse a range of talent as we can and we believe that everyone brings something different to the table \u2013 so we\u2019d love to know what makes you different. Such d\u2026",
     "source": "adzuna"
   },
   {
@@ -2359,6 +2319,26 @@
     "external_id": "R0442459-1"
   },
   {
+    "title": "Senior AI Engineer",
+    "company": "Mastercard",
+    "location": "Vancouver, Canada",
+    "posted_date": "2026-09-10",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Vancouver-Canada/Senior-AI-Engineer_R-289918-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289918-1"
+  },
+  {
+    "title": "Lead Software Engineer",
+    "company": "Mastercard",
+    "location": "2 Locations",
+    "posted_date": "2026-09-10",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Arlington-Virginia/Lead-Software-Engineer_R-279701",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-279701"
+  },
+  {
     "title": "Lead Software Engineer",
     "company": "Mastercard",
     "location": "O'Fallon, Missouri",
@@ -2748,26 +2728,6 @@
     "external_id": "R-287861"
   },
   {
-    "title": "Manager, Customer Success (Ukrainian Speaker)",
-    "company": "Mastercard",
-    "location": "Besiktas, Istanbul Turkey",
-    "posted_date": "2026-09-09",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Besiktas-Istanbul-Turkey/Manager--Customer-Success--Ukrainian-Speaker-_R-290216",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-290216"
-  },
-  {
-    "title": "Lead Platform Architect (Linux, Virtualisation, VmWare)",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-09-09",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Platform-Architect_R-282719",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-282719"
-  },
-  {
     "title": "Lead Product Manager- Technical",
     "company": "Mastercard",
     "location": "Pune, Maharashtra",
@@ -2802,6 +2762,26 @@
     "url": "https://www.adzuna.in/details/5860805286?utm_medium=api&utm_source=27480221",
     "description": "Our Purpose _Mastercard powers economies and empowers people in 200 countries and territories worldwide. Together with our customers, we're helping build a sustainable economy where everyone can prosper. We support a wide range of digital payments choices, making transactions secure, simple, smart and accessible. Our technology and innovation, partnerships and networks combine to deliver a unique set of products and services that help people, businesses and governments realize their greatest po\u2026",
     "source": "adzuna"
+  },
+  {
+    "title": "Senior Analyst, Workday Reporting  & P&C Core HR Services Analytics",
+    "company": "Mastercard",
+    "location": "2 Locations",
+    "posted_date": "2026-09-10",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Analyst--Workday-Reporting----P-C-Core-HR-Services-Analytics_R-289788",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289788"
+  },
+  {
+    "title": "Senior Business Analyst - Oracle",
+    "company": "Mastercard",
+    "location": "Bogota, Colombia",
+    "posted_date": "2026-09-10",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Business-Analyst_R-289429",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289429"
   },
   {
     "title": "Information Security Engineer II",
@@ -2982,16 +2962,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-288493-1"
-  },
-  {
-    "title": "Senior Business Analyst",
-    "company": "Mastercard",
-    "location": "Bogota, Colombia",
-    "posted_date": "2026-09-04",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bogota-Colombia/Senior-Business-Analyst_R-289429",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289429"
   },
   {
     "title": "Principal Software Engineer",
@@ -3176,12 +3146,12 @@
   {
     "title": "Senior Software Engineer",
     "company": "Mastercard",
-    "location": "Dublin, Ireland",
-    "posted_date": "2026-09-01",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Software-Engineer_R-280457",
+    "location": "Oslo, Norway (haavard martinsens vei)",
+    "posted_date": "2026-09-10",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Oslo-Norway-haavard-martinsens-vei/Senior-Software-Engineer_R-290480",
     "description": null,
     "source": "workday",
-    "external_id": "R-280457"
+    "external_id": "R-290480"
   },
   {
     "title": "Senior Analyst, Product Delivery",
@@ -3224,16 +3194,6 @@
     "external_id": "R-288079"
   },
   {
-    "title": "Senior Analyst, Business Development",
-    "company": "Mastercard",
-    "location": "Mumbai, India",
-    "posted_date": "2026-09-08",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Mumbai-India/Senior-Analyst--Business-Development_R-288863",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288863"
-  },
-  {
     "title": "Specialist, Product and Sales Analyst \u2013 Digital Product",
     "company": "Mastercard",
     "location": "St. Leonards, Australia",
@@ -3242,15 +3202,5 @@
     "description": null,
     "source": "workday",
     "external_id": "R-289210"
-  },
-  {
-    "title": "Senior Analyst, Technology Account Management (Real Time Payments, RTP)",
-    "company": "Mastercard",
-    "location": "Manila, Philippines",
-    "posted_date": "2026-09-02",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Manila-Philippines/Senior-Analyst--Technology-Account-Management--Real-Time-Payments--RTP-_R-286591",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286591"
   }
 ]
