@@ -550,6 +550,16 @@
     "external_id": "JR-0025944"
   },
   {
+    "title": "Business Manager, ICB COO",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-09-16",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Business-Manager--ICB-COO_JR-0000117546",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000117546"
+  },
+  {
     "title": "Payments Product Manager - Fintech",
     "company": "Barclays",
     "location": "Frankfurt, Taunus Turm",
@@ -1138,16 +1148,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000124796"
-  },
-  {
-    "title": "Java Developer Integrated Financial Crime (IFC)",
-    "company": "Barclays",
-    "location": "Glasgow Campus",
-    "posted_date": "2026-09-14",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Senior-Java-Developer-Integrated-Financial-Crime--IFC-_JR-0000083058",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000083058"
   },
   {
     "title": "Sales, Trading and Structuring Graduate Programme 2027 Zurich",
@@ -1843,6 +1843,16 @@
     "external_id": "26994825"
   },
   {
+    "title": "Markets In-Business Risk and Governance Lead - Vice President",
+    "company": "Citi",
+    "location": "Belfast  United Kingdom",
+    "posted_date": "2026-09-15",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Belfast--United-Kingdom/Markets-In-Business-Risk-and-Governance-Lead---Vice-President_26991000",
+    "description": null,
+    "source": "workday",
+    "external_id": "26991000"
+  },
+  {
     "title": "Technology Business Analyst",
     "company": "Citi",
     "location": "Warsaw  Poland",
@@ -1861,16 +1871,6 @@
     "description": null,
     "source": "workday",
     "external_id": "26993689"
-  },
-  {
-    "title": "IT Business Sr Analyst",
-    "company": "Citi",
-    "location": "Tampa Florida United States",
-    "posted_date": "2026-09-11",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Tampa-Florida-United-States/IT-Business-Sr-Analyst_26981294",
-    "description": null,
-    "source": "workday",
-    "external_id": "26981294"
   },
   {
     "title": "Business Analyst",
@@ -1990,6 +1990,16 @@
     "description": null,
     "source": "workday",
     "external_id": "26994602"
+  },
+  {
+    "title": "IT Business Sr Analyst",
+    "company": "Citi",
+    "location": "Tampa Florida United States",
+    "posted_date": "2026-09-11",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Tampa-Florida-United-States/IT-Business-Sr-Analyst_26981294",
+    "description": null,
+    "source": "workday",
+    "external_id": "26981294"
   },
   {
     "title": "BANAMEX Business Analyst C12 \u2013 Pensiones / Afore / Proyectos Regulatorios",
@@ -3003,16 +3013,6 @@
     "source": "adzuna"
   },
   {
-    "title": "Senior Analyst, Market Delivery",
-    "company": "Mastercard",
-    "location": "Lima, Peru",
-    "posted_date": "2026-09-16",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Lima-Peru/Senior-Analyst--Market-Delivery_R-289265",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289265"
-  },
-  {
     "title": "Director, Core Payments Communications",
     "company": "Mastercard",
     "location": "Purchase, New York",
@@ -3361,6 +3361,26 @@
     "description": null,
     "source": "workday",
     "external_id": "R-290036"
+  },
+  {
+    "title": "Senior Analyst - Finance Business Partner Technology",
+    "company": "Mastercard",
+    "location": "O'Fallon, Missouri",
+    "posted_date": "2026-09-03",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Senior-Analyst---Finance-Business-Partner-Technology_R-289995-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289995-1"
+  },
+  {
+    "title": "Senior Analyst, Market Delivery",
+    "company": "Mastercard",
+    "location": "Lima, Peru",
+    "posted_date": "2026-09-16",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Lima-Peru/Senior-Analyst--Market-Delivery_R-289265",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289265"
   },
   {
     "title": "Data Analyst",
