@@ -260,16 +260,6 @@
     "external_id": "JR-0024667"
   },
   {
-    "title": "Client Onboarding Support Specialist",
-    "company": "Apex Group",
-    "location": "Pune - Baner",
-    "posted_date": "2026-09-16",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---Baner/Client-Onboarding-Support-Specialist_JR-0026223",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0026223"
-  },
-  {
     "title": "Senior Process Lead",
     "company": "Apex Group",
     "location": "Mumbai, Raiaskaran Tech Park",
@@ -288,6 +278,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0025110-1"
+  },
+  {
+    "title": "Security Architect",
+    "company": "Apex Group",
+    "location": "2 Locations",
+    "posted_date": "2026-09-16",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Hyderabad/Security-Architect_JR-0026401",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0026401"
   },
   {
     "title": "Senior Specialist \u2013 Local Risk Management",
@@ -1130,6 +1130,16 @@
     "external_id": "JR-0000115648"
   },
   {
+    "title": "Senior Analyst - Customer Journey Mapping",
+    "company": "Barclays",
+    "location": "2 Locations",
+    "posted_date": "2026-09-20",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Noida-Candor-TechSpace/Senior-Analyst---Customer-Journey-Mapping_JR-0000123845-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000123845-1"
+  },
+  {
     "title": "BARX Client Services: Macro- FX and Fixed Income Analyst",
     "company": "Barclays",
     "location": "New York, 745 7th Avenue",
@@ -1470,16 +1480,6 @@
     "external_id": "JR-0000106823-1"
   },
   {
-    "title": "KYC Refresh Analyst",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-09-17",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/KYC-Refresh-Analyst_JR-0000121633",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000121633"
-  },
-  {
     "title": "Customer Service Associate",
     "company": "Barclays",
     "location": "Glasgow, Clyde Place",
@@ -1526,15 +1526,6 @@
     "posted_date": "2026-09-13",
     "url": "https://www.adzuna.in/details/5882779491?utm_medium=api&utm_source=27480221",
     "description": "Job Description Purpose of the role To support the bank's decision-making processes by providing timely, accurate, and insightful information through designing, developing, and maintaining management reports, compelling visualisations and dashboards that effectively communicate key performance indicators (KPIs), data insights and trends across various business units. Accountabilities Design and development of comprehensive reports and dashboards utilisng best practices in data visualisation pri\u2026",
-    "source": "adzuna"
-  },
-  {
-    "title": "Business Analysts - AVP",
-    "company": "Barclays",
-    "location": "India",
-    "posted_date": "2026-09-12",
-    "url": "https://www.adzuna.in/details/5881150928?utm_medium=api&utm_source=27480221",
-    "description": "Job Description Purpose of the role To support the organisation, achieve its strategic objectives by the identification of business requirements and solutions that address business problems and opportunities. Accountabilities Identification and analysis of business problems and client requirements that require change within the organisation. Development of business requirements that will address business problems and opportunities. Collaboration with stakeholders to ensure that proposed solutio\u2026",
     "source": "adzuna"
   },
   {
@@ -3308,26 +3299,6 @@
     "external_id": "R-281167"
   },
   {
-    "title": "Senior Analyst, Settlement Operations",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-09-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Analyst--Settlement-Operations_R-288376",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288376"
-  },
-  {
-    "title": "Manager, Network Performance & Analytics",
-    "company": "Mastercard",
-    "location": "Dubai, United Arab Emirates",
-    "posted_date": "2026-09-17",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dubai-United-Arab-Emirates/Network-Analyst_R-288061",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-288061"
-  },
-  {
     "title": "Senior Analyst, Market Delivery",
     "company": "Mastercard",
     "location": "Lima, Peru",
@@ -3396,6 +3367,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-287842"
+  },
+  {
+    "title": "Senior Software Engineer",
+    "company": "Mastercard",
+    "location": "Oslo, Norway (haavard martinsens vei)",
+    "posted_date": "2026-09-10",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Oslo-Norway-haavard-martinsens-vei/Senior-Software-Engineer_R-290480",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-290480"
   },
   {
     "title": "Senior IT Business Analyst",
