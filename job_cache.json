@@ -690,16 +690,6 @@
     "external_id": "JR-0000101597-2"
   },
   {
-    "title": "Test Technologist-BPL",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-09-21",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Test-Technologist-BPL_JR-0000128225",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000128225"
-  },
-  {
     "title": "Senior Kafka Platform Engineer",
     "company": "Barclays",
     "location": "2 Locations",
@@ -1148,6 +1138,26 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000117546"
+  },
+  {
+    "title": "Windows Server Engineering Lead",
+    "company": "Barclays",
+    "location": "Knutsford, Radbroke Hall",
+    "posted_date": "2026-09-17",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Windows-Server-Engineering-Lead_JR-0000106788-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000106788-1"
+  },
+  {
+    "title": "Payments Product Manager - Fintech",
+    "company": "Barclays",
+    "location": "Frankfurt, Taunus Turm",
+    "posted_date": "2026-09-16",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Frankfurt-Taunus-Turm/Payments-Product-Manager---Fintech_JR-0000110399",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000110399"
   },
   {
     "title": "Banking Analyst Graduate Program 2027 Houston",
@@ -3020,6 +3030,16 @@
     "source": "adzuna"
   },
   {
+    "title": "Senior Specialist, Attribute Verification Product Management",
+    "company": "Mastercard",
+    "location": "2 Locations",
+    "posted_date": "2026-09-21",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Toronto-Canada/Senior-Specialist--Attribute-Verification-Product-Management_R-291038",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-291038"
+  },
+  {
     "title": "Senior Specialist, Payroll Tax",
     "company": "Mastercard",
     "location": "O'Fallon, Missouri",
@@ -3390,16 +3410,6 @@
     "external_id": "R-281725-1"
   },
   {
-    "title": "Senior Analyst, Business Development",
-    "company": "Mastercard",
-    "location": "London, England (Angel Lane)",
-    "posted_date": "2026-09-07",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/London-England-Angel-Lane/Senior-Analyst--Business-Development_R-289539",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289539"
-  },
-  {
     "title": "Analyst, Media Planning",
     "company": "Mastercard",
     "location": "Purchase, New York",
@@ -3508,16 +3518,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-287842"
-  },
-  {
-    "title": "Senior Software Engineer",
-    "company": "Mastercard",
-    "location": "Oslo, Norway (haavard martinsens vei)",
-    "posted_date": "2026-09-10",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Oslo-Norway-haavard-martinsens-vei/Senior-Software-Engineer_R-290480",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-290480"
   },
   {
     "title": "Senior IT Business Analyst",
