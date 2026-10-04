@@ -570,6 +570,26 @@
     "external_id": "JR-0026525"
   },
   {
+    "title": "Full Stack Developer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-04",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/DDA-Engineer_JR-0000093267-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000093267-1"
+  },
+  {
+    "title": "Full Stack Developer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-04",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/DDA-Senior-DevOps-Engineer_JR-0000093488",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000093488"
+  },
+  {
     "title": "Banking Associate Summer Internship Program 2027 Houston",
     "company": "Barclays",
     "location": "Houston, 609 Main Street",
@@ -1150,26 +1170,6 @@
     "external_id": "JR-0000122065"
   },
   {
-    "title": "Onboarding Business Partner",
-    "company": "Barclays",
-    "location": "Geneva, 18-20 Chemin de Grange-Canal",
-    "posted_date": "2026-09-29",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Geneva-18-20-Chemin-de-Grange-Canal/Onboarding-Business-Partner_JR-0000115881",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000115881"
-  },
-  {
-    "title": "Wealth Manager - Wealth Management",
-    "company": "Barclays",
-    "location": "Manchester, Spinningfields",
-    "posted_date": "2026-09-29",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-Spinningfields/Wealth-Manager---Wealth-Management_JR-0000099160",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000099160"
-  },
-  {
     "title": "Executive Assistant",
     "company": "Barclays",
     "location": "New York, 745 7th Avenue",
@@ -1558,6 +1558,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000130246-2"
+  },
+  {
+    "title": "Onboarding Business Partner",
+    "company": "Barclays",
+    "location": "Geneva, 18-20 Chemin de Grange-Canal",
+    "posted_date": "2026-09-29",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Geneva-18-20-Chemin-de-Grange-Canal/Onboarding-Business-Partner_JR-0000115881",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000115881"
   },
   {
     "title": "Process & Requirements Analyst - AVP",
@@ -2297,6 +2307,16 @@
     "external_id": "R0418246"
   },
   {
+    "title": "Senior Business Line Anti-Financial Crime (BLAFC) Private Bank (PB) Europe International Lead and SME",
+    "company": "Deutsche Bank",
+    "location": "Luxembourg 2 Blvd K. Adenauer",
+    "posted_date": "2026-09-22",
+    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Luxembourg-2-Blvd-K-Adenauer/Senior-Business-Line-Anti-Financial-Crime--BLAFC--Private-Bank--PB--Europe-International-Lead-and-SME_R0439686-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R0439686-1"
+  },
+  {
     "title": "Senior Business Analyst with German - Requirements Engineer (f/m/x)",
     "company": "Deutsche Bank",
     "location": "Bucharest, 6A Dimitrie Pompeiu Blvd",
@@ -2315,15 +2335,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R0435030"
-  },
-  {
-    "title": "VP Software Engineer, FIC Sales Technology",
-    "company": "Deutsche Bank",
-    "location": "Bangalore, Karnataka",
-    "posted_date": "2026-09-26",
-    "url": "https://www.adzuna.in/details/5899377975?utm_medium=api&utm_source=27480221",
-    "description": "This job is with Deutsche Bank, an inclusive employer and a member of myGwork \u2013 the largest global platform for the LGBTQ business community. Please do not contact the recruiter directly. Position Overview Role Description Join the Bluespace CRM Platform Technology team within Deutsche Bank\u2019s Client 360 Technology organization. As a VP Software Engineer, you will be a pivotal and influential member, driving the evolution of strategic CRM for IB and CB sales professionals. This is a unique and e\u2026",
-    "source": "adzuna"
   },
   {
     "title": "VP Software Engineer, FIC Sales Technology",
