@@ -410,16 +410,6 @@
     "external_id": "JR-0026787"
   },
   {
-    "title": "Senior Analyst 3",
-    "company": "Apex Group",
-    "location": "2 Locations",
-    "posted_date": "2026-10-05",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---Baner/Senior-Analyst-3_JR-0026684",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0026684"
-  },
-  {
     "title": "Deal Desk Associate",
     "company": "Apex Group",
     "location": "S\u00e3o Paulo Alves",
@@ -488,16 +478,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0023955"
-  },
-  {
-    "title": "Analyst - Global Payments",
-    "company": "Apex Group",
-    "location": "Pune - Baner",
-    "posted_date": "2026-09-30",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---Baner/Analyst---Global-Payments_JR-0024295",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0024295"
   },
   {
     "title": "Senior Analyst - Transfer Agency",
@@ -600,6 +580,16 @@
     "external_id": "JR-0023403"
   },
   {
+    "title": "Senior Analyst-Corporate Secretarial Services",
+    "company": "Apex Group",
+    "location": "Pune - Baner",
+    "posted_date": "2026-09-28",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---Baner/Senior-Analyst-Corporate-Secretarial-Services_JR-0026622",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0026622"
+  },
+  {
     "title": "Speech Analyst",
     "company": "Barclays",
     "location": "2 Locations",
@@ -678,16 +668,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000117653"
-  },
-  {
-    "title": "Software Engineer - PBI Data Analytics",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Software-Engineer---PBI-Data-Analytics_JR-0000128767",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000128767"
   },
   {
     "title": "AVP Senior Data Manager - FCE",
@@ -1200,6 +1180,16 @@
     "external_id": "JR-0000111662"
   },
   {
+    "title": "Senior Software Engineer \u2013 UI Platform Lead",
+    "company": "Barclays",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-10-05",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Sr-Software-Engineer_JR-0000127505",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000127505"
+  },
+  {
     "title": "Equity Research Aerospace & Defense/Defense Tech, AVP",
     "company": "Barclays",
     "location": "New York, 745 7th Avenue",
@@ -1270,16 +1260,6 @@
     "external_id": "JR-0000132329"
   },
   {
-    "title": "Cloud Data Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Cloud-Data-Engineer_JR-0000128770",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000128770"
-  },
-  {
     "title": "Fraud & Dispute Analyst - BA2",
     "company": "Barclays",
     "location": "Noida, Candor TechSpace",
@@ -1328,16 +1308,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000117802-1"
-  },
-  {
-    "title": "Senior Analyst",
-    "company": "Barclays",
-    "location": "Chennai, DLF IT Park",
-    "posted_date": "2026-10-09",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Chennai-DLF-IT-Park/Senior-Analyst_JR-0000120762-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000120762-1"
   },
   {
     "title": "Global Markets, VP",
@@ -1640,6 +1610,26 @@
     "external_id": "JR-0000067619"
   },
   {
+    "title": "Data Engineer ETL",
+    "company": "Barclays",
+    "location": "Chennai, DLF IT Park",
+    "posted_date": "2026-10-06",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Chennai-DLF-IT-Park/Data-Engineer-ETL_JR-0000086233",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000086233"
+  },
+  {
+    "title": "Senior Customer Service Advisor",
+    "company": "Barclays",
+    "location": "Isle of Man, Eagle Court",
+    "posted_date": "2026-10-06",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Isle-of-Man-Eagle-Court/Senior-Client-Service-Executive_JR-0000046486-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000046486-1"
+  },
+  {
     "title": "Analyst - Treasury PC",
     "company": "Barclays",
     "location": "Chennai, DLF IT Park",
@@ -1648,6 +1638,15 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000121825"
+  },
+  {
+    "title": "Python Developer-TPRM",
+    "company": "Capco",
+    "location": "Bangalore, Karnataka",
+    "posted_date": "2026-10-11",
+    "url": "https://www.adzuna.in/details/5923502961?utm_medium=api&utm_source=27480221",
+    "description": "Job Title: Business Analyst- Risk and Compliance About Us \u201cCapco, a Wipro company, is a global technology and management consulting firm. Awarded with Consultancy of the year in the British Bank Award and has been ranked Top 100 Best Companies for Women in India 2022 by Avtar & Seramount . With our presence across 32 cities across globe, we support 100 clients across banking, financial and Energy sectors. We are recognized for our deep transformation execution and delivery. WHY JOIN CAPCO? You \u2026",
+    "source": "adzuna"
   },
   {
     "title": "BA - Commercial Banking",
@@ -2297,6 +2296,16 @@
     "external_id": "R0435030"
   },
   {
+    "title": "AI Tech Lead",
+    "company": "Mastercard",
+    "location": "Ramat-Gan, Israel",
+    "posted_date": "2026-10-11",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Ramat-Gan-Israel/Lead-Software-Engineer_R-280407",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-280407"
+  },
+  {
     "title": "Lead, Customer Technology Operation",
     "company": "Mastercard",
     "location": "Mexico City, Mexico",
@@ -2694,16 +2703,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-289109"
-  },
-  {
-    "title": "Manager, Account Management \u2013 Acquiring & Acceptance",
-    "company": "Mastercard",
-    "location": "Paris, France",
-    "posted_date": "2026-10-08",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Paris-France/Manager--Account-Management---Acquiring---Acceptance_R-286839",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286839"
   },
   {
     "title": "Manager, Product Management",
