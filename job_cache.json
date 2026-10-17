@@ -710,16 +710,6 @@
     "external_id": "JR-0000136145"
   },
   {
-    "title": "Network Engineering CORE",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-16",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Network-Engineering-CORE_JR-0000105745",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000105745"
-  },
-  {
     "title": "Vice President \u2013 AI Engineer",
     "company": "Barclays",
     "location": "2 Locations",
@@ -1088,6 +1078,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000132979"
+  },
+  {
+    "title": "Senior UI Engineer - Design Systems Team Lead",
+    "company": "Barclays",
+    "location": "Gemini Building A, Prague",
+    "posted_date": "2026-10-13",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gemini-Building-A-Prague/Senior-Software-Engineer---Adoption_JR-0000040628",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000040628"
   },
   {
     "title": "Fraud & Dispute Analyst - BA2",
@@ -1530,6 +1530,16 @@
     "external_id": "JR-0000070522-1"
   },
   {
+    "title": "Avaloq Developer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-12",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Avaloq-Developer_JR-0000074700-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000074700-1"
+  },
+  {
     "title": "Business Analysts - AVP",
     "company": "Barclays",
     "location": "India",
@@ -1732,16 +1742,6 @@
     "description": null,
     "source": "workday",
     "external_id": "261001955"
-  },
-  {
-    "title": "Servicing Reporting Intermediate Analyst",
-    "company": "Citi",
-    "location": "PANCHSHIL BUSINESS HUB",
-    "posted_date": "2026-10-16",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/PANCHSHIL-BUSINESS-HUB/Servicing-Reporting-Intermediate-Analyst_26996536",
-    "description": null,
-    "source": "workday",
-    "external_id": "26996536"
   },
   {
     "title": "Business Senior Analyst - Assistant Vice President",
@@ -3218,16 +3218,6 @@
     "external_id": "R-284561"
   },
   {
-    "title": "Senior Systems Analyst",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-10-14",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Systems-Analyst_R-292228",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-292228"
-  },
-  {
     "title": "Associate Analyst, Insights & Enablement",
     "company": "Mastercard",
     "location": "Gurgaon, India",
@@ -3236,5 +3226,15 @@
     "description": null,
     "source": "workday",
     "external_id": "R-293097"
+  },
+  {
+    "title": "Sales Analyst, Merchant Solutions, Europe",
+    "company": "Mastercard",
+    "location": "Lisbon, Portugal",
+    "posted_date": "2026-10-09",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Lisbon-Portugal/Sales-Specialist--Merchant-Solutions--Europe_R-290930",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-290930"
   }
 ]
