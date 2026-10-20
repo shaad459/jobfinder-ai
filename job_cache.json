@@ -740,16 +740,6 @@
     "external_id": "JR-0000105906"
   },
   {
-    "title": "API Software Engineer",
-    "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-10-19",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/API-Software-Engineer_JR-0000130020",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000130020"
-  },
-  {
     "title": "AI Platform Engineer",
     "company": "Barclays",
     "location": "2 Locations",
@@ -1100,16 +1090,6 @@
     "external_id": "JR-0000135313-1"
   },
   {
-    "title": "Market Platform Solutions AVP",
-    "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-10-15",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Market-Platform-Solutions-AVP_JR-0000135123",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000135123"
-  },
-  {
     "title": "Forward Deployed Software Engineer",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
@@ -1148,6 +1128,36 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000116582"
+  },
+  {
+    "title": "Software Engineer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-15",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Software-Engineer_JR-0000126261",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000126261"
+  },
+  {
+    "title": "Lead Platform Engineer",
+    "company": "Barclays",
+    "location": "New York, 745 7th Avenue",
+    "posted_date": "2026-10-14",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Lead-Platform-Engineer_JR-0000079550",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000079550"
+  },
+  {
+    "title": "Residential Warehouse Trader Analyst",
+    "company": "Barclays",
+    "location": "New York, 745 7th Avenue",
+    "posted_date": "2026-10-20",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Residential-Warehouse-Trader-Analyst_JR-0000102369",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000102369"
   },
   {
     "title": "Equity Research Biotech, AVP",
@@ -1258,16 +1268,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000134320"
-  },
-  {
-    "title": "AML SAR Analyst",
-    "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-10-19",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/AML-SAR-Analyst_JR-0000130522-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000130522-1"
   },
   {
     "title": "Agency CMO Trading Analyst",
@@ -1460,16 +1460,6 @@
     "external_id": "JR-0000133652"
   },
   {
-    "title": "Transaction Monitoring Analyst",
-    "company": "Barclays",
-    "location": "Glasgow Campus",
-    "posted_date": "2026-10-15",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/Transaction-Monitoring-Analyst_JR-0000126189",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000126189"
-  },
-  {
     "title": "Test Engineer",
     "company": "Barclays",
     "location": "2 Locations",
@@ -1598,6 +1588,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000120497-1"
+  },
+  {
+    "title": "IFC - Cloud Data Engineer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-13",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/IFC---Cloud-Data-Engineer_JR-0000133706-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000133706-1"
   },
   {
     "title": "Business Analysts - AVP",
@@ -1806,6 +1806,16 @@
     "external_id": "261003007-1"
   },
   {
+    "title": "BANAMEX - Lending IT Business Intmd Analyst",
+    "company": "Citi",
+    "location": "Ciudad De Mexico Distrito Federal Mexico",
+    "posted_date": "2026-10-20",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Ciudad-De-Mexico-Distrito-Federal-Mexico/BANAMEX---Lending-IT-Business-Intmd-Analyst_261001894",
+    "description": null,
+    "source": "workday",
+    "external_id": "261001894"
+  },
+  {
     "title": "Technology Lead PM/BA-Client Integration",
     "company": "Citi",
     "location": "Tampa Florida United States",
@@ -1994,6 +2004,16 @@
     "description": null,
     "source": "workday",
     "external_id": "261003589"
+  },
+  {
+    "title": "IT Business Analyst - Assistant Vice President",
+    "company": "Citi",
+    "location": "Tampa Florida United States",
+    "posted_date": "2026-10-20",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Tampa-Florida-United-States/IT-Business-Analyst---Assistant-Vice-President_261001178",
+    "description": null,
+    "source": "workday",
+    "external_id": "261001178"
   },
   {
     "title": "Business Analytics Analyst - Pyspark",
@@ -2416,6 +2436,26 @@
     "external_id": "R0451378-1"
   },
   {
+    "title": "Lead Software Engineer",
+    "company": "Mastercard",
+    "location": "O'Fallon, Missouri",
+    "posted_date": "2026-10-20",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Lead-Software-Engineer_R-290277",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-290277"
+  },
+  {
+    "title": "Manager Software Engineering",
+    "company": "Mastercard",
+    "location": "O'Fallon, Missouri",
+    "posted_date": "2026-10-20",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Manager-Software-Engineering_R-292949",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-292949"
+  },
+  {
     "title": "Manager, Product Management \u2013 Operational Reports",
     "company": "Mastercard",
     "location": "O'Fallon, Missouri",
@@ -2794,26 +2834,6 @@
     "description": null,
     "source": "workday",
     "external_id": "R-293696"
-  },
-  {
-    "title": "Manager, Corporate Communications (LAC)",
-    "company": "Mastercard",
-    "location": "Miami, Florida",
-    "posted_date": "2026-10-19",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Miami-Florida/Manager--Corporate-Communications--LAC-_R-293700",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-293700"
-  },
-  {
-    "title": "Vice President, Stablecoin Product Strategy",
-    "company": "Mastercard",
-    "location": "New York City, New York",
-    "posted_date": "2026-10-19",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/New-York-City-New-York/Vice-President--Product-Management--Stablecoins-and-Open-Standard_R-289478",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289478"
   },
   {
     "title": "Lead Product Manager Technical",
