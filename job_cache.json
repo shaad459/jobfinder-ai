@@ -1,5 +1,15 @@
 [
   {
+    "title": "Business Development Executive",
+    "company": "Apex Group",
+    "location": "Dubai",
+    "posted_date": "2026-10-30",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Dubai/Business-Development-Executive_JR-0026992",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0026992"
+  },
+  {
     "title": "Sales Director - Middle East",
     "company": "Apex Group",
     "location": "Abu Dhabi",
@@ -8,6 +18,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0027061"
+  },
+  {
+    "title": "Business Development Director",
+    "company": "Apex Group",
+    "location": "Dubai",
+    "posted_date": "2026-10-30",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Dubai/Business-Development-Director_JR-0023097",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0023097"
   },
   {
     "title": "Senior Corporate Accountant",
@@ -240,16 +260,6 @@
     "external_id": "JR-0026046"
   },
   {
-    "title": "Investment Fund Analyst",
-    "company": "Apex Group",
-    "location": "S\u00e3o Paulo Alves",
-    "posted_date": "2026-10-23",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/So-Paulo-Alves/Investment-Fund-Analyst_JR-0026583",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0026583"
-  },
-  {
     "title": "Compliance Manager - Depositary & Custody",
     "company": "Apex Group",
     "location": "London",
@@ -298,16 +308,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0026819-1"
-  },
-  {
-    "title": "Senior Analyst - MO",
-    "company": "Apex Group",
-    "location": "Hyderabad, Sy. No. 53",
-    "posted_date": "2026-10-30",
-    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Hyderabad-Sy-No-53/Senior-Analyst---MO_JR-0027427",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0027427"
   },
   {
     "title": "Analyst - Transfer Agency",
@@ -388,6 +388,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0027327"
+  },
+  {
+    "title": "Investment Fund Analyst",
+    "company": "Apex Group",
+    "location": "S\u00e3o Paulo Alves",
+    "posted_date": "2026-10-23",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/So-Paulo-Alves/Investment-Fund-Analyst_JR-0026583",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0026583"
   },
   {
     "title": "Compliance Monitoring Test Administrator",
@@ -548,6 +558,66 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0022352"
+  },
+  {
+    "title": "Analyst - Taxation",
+    "company": "Apex Group",
+    "location": "Pune - East",
+    "posted_date": "2026-10-19",
+    "url": "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Pune---East/Analyst---Taxation_JR-0027075",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0027075"
+  },
+  {
+    "title": "Onboarding Business Partner",
+    "company": "Barclays",
+    "location": "Monaco La Costa, Le Saint Michel Building",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Monaco-La-Costa-Le-Saint-Michel-Building/Onboarding-Business-Partner_JR-0000132855-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000132855-1"
+  },
+  {
+    "title": "AI Software Engineer",
+    "company": "Barclays",
+    "location": "2 Locations",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/Software-Engineer_JR-0000108417",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000108417"
+  },
+  {
+    "title": "2027 Business Banking Apprenticeship Programme Manchester",
+    "company": "Barclays",
+    "location": "Manchester, 4 Piccadilly Place",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Manchester-4-Piccadilly-Place/XMLNAME-2027-Business-Banking-Apprenticeship-Programme-Manchester_JR-0000129619",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000129619"
+  },
+  {
+    "title": "Platform Engineer - AVP",
+    "company": "Barclays",
+    "location": "Building 300-Whippany Campus, Jefferson Park",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-300-Whippany-Campus-Jefferson-Park/Platform-Engineer---AVP_JR-0000122937-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000122937-1"
+  },
+  {
+    "title": "FullStack Developer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/FullStack-Developer_JR-0000111862",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000111862"
   },
   {
     "title": "Fraud Operations - Team Manager",
@@ -960,15 +1030,6 @@
     "external_id": "JR-0000128047"
   },
   {
-    "title": "Product Manager",
-    "company": "Barclays",
-    "location": "India",
-    "posted_date": "2026-10-28",
-    "url": "https://www.adzuna.in/details/5944721049?utm_medium=api&utm_source=27480221",
-    "description": "Job Description Purpose of the role Product Managers are responsible for the leading the strategic focus of the product(s), defining the product vision, market strategy, and competitive analysis. They think about the product's future and how it will evolve over time. They work with various teams, including marketing, engineering, operations, and sales, to ensure everyone is aligned on the product strategy. They use data and market research to inform their decisions and prioritize product featur\u2026",
-    "source": "adzuna"
-  },
-  {
     "title": "Senior Manager - Northern Audit Survey",
     "company": "Barclays",
     "location": "3 Locations",
@@ -1109,64 +1170,54 @@
     "external_id": "JR-0000136939"
   },
   {
-    "title": "Product Sales Specialist \u2013 Transactional Banking",
+    "title": "Investment Banking Equity Capital Markets Healthcare Analyst",
     "company": "Barclays",
-    "location": "2 Locations",
-    "posted_date": "2026-10-27",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Product-Sales-Specialist---Transactional-Banking_JR-0000136943-1",
+    "location": "New York, 745 7th Avenue",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Investment-Banking-Equity-Capital-Markets-Healthcare-Analyst_JR-0000135650-1",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000136943-1"
+    "external_id": "JR-0000135650-1"
   },
   {
-    "title": "Senior AI Product Owner - VP",
+    "title": "Chief Client Office - Client Data & Engineering Group Summer Internship Program 2027 New York City",
     "company": "Barclays",
-    "location": "Building 400-Whippany Campus, Jefferson Park",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Building-400-Whippany-Campus-Jefferson-Park/Senior-AI-Product-Owner---VP_JR-0000130037",
+    "location": "New York, 745 7th Avenue",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/New-York-745-7th-Avenue/Chief-Client-Office---Client-Data---Engineering-Group-Summer-Internship-Program-2027-New-York-City_JR-0000137731",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000130037"
+    "external_id": "JR-0000137731"
   },
   {
-    "title": "Head of Commodities, Diversified Energy & Infrastructure, Trade & Working Capital",
+    "title": "2027 Customer and Digital - Data and Analytics Summer Internship Programme Glasgow",
     "company": "Barclays",
-    "location": "Canary Wharf, 1 Churchill Place",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Head-of-Commodities--Diversified-Energy---Infrastructure--Trade---Working-Capital_JR-0000136568",
+    "location": "Glasgow Campus",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Glasgow-Campus/XMLNAME-2027-Customer-and-Digital---Data-and-Analytics-Summer-Internship-Programme-Glasgow_JR-0000129278",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000136568"
+    "external_id": "JR-0000129278"
   },
   {
-    "title": "Supplier Manager - French/Spanish Speaking",
-    "company": "Barclays",
-    "location": "3 Locations",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Supplier-Manager---French-Spanish-Speaking_JR-0000126778",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000126778"
-  },
-  {
-    "title": "Devops Engineer",
+    "title": "Data Analyst",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Devops-Engineer_JR-0000118118-1",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Data-Analyst_JR-0000088273-1",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000118118-1"
+    "external_id": "JR-0000088273-1"
   },
   {
-    "title": "Business Analyst - BA4",
+    "title": "AI/ML Data Scientist",
     "company": "Barclays",
-    "location": "Mumbai, Nirlon Knowledge Park (IB) , 9th floor",
+    "location": "Gurugram, DLF Downtown",
     "posted_date": "2026-10-30",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Nirlon-Knowledge-Park-IB--9th-floor/Business-Analyst---BA4_JR-0000136341",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/AI-ML-Data-Scientist_JR-0000136329-1",
     "description": null,
     "source": "workday",
-    "external_id": "JR-0000136341"
+    "external_id": "JR-0000136329-1"
   },
   {
     "title": "Specialist Customer Care",
@@ -1177,6 +1228,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000136566-1"
+  },
+  {
+    "title": "Business Analyst - BA4",
+    "company": "Barclays",
+    "location": "Mumbai, Nirlon Knowledge Park (IB) , 9th floor",
+    "posted_date": "2026-10-30",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Nirlon-Knowledge-Park-IB--9th-floor/Business-Analyst---BA4_JR-0000136341",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000136341"
   },
   {
     "title": "Business Analyst",
@@ -1499,6 +1560,26 @@
     "external_id": "JR-0000132385"
   },
   {
+    "title": "Supplier Manager - French/Spanish Speaking",
+    "company": "Barclays",
+    "location": "3 Locations",
+    "posted_date": "2026-10-26",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Supplier-Manager---French-Spanish-Speaking_JR-0000126778",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000126778"
+  },
+  {
+    "title": "Devops Engineer",
+    "company": "Barclays",
+    "location": "Pune, Gera Commerzone SEZ",
+    "posted_date": "2026-10-26",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Devops-Engineer_JR-0000118118-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000118118-1"
+  },
+  {
     "title": "Commercial Analytics Manager - BPL",
     "company": "Barclays",
     "location": "2 Locations",
@@ -1507,76 +1588,6 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000126766"
-  },
-  {
-    "title": "IB SR Refresh SME",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/IB-SR-Refresh-SME_JR-0000119486-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000119486-1"
-  },
-  {
-    "title": "Transformation Lead, PBWM India",
-    "company": "Barclays",
-    "location": "Mumbai, Nirlon Knowledge Park (BX) 9th & 11-12 floor",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Mumbai-Nirlon-Knowledge-Park-BX-9th--11-12-floor/Global-Indians---Transformation-Lead--PBWM-India_JR-0000129892",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000129892"
-  },
-  {
-    "title": "KYC Processing Analyst",
-    "company": "Barclays",
-    "location": "Gurugram, DLF Downtown",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/KYC-Processing-Analyst_JR-0000126442-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000126442-1"
-  },
-  {
-    "title": "KYC Analyst",
-    "company": "Barclays",
-    "location": "Chennai, DLF IT Park",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Chennai-DLF-IT-Park/KYC-Analyst_JR-0000136902",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000136902"
-  },
-  {
-    "title": "International Corporate Banking Graduate Programme 2027 Madrid",
-    "company": "Barclays",
-    "location": "Madrid, Calle de Jose Abascal",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Madrid-Calle-de-Jose-Abascal/International-Corporate-Banking-Graduate-Programme-2027-Madrid_JR-0000124209",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000124209"
-  },
-  {
-    "title": "DevOps Engineer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/DevOps-Engineer_JR-0000112829",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000112829"
-  },
-  {
-    "title": "FLM LRR Analyst",
-    "company": "Barclays",
-    "location": "Noida, Candor TechSpace",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Noida-Candor-TechSpace/FLM-LRR-Analyst---BA4-2_JR-0000116098",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000116098"
   },
   {
     "title": "Analyst - Treasury PC",
@@ -1626,14 +1637,24 @@
     "source": "adzuna"
   },
   {
-    "title": "Product Mngt Mehanty Analyst (UAE Nationals ONLY)",
+    "title": "Balance Sheet & Pricing Management Product Manager, SVP",
     "company": "Citi",
-    "location": "Dubai United Arab Emirates",
-    "posted_date": "2026-10-29",
-    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Dubai-United-Arab-Emirates/Product-Mngt-Analyst---C09---DUBAI_26983398-1",
+    "location": "New York New York United States",
+    "posted_date": "2026-10-30",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/New-York-New-York-United-States/Balance-Sheet---Pricing-Management-Product-Manager--SVP_261006111",
     "description": null,
     "source": "workday",
-    "external_id": "26983398-1"
+    "external_id": "261006111"
+  },
+  {
+    "title": "Technology Product Management Senior Analyst - Assistant Vice President",
+    "company": "Citi",
+    "location": "Rutherford New Jersey United States",
+    "posted_date": "2026-10-30",
+    "url": "https://citi.wd5.myworkdayjobs.com/2/job/Rutherford-New-Jersey-United-States/Technology-Product-Management-Senior-Analyst---Assistant-Vice-President_261005590",
+    "description": null,
+    "source": "workday",
+    "external_id": "261005590"
   },
   {
     "title": "Business Product Manager-Assistant Vice President",
@@ -2006,16 +2027,6 @@
     "external_id": "261003589"
   },
   {
-    "title": "Corporate Bank Production Control Room Manager",
-    "company": "Deutsche Bank",
-    "location": "Birmingham 5 Brindley Place",
-    "posted_date": "2026-10-28",
-    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Birmingham-5-Brindley-Place/Corporate-Bank-Production-Control-Room-Manager_R0447574-1",
-    "description": null,
-    "source": "workday",
-    "external_id": "R0447574-1"
-  },
-  {
     "title": "Technical Data Product Owner Illiquid, AVP",
     "company": "Deutsche Bank",
     "location": "Bangalore Velankani ISC",
@@ -2054,6 +2065,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R0455623-1"
+  },
+  {
+    "title": "KYC IT Product Owner (f/m/x)",
+    "company": "Deutsche Bank",
+    "location": "Bucharest, 6A Dimitrie Pompeiu Blvd",
+    "posted_date": "2026-10-22",
+    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Bucharest-6A-Dimitrie-Pompeiu-Blvd/Frontend-Engineer---f-m-x-_R0432064",
+    "description": null,
+    "source": "workday",
+    "external_id": "R0432064"
   },
   {
     "title": "Senior Cash Management Sales Advisor \u2013 Nordics",
@@ -2176,6 +2197,16 @@
     "external_id": "R0450235"
   },
   {
+    "title": "Corporate Action and Income Analyst- Associate",
+    "company": "Deutsche Bank",
+    "location": "Pune - Business Bay",
+    "posted_date": "2026-10-27",
+    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Pune---Business-Bay/Corporate-Action-and-Income-Analyst--Associate_R0377344-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R0377344-1"
+  },
+  {
     "title": "HCM Business Advisory Senior Analyst, AVP",
     "company": "Deutsche Bank",
     "location": "Bangalore Velankani ISC",
@@ -2263,6 +2294,86 @@
     "description": null,
     "source": "workday",
     "external_id": "R0442459-1"
+  },
+  {
+    "title": "Manager, Enterprise Strategy",
+    "company": "Mastercard",
+    "location": "Dubai, United Arab Emirates",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dubai-United-Arab-Emirates/Manager--Enterprise-Strategy_R-291068",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-291068"
+  },
+  {
+    "title": "Product Manager - B2B Payments",
+    "company": "Mastercard",
+    "location": "New York City, New York",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/New-York-City-New-York/Product-Manager---B2B-Payments_R-287179",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-287179"
+  },
+  {
+    "title": "Creative Strategist, Advisors Creative Desk",
+    "company": "Mastercard",
+    "location": "Dubai, United Arab Emirates",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dubai-United-Arab-Emirates/Creative-Strategist--Advisors-Creative-Desk_R-292258-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-292258-1"
+  },
+  {
+    "title": "Senior Platform Engineer",
+    "company": "Mastercard",
+    "location": "Dublin, Ireland",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Site-Reliability-Engineer_R-289950",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289950"
+  },
+  {
+    "title": "Vice President, Business Development",
+    "company": "Mastercard",
+    "location": "London, England (Angel Lane)",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/London-England-Angel-Lane/Vice-President--Business-Development_R-294489-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-294489-1"
+  },
+  {
+    "title": "Manager, SME Channel Distribution Activation Specialist",
+    "company": "Mastercard",
+    "location": "Bangalore, India",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Bangalore-India/Manager--SME-Channel-Distribution-Activation-Specialist_R-281390",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-281390"
+  },
+  {
+    "title": "Principal Technical Program Manager",
+    "company": "Mastercard",
+    "location": "Dublin, Ireland",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Principal-Technical-Program-Manager_R-290570",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-290570"
+  },
+  {
+    "title": "Senior Technical Program Manager, Data Science",
+    "company": "Mastercard",
+    "location": "Pune, India",
+    "posted_date": "2026-10-30",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Technical-Program-Manager--Data-Science_R-293844",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-293844"
   },
   {
     "title": "PMO Manager \u2013 Commercial Acceptance Product",
@@ -2585,86 +2696,6 @@
     "external_id": "R-293705"
   },
   {
-    "title": "Innovation Manager",
-    "company": "Mastercard",
-    "location": "London, England (Angel Lane)",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/London-England-Angel-Lane/Innovation-Manager_R-289109",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-289109"
-  },
-  {
-    "title": "Manager, Industry Standards",
-    "company": "Mastercard",
-    "location": "Lisbon, Portugal",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Lisbon-Portugal/Manager--Industry-Standards_R-286492",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-286492"
-  },
-  {
-    "title": "Director, Product Management, Payment Performance Intelligence",
-    "company": "Mastercard",
-    "location": "Lisbon, Portugal",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Lisbon-Portugal/Director--Product-Management_R-287487",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287487"
-  },
-  {
-    "title": "Senior Software Engineer",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Software-Engineer_R-291756",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-291756"
-  },
-  {
-    "title": "Software Engineer II",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Product-Manager---Technical-II_R-293237",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-293237"
-  },
-  {
-    "title": "Manager, Software Engineering - Java, Springboot, Kafka, SQL",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Manager--Software-Engineering---Java--Springboot--Kafka--SQL_R-291760",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-291760"
-  },
-  {
-    "title": "Lead Data Engineer",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Lead-Data-Engineer_R-280352",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-280352"
-  },
-  {
-    "title": "Director B2B Travel Acceptance Solutions",
-    "company": "Mastercard",
-    "location": "3 Locations",
-    "posted_date": "2026-10-29",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/London-England-Angel-Lane/Director-B2B-Travel-Acceptance-Solutions_R-287256",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-287256"
-  },
-  {
     "title": "Senior Specialist, Global Product Management (Anti-Money Laundering (AML) Solution)",
     "company": "Mastercard",
     "location": "Pune, Maharashtra",
@@ -2910,16 +2941,6 @@
     "external_id": "R-292513-1"
   },
   {
-    "title": "Lead Security Metrics Analyst",
-    "company": "Mastercard",
-    "location": "O'Fallon, Missouri",
-    "posted_date": "2026-10-27",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/OFallon-Missouri/Lead-Security-Metrics-Analyst_R-292604",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-292604"
-  },
-  {
     "title": "Senior Specialist, Business Development",
     "company": "Mastercard",
     "location": "2 Locations",
@@ -3058,6 +3079,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-287098"
+  },
+  {
+    "title": "Principal Software Engineer",
+    "company": "Mastercard",
+    "location": "2 Locations",
+    "posted_date": "2026-10-27",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Arlington-Virginia/Principal-Software-Engineer_R-278831",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-278831"
   },
   {
     "title": "Senior Analyst, Billing Operations",
