@@ -560,26 +560,6 @@
     "external_id": "JR-0000129619"
   },
   {
-    "title": "FullStack Developer",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-30",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/FullStack-Developer_JR-0000111862",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000111862"
-  },
-  {
-    "title": "Fraud Operations - Team Manager",
-    "company": "Barclays",
-    "location": "Pune, Gera Commerzone SEZ",
-    "posted_date": "2026-10-30",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Pune-Gera-Commerzone-SEZ/Fraud-Operations---Team-Manager_JR-0000125360",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000125360"
-  },
-  {
     "title": "Senior Java Software Engineer -VP",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
@@ -1130,6 +1110,26 @@
     "external_id": "JR-0000130037"
   },
   {
+    "title": "Head of Commodities, Diversified Energy & Infrastructure, Trade & Working Capital",
+    "company": "Barclays",
+    "location": "Canary Wharf, 1 Churchill Place",
+    "posted_date": "2026-10-26",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Canary-Wharf-1-Churchill-Place/Head-of-Commodities--Diversified-Energy---Infrastructure--Trade---Working-Capital_JR-0000136568",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000136568"
+  },
+  {
+    "title": "Supplier Manager - French/Spanish Speaking",
+    "company": "Barclays",
+    "location": "3 Locations",
+    "posted_date": "2026-10-26",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Supplier-Manager---French-Spanish-Speaking_JR-0000126778",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000126778"
+  },
+  {
     "title": "Product Manager-Tech",
     "company": "Barclays",
     "location": "India",
@@ -1539,16 +1539,6 @@
     "external_id": "JR-0000132385"
   },
   {
-    "title": "Supplier Manager - French/Spanish Speaking",
-    "company": "Barclays",
-    "location": "3 Locations",
-    "posted_date": "2026-10-26",
-    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Knutsford-Radbroke-Hall/Supplier-Manager---French-Spanish-Speaking_JR-0000126778",
-    "description": null,
-    "source": "workday",
-    "external_id": "JR-0000126778"
-  },
-  {
     "title": "Devops Engineer",
     "company": "Barclays",
     "location": "Pune, Gera Commerzone SEZ",
@@ -1567,6 +1557,16 @@
     "description": null,
     "source": "workday",
     "external_id": "JR-0000126766"
+  },
+  {
+    "title": "IB SR Refresh SME",
+    "company": "Barclays",
+    "location": "Gurugram, DLF Downtown",
+    "posted_date": "2026-10-26",
+    "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Gurugram-DLF-Downtown/IB-SR-Refresh-SME_JR-0000119486-1",
+    "description": null,
+    "source": "workday",
+    "external_id": "JR-0000119486-1"
   },
   {
     "title": "Analyst - Treasury PC",
@@ -1948,6 +1948,16 @@
     "external_id": "261003589"
   },
   {
+    "title": "IT Product Owner, VP",
+    "company": "Deutsche Bank",
+    "location": "Pune - Margarpatta",
+    "posted_date": "2026-10-31",
+    "url": "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Pune---Margarpatta/IT-Product-Owner--VP_R0455446",
+    "description": null,
+    "source": "workday",
+    "external_id": "R0455446"
+  },
+  {
     "title": "Technical Data Product Owner Illiquid, AVP",
     "company": "Deutsche Bank",
     "location": "Bangalore Velankani ISC",
@@ -2287,16 +2297,6 @@
     "external_id": "R-290570"
   },
   {
-    "title": "Senior Technical Program Manager, Data Science",
-    "company": "Mastercard",
-    "location": "Pune, India",
-    "posted_date": "2026-10-30",
-    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Pune-India/Senior-Technical-Program-Manager--Data-Science_R-293844",
-    "description": null,
-    "source": "workday",
-    "external_id": "R-293844"
-  },
-  {
     "title": "PMO Manager \u2013 Commercial Acceptance Product",
     "company": "Mastercard",
     "location": "London, England (Angel Lane)",
@@ -2605,6 +2605,16 @@
     "description": null,
     "source": "workday",
     "external_id": "R-293705"
+  },
+  {
+    "title": "Innovation Manager",
+    "company": "Mastercard",
+    "location": "London, England (Angel Lane)",
+    "posted_date": "2026-10-29",
+    "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/London-England-Angel-Lane/Innovation-Manager_R-289109",
+    "description": null,
+    "source": "workday",
+    "external_id": "R-289109"
   },
   {
     "title": "Manager, Product Management",
